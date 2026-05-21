@@ -1,0 +1,90 @@
+\usepackage[utf8]{vietnam}
+\AtBeginDocument{
+    \renewcommand{\chaptername}{CHAPTER}
+    \renewcommand{\figurename}{Figure}
+    \renewcommand{\tablename}{Table}
+}
+\usepackage[left=3.5cm, right=2cm, top=3.5cm, bottom=3cm]{geometry}
+\usepackage{graphicx,float}
+\usepackage{mathtools}
+\usepackage{amssymb,amsmath}
+\usepackage{mathptmx}       
+\usepackage[varvw]{newtxmath}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{titlesec,titletoc}
+\usepackage{titlesec}
+\titleformat{\chapter}[block]{\bfseries\fontsize{16}{19}\selectfont\centering}{\thechapter}{0pt}{\MakeUppercase}
+\titlespacing*{\chapter}{0pt}{40pt}{5pt}
+\titleformat{\section}[hang]{\bfseries\fontsize{14}{17}\selectfont\color{black}}{\thesection}{1.5ex}{}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titleformat{\subsection}[hang]{\bfseries\itshape\fontsize{14}{17}\selectfont\color{black}}{\thesubsection}{1.5ex}{}
+\titlespacing*{\subsection}{0pt}{10pt}{4pt}
+\titleformat{\subsubsection}[hang]{\mdseries\fontsize{14}{17}\selectfont\color{black}}{\thesubsubsection}{1.5ex}{}
+\titlespacing*{\subsubsection}{0pt}{8pt}{4pt}
+
+\usepackage{titletoc}
+\titlecontents{chapter}[0pt]{\bfseries\color{black}}{\MakeUppercase\chaptername\ \thecontentslabel\quad}{}{\normalfont\dotfill\bfseries\contentspage}
+
+\titlecontents{section}[2.5ex]{\color{black}}{ \thecontentslabel\quad}{}{\dotfill\contentspage}
+
+\titlecontents{subsection}[5ex]{\color{black}}{ \thecontentslabel\quad}{}{\dotfill\contentspage}
+
+\titlecontents{subsubsection}[7.5ex]{\color{black}}{ \thecontentslabel\quad}{}{\dotfill\contentspage}
+
+\titlecontents{figure}[0pt]{\color{black}}{\figurename\ \thecontentslabel:\quad}{}{\dotfill\contentspage}
+\titlecontents{table}[0pt]{\color{black}}{\tablename\ \thecontentslabel:\quad}{}{\dotfill\contentspage}
+
+\usepackage{enumitem}
+\newlist{abbrv}{itemize}{1}
+\setlist[abbrv,1]{label=,labelwidth=1in,align=parleft,itemsep=0.1\baselineskip,leftmargin=!}
+
+\usepackage[fontsize = 13]{scrextend}
+\usepackage[thmmarks]{ntheorem} 
+
+\theorembodyfont{\normalfont}
+\theoremseparator{.}
+\newtheorem{definition}{Định nghĩa}[chapter]
+\theorembodyfont{\itshape}
+\newtheorem{theorem}[definition]{Định lí}
+\newtheorem{lemma}[definition]{Bổ đề}
+\newtheorem{corrollary}[definition]{Hệ quả}
+\newtheorem{Proposition}[definition]{Mệnh đề}
+
+\theorembodyfont{\normalfont}
+\newtheorem{example}{Ví dụ}[chapter]
+
+\theoremheaderfont{\itshape}
+\theoremsymbol{\ensuremath{\blacksquare}}
+\newtheorem*{proof}{Chứng minh}
+
+\usepackage[style=apa,backend=biber]{biblatex}
+\DeclareLanguageMapping{english}{english-apa}
+\addbibresource{references.bib}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	citecolor=red,
+	urlcolor=black
+}
+
+\usepackage{indentfirst}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\renewcommand{\baselinestretch}{1.5}
+\setlength{\parindent}{1.27cm}
+\allowdisplaybreaks
+
+\usepackage[labelfont=bf]{caption}
+\numberwithin{figure}{chapter}
+\numberwithin{table}{chapter}
+
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyhead[C]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+}

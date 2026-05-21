@@ -1,0 +1,10 @@
+# LaTeX build output
+build/
+
+# Synctex
+*.synctex.gz
+*.synctex(busy)
+LeAnhCuong_521H0517_HoangDinhQuyVu.docx
+LeAnhCuong_521H0517_HoangDinhQuyVu.pdf
+
+*.zip

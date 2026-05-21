@@ -1,0 +1,199 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{vietnam}
+\usepackage[left=3.5cm, right=2cm, top=3.5cm, bottom=3cm,showframe]{geometry}
+\usepackage{graphicx,float}
+\usepackage{mathtools}
+\usepackage{amssymb,amsmath}
+\usepackage{mathptmx}       
+\usepackage[varvw]{newtxmath}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\titleformat{\chapter}{\fontsize{16}{20}\selectfont\bfseries\centering}{\thechapter}{0ex}{\vspace*{-2.5cm}}
+
+\usepackage{enumitem}
+\newlist{abbrv}{itemize}{1}
+\setlist[abbrv,1]{label=,labelwidth=1in,align=parleft,itemsep=0.1\baselineskip,leftmargin=!}
+\usepackage[fontsize = 13]{scrextend}
+\usepackage[thmmarks]{ntheorem} 
+\theorembodyfont{\normalfont}
+\theoremseparator{.}
+\newtheorem{definition}{Định nghĩa}[chapter]
+\theorembodyfont{\itshape}
+\newtheorem{theorem}[definition]{Định lí}
+\newtheorem{lemma}[definition]{Bổ đề}
+\newtheorem{corrollary}[definition]{Hệ quả}
+\newtheorem{Proposition}[definition]{Mệnh đề}
+
+\theorembodyfont{\normalfont}
+\newtheorem{example}{Ví dụ}[chapter]
+
+\theoremheaderfont{\itshape}
+\theoremsymbol{\ensuremath{\blacksquare}}
+\newtheorem*{proof}{Chứng minh}
+
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	citecolor=red,
+	urlcolor=blue
+}
+
+\renewcommand{\baselinestretch}{1.5} 
+\setlength{\parindent}{0cm}
+
+\usepackage[labelfont=bf]{caption}
+\numberwithin{figure}{chapter}
+\numberwithin{table}{chapter}
+
+\usepackage{subcaption}
+
+\usepackage{tocloft}
+\renewcommand{\cftfigpresnum}{\hspace*{-0.7cm}\bf Hình }
+\renewcommand{\cftfigaftersnum}{.}
+\setlength{\cftfignumwidth}{1.25cm}
+
+\renewcommand{\cfttabpresnum}{\hspace*{-0.7cm}\bf Bảng }
+\renewcommand{\cfttabaftersnum}{.}
+\setlength{\cfttabnumwidth}{1.25cm}
+\usepackage{titletoc}
+\titlecontents{chapter}[0em]{}{\color{blue}\bfseries CHƯƠNG \thecontentslabel.~~~ \MakeUppercase }{}{\titlerule*[.7pc]{.}\contentspage}
+
+\begin{document}
+	\begin{titlepage}
+		\centering
+		\fontsize{14}{18}\selectfont
+		TỔNG LIÊN ĐOÀN LAO ĐỘNG VIỆT NAM \\
+		\bfseries
+		TRƯỜNG ĐẠI HỌC TÔN ĐỨC THẮNG \\
+		KHOA TOÁN VÀ THỐNG KÊ \\[1cm]	
+		
+		\includegraphics[width=5cm]{logo}\\[2cm]
+		
+		TÊN HỌC VIÊN\\[1cm]
+		
+		\fontsize{24}{28}\selectfont
+		TÊN ĐỀ TÀI\\[3cm]
+		
+		\fontsize{22}{26}\selectfont
+		LUẬN VĂN THẠC SĨ\\
+		NGÀNH TOÁN ỨNG DỤNG\\
+		
+		\vfill
+		\fontsize{14}{18}\selectfont
+		THÀNH PHỐ HỒ CHÍ MINH, NĂM $\ldots$
+	\end{titlepage}
+	
+	\begin{titlepage}
+		\centering
+		\fontsize{14}{18}\selectfont
+		TỔNG LIÊN ĐOÀN LAO ĐỘNG VIỆT NAM \\
+		\bfseries
+		TRƯỜNG ĐẠI HỌC TÔN ĐỨC THẮNG \\
+		KHOA TOÁN VÀ THỐNG KÊ \\[1cm]	
+		
+		\includegraphics[width=5cm]{logo}\\[2cm]
+		
+		TÊN HỌC VIÊN\\[1cm]
+		
+		\fontsize{22}{26}\selectfont
+		TÊN ĐỀ TÀI\\[3cm]
+		
+		\fontsize{20}{24}\selectfont
+		LUẬN VĂN THẠC SĨ\\
+		NGÀNH TOÁN ỨNG DỤNG\\
+		
+		\vfill
+		\fontsize{14}{18}\selectfont
+		THÀNH PHỐ HỒ CHÍ MINH, NĂM $\ldots$
+	\end{titlepage}
+	
+	\pagestyle{empty}
+	\chapter*{LỜI CẢM ƠN}
+	\qquad Tôi xin chân thành cảm ơn\dotfill
+	
+	\dotfill
+	
+	\dotfill
+	
+	\vspace*{1cm}
+	\begin{flushright}
+		\begin{minipage}{8.75cm}
+			\centering\itshape
+			TP. Hồ Chí Minh, ngày $\ldots$ tháng $\ldots$ năm 20$\ldots$\\
+			Tác giả\\[3cm]
+			Ghi rõ họ tên
+		\end{minipage}
+	\end{flushright}
+	
+	\newpage
+	Công trình được hoàn thành tại Trường Đại học Tôn Đức Thắng
+	
+	Cán bộ hướng dẫn khoa học: \dotfill
+	
+	\hspace*{5.3cm}\dotfill
+	
+	\hspace*{6.5cm}(Ghi rõ học hàm, học vị, họ tên và chữ ký)\\[0.25cm]
+	
+	Luận văn thạc sĩ được bảo vệ tại \textbf{Hội đồng đánh giá Luận văn thạc sĩ Trường Đại học Tôn Đức Thắng} vào ngày $\ldots$ / $\ldots$/ $\ldots$theo Quyết định số $\ldots\ldots$/20$\ldots$/QĐ-TĐT ngày
+	$\ldots$/$\ldots$/20$\ldots$\\
+	
+	Thành phần Hội đồng đánh giá Luận văn thạc sĩ gồm:
+	
+	\begin{tabular}{p{9cm}l}
+		1. GS.TS. Nguyễn Văn D& Chủ tịch\\
+		2. PGS.TS. Nguyễn Văn B& Phản biện 1\\
+		3. TS. Nguyễn Văn C Phản& biện 2\\
+		4. TS. Nguyễn Thị E& Ủy viên\\
+		5. TS. Trần Văn F& Thư ký\\
+	\end{tabular}
+	\vspace*{1cm}
+	
+	Xác nhận của Chủ tịch Hội đồng đánh giá Luận văn và Trưởng khoa quản lý chuyên ngành sau khi nhận Luận văn đã được sửa chữa (nếu có).
+	\vspace*{1cm}
+	\begin{multicols}{2}
+		\centering
+		\textbf{CHỦ TỊCH HỘI ĐỒNG}\\[3cm]
+		................................................
+		
+		\textbf{TRƯỞNG KHOA}\\[3cm]
+		................................................
+	\end{multicols}
+	
+	\newpage
+	\chapter*{CÔNG TRÌNH ĐƯỢC HOÀN THÀNH\\TẠI TRƯỜNG ĐẠI HỌC TÔN ĐỨC THẮNG}
+	\qquad Tôi xin cam đoan đây là công trình nghiên cứu của riêng tôi và được sự hướng dẫn khoa học của ................................................................;. Các nội dung nghiên cứu, kết quả trong đề tài này là trung thực do chính tác giả thực hiện và không vi phạm đạo đức nghiên cứu. Những số liệu trong các bảng biểu phục vụ cho việc phân tích, nhận xét, đánh giá được chính tác giả thu thập từ các nguồn khác nhau có ghi rõ trong phần tài
+	liệu tham khảo.
+	
+	\qquad Ngoài ra, trong Luận văn/Luận án còn sử dụng một số nhận xét, đánh giá cũng như số liệu của các tác giả khác, cơ quan tổ chức khác đều có trích dẫn và chú thích
+	nguồn gốc.
+	
+	\qquad \textbf{Nếu phát hiện có bất kỳ sự gian lận nào tôi xin hoàn toàn chịu trách nhiệm về nội dung Luận văn/Luận án của mình.} Trường Đại học Tôn Đức Thắng không liên quan đến những vi phạm tác quyền, bản quyền do tôi gây ra trong quá trình thực hiện (nếu có).
+	
+	\vspace*{1cm}
+	\begin{flushright}
+		\begin{minipage}{8.75cm}
+			\centering\itshape
+			TP. Hồ Chí Minh, ngày $\ldots$ tháng $\ldots$ năm 20$\ldots$\\
+			Tác giả\\[3cm]
+			Ghi rõ họ tên
+		\end{minipage}
+	\end{flushright}
+	
+	\newpage
+	\begin{center}
+		\fontsize{16}{20}\selectfont\bfseries
+		TÊN ĐỀ TÀI\\
+		TÓM TẮT
+	\end{center}
+	\dotfill
+	
+	\dotfill
+	
+	\dotfill
+	
+	\tableofcontents
+	
+	
+\end{document}

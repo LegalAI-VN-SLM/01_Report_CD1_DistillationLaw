@@ -1,0 +1,26 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage{fancyhdr}
+\input{config/format}
+% Compile with biblatex/biber: pdflatex main -> biber main -> pdflatex main -> pdflatex main
+\begin{document}
+	% --- Frontmatter ---
+	\input{1_frontmatter/01_Coverpage}
+	\input{1_frontmatter/02_Acknowledgements}
+	% \input{1_frontmatter/03_CommitteeInfo}
+	\input{1_frontmatter/04_Declaration}
+	\input{1_frontmatter/05_Abstract}
+	\input{1_frontmatter/06_TableOfContents}
+	\input{1_frontmatter/07_ListOfFigures}
+	\input{1_frontmatter/08_ListOfTables}
+	\input{1_frontmatter/09_ListOfAbbreviations}
+	% --- Chapters ---
+	\input{2_chapters/1_Introduction}
+	\input{2_chapters/2_Background}
+	\input{2_chapters/3_Methods_Models}
+	\input{2_chapters/4_Experiments}
+	\input{2_chapters/5_Conclusion}
+	% --- Backmatter ---
+	% \input{3_backmatter/Publications}
+	\input{3_backmatter/References}
+	% \input{3_backmatter/Appendix}
+\end{document}
