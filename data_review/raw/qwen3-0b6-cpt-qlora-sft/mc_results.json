@@ -1,0 +1,721 @@
+{
+  "task": "mc",
+  "thinking_mode_inference": false,
+  "overall": {
+    "accuracy": 0.45,
+    "n": 100
+  },
+  "unknown": 19,
+  "by_thinking": {
+    "thinking_true": {
+      "accuracy": 0.4666666666666667,
+      "n": 75
+    },
+    "thinking_false": {
+      "accuracy": 0.4,
+      "n": 25
+    }
+  },
+  "per_sample": [
+    {
+      "id": "vilawqa_mc_00593",
+      "thinking": true,
+      "gold": "B",
+      "pred": "D",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00107",
+      "thinking": true,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00960",
+      "thinking": true,
+      "gold": "A",
+      "pred": "D",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00314",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00857",
+      "thinking": true,
+      "gold": "B",
+      "pred": "B",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00822",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00819",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00876",
+      "thinking": true,
+      "gold": "D",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00884",
+      "thinking": true,
+      "gold": "D",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00861",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00702",
+      "thinking": false,
+      "gold": "A",
+      "pred": "D",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00777",
+      "thinking": true,
+      "gold": "D",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00367",
+      "thinking": false,
+      "gold": "C",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00103",
+      "thinking": true,
+      "gold": "A",
+      "pred": "D",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00806",
+      "thinking": true,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00092",
+      "thinking": true,
+      "gold": "B",
+      "pred": "A",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00562",
+      "thinking": true,
+      "gold": "B",
+      "pred": "C",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00100",
+      "thinking": false,
+      "gold": "B",
+      "pred": "A",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00206",
+      "thinking": true,
+      "gold": "A",
+      "pred": "B",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00615",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00655",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00521",
+      "thinking": false,
+      "gold": "B",
+      "pred": "A",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00578",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00462",
+      "thinking": true,
+      "gold": "A",
+      "pred": "B",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00853",
+      "thinking": false,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00277",
+      "thinking": false,
+      "gold": "A",
+      "pred": "D",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00675",
+      "thinking": true,
+      "gold": "B",
+      "pred": "B",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00033",
+      "thinking": false,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00566",
+      "thinking": true,
+      "gold": "B",
+      "pred": "A",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00813",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00035",
+      "thinking": true,
+      "gold": "A",
+      "pred": "B",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00567",
+      "thinking": true,
+      "gold": "C",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00331",
+      "thinking": true,
+      "gold": "B",
+      "pred": "B",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00139",
+      "thinking": true,
+      "gold": "B",
+      "pred": "B",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00575",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00970",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00002",
+      "thinking": true,
+      "gold": "D",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00505",
+      "thinking": true,
+      "gold": "B",
+      "pred": "B",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00135",
+      "thinking": false,
+      "gold": "A",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00477",
+      "thinking": false,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00956",
+      "thinking": true,
+      "gold": "A",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00511",
+      "thinking": false,
+      "gold": "B",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00840",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00509",
+      "thinking": true,
+      "gold": "A",
+      "pred": "D",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00476",
+      "thinking": true,
+      "gold": "D",
+      "pred": "A",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00063",
+      "thinking": true,
+      "gold": "A",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00990",
+      "thinking": false,
+      "gold": "B",
+      "pred": "B",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00414",
+      "thinking": false,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00796",
+      "thinking": true,
+      "gold": "A",
+      "pred": "B",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00701",
+      "thinking": true,
+      "gold": "B",
+      "pred": "B",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00499",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00021",
+      "thinking": true,
+      "gold": "C",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00984",
+      "thinking": false,
+      "gold": "C",
+      "pred": "A",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00407",
+      "thinking": false,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00379",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00872",
+      "thinking": false,
+      "gold": "C",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00296",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00167",
+      "thinking": false,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00725",
+      "thinking": true,
+      "gold": "A",
+      "pred": "C",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00684",
+      "thinking": true,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00373",
+      "thinking": true,
+      "gold": "C",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00271",
+      "thinking": true,
+      "gold": "C",
+      "pred": "B",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00344",
+      "thinking": true,
+      "gold": "D",
+      "pred": "B",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00950",
+      "thinking": true,
+      "gold": "B",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00805",
+      "thinking": true,
+      "gold": "C",
+      "pred": "A",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00171",
+      "thinking": true,
+      "gold": "C",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00743",
+      "thinking": true,
+      "gold": "A",
+      "pred": "B",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00561",
+      "thinking": true,
+      "gold": "A",
+      "pred": "C",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00839",
+      "thinking": false,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00490",
+      "thinking": true,
+      "gold": "A",
+      "pred": "D",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00772",
+      "thinking": true,
+      "gold": "A",
+      "pred": "C",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00776",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00734",
+      "thinking": true,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00664",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00557",
+      "thinking": false,
+      "gold": "A",
+      "pred": "C",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00485",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00380",
+      "thinking": false,
+      "gold": "C",
+      "pred": "D",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00162",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00460",
+      "thinking": true,
+      "gold": "A",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00554",
+      "thinking": true,
+      "gold": "D",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00053",
+      "thinking": false,
+      "gold": "C",
+      "pred": "D",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00898",
+      "thinking": true,
+      "gold": "D",
+      "pred": "B",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00795",
+      "thinking": true,
+      "gold": "A",
+      "pred": "A",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00662",
+      "thinking": false,
+      "gold": "C",
+      "pred": "A",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00459",
+      "thinking": true,
+      "gold": "A",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00122",
+      "thinking": true,
+      "gold": "B",
+      "pred": "C",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00065",
+      "thinking": true,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00691",
+      "thinking": true,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00525",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00720",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_01000",
+      "thinking": true,
+      "gold": "C",
+      "pred": "A",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00467",
+      "thinking": false,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00648",
+      "thinking": true,
+      "gold": "C",
+      "pred": "C",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00202",
+      "thinking": true,
+      "gold": "C",
+      "pred": "B",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00388",
+      "thinking": false,
+      "gold": "A",
+      "pred": null,
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00492",
+      "thinking": false,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00988",
+      "thinking": true,
+      "gold": "A",
+      "pred": "C",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00022",
+      "thinking": false,
+      "gold": "A",
+      "pred": "C",
+      "correct": false
+    },
+    {
+      "id": "vilawqa_mc_00503",
+      "thinking": true,
+      "gold": "D",
+      "pred": "D",
+      "correct": true
+    },
+    {
+      "id": "vilawqa_mc_00643",
+      "thinking": true,
+      "gold": "C",
+      "pred": "A",
+      "correct": false
+    }
+  ]
+}

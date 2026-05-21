@@ -1,0 +1,15 @@
+{
+  "adapter": "outputs/legal-slm-sft-v1/adapter_final",
+  "thinking_mode": false,
+  "nli_accuracy": 0.6808510638297872,
+  "nli_f1": 0.4819404364473114,
+  "mc_accuracy": 0.16,
+  "syllo_rougeL": 0.3896532506590718,
+  "syllo_rouge1": 0.44443107431096285,
+  "nli_acc_thinking": 0.6509433962264151,
+  "mc_acc_thinking": 0.16,
+  "syllo_rl_thinking": 0.3822632159399746,
+  "nli_acc_direct": 0.7714285714285715,
+  "mc_acc_direct": 0.16,
+  "syllo_rl_direct": 0.4118233548163633
+}

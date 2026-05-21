@@ -1,0 +1,614 @@
+{
+  "task": "syllogism",
+  "thinking_mode_inference": false,
+  "overall": {
+    "rouge1": 0.40299833794280093,
+    "rouge2": 0.3097045623163822,
+    "rougeL": 0.3517139362512931,
+    "n": 84
+  },
+  "by_thinking": {
+    "thinking_true": {
+      "rouge1": 0.4050147749429785,
+      "rouge2": 0.31097889046916133,
+      "rougeL": 0.3493649340270096,
+      "n": 63
+    },
+    "thinking_false": {
+      "rouge1": 0.39694902694226836,
+      "rouge2": 0.30588157785804493,
+      "rougeL": 0.35876094292414373,
+      "n": 21
+    }
+  },
+  "per_sample": [
+    {
+      "id": "vilawqa_syllo_00969",
+      "thinking": true,
+      "rouge1": 0.6852791878172589,
+      "rouge2": 0.5102040816326531,
+      "rougeL": 0.47208121827411165
+    },
+    {
+      "id": "vilawqa_syllo_00648",
+      "thinking": true,
+      "rouge1": 0.046357615894039736,
+      "rouge2": 0.006666666666666667,
+      "rougeL": 0.046357615894039736
+    },
+    {
+      "id": "vilawqa_syllo_00736",
+      "thinking": true,
+      "rouge1": 0.4066390041493776,
+      "rouge2": 0.401673640167364,
+      "rougeL": 0.4066390041493776
+    },
+    {
+      "id": "vilawqa_syllo_00815",
+      "thinking": true,
+      "rouge1": 0.344,
+      "rouge2": 0.2661290322580645,
+      "rougeL": 0.32
+    },
+    {
+      "id": "vilawqa_syllo_00449",
+      "thinking": true,
+      "rouge1": 0.0564516129032258,
+      "rouge2": 0.016260162601626018,
+      "rougeL": 0.03225806451612903
+    },
+    {
+      "id": "vilawqa_syllo_00987",
+      "thinking": false,
+      "rouge1": 0.33540372670807456,
+      "rouge2": 0.2,
+      "rougeL": 0.2795031055900621
+    },
+    {
+      "id": "vilawqa_syllo_00345",
+      "thinking": true,
+      "rouge1": 0.27007299270072993,
+      "rouge2": 0.25,
+      "rougeL": 0.24087591240875908
+    },
+    {
+      "id": "vilawqa_syllo_00790",
+      "thinking": true,
+      "rouge1": 0.6504065040650406,
+      "rouge2": 0.48360655737704916,
+      "rougeL": 0.5365853658536586
+    },
+    {
+      "id": "vilawqa_syllo_00242",
+      "thinking": true,
+      "rouge1": 0.006430868167202572,
+      "rouge2": 0.0,
+      "rougeL": 0.006430868167202572
+    },
+    {
+      "id": "vilawqa_syllo_00550",
+      "thinking": false,
+      "rouge1": 0.3632075471698113,
+      "rouge2": 0.15165876777251186,
+      "rougeL": 0.3018867924528302
+    },
+    {
+      "id": "vilawqa_syllo_00226",
+      "thinking": true,
+      "rouge1": 0.5150214592274678,
+      "rouge2": 0.5021645021645021,
+      "rougeL": 0.5150214592274678
+    },
+    {
+      "id": "vilawqa_syllo_00374",
+      "thinking": true,
+      "rouge1": 0.5641025641025641,
+      "rouge2": 0.396551724137931,
+      "rougeL": 0.4358974358974359
+    },
+    {
+      "id": "vilawqa_syllo_00352",
+      "thinking": true,
+      "rouge1": 0.09142857142857144,
+      "rouge2": 0.08092485549132947,
+      "rougeL": 0.09142857142857144
+    },
+    {
+      "id": "vilawqa_syllo_00120",
+      "thinking": true,
+      "rouge1": 0.4225352112676056,
+      "rouge2": 0.3262411347517731,
+      "rougeL": 0.3591549295774648
+    },
+    {
+      "id": "vilawqa_syllo_00283",
+      "thinking": false,
+      "rouge1": 0.4571428571428571,
+      "rouge2": 0.41618497109826585,
+      "rougeL": 0.4457142857142857
+    },
+    {
+      "id": "vilawqa_syllo_00534",
+      "thinking": false,
+      "rouge1": 0.6440677966101694,
+      "rouge2": 0.5964912280701755,
+      "rougeL": 0.6440677966101694
+    },
+    {
+      "id": "vilawqa_syllo_00277",
+      "thinking": true,
+      "rouge1": 0.7879858657243817,
+      "rouge2": 0.5177304964539008,
+      "rougeL": 0.5477031802120141
+    },
+    {
+      "id": "vilawqa_syllo_00764",
+      "thinking": false,
+      "rouge1": 0.6013986013986015,
+      "rouge2": 0.556338028169014,
+      "rougeL": 0.5734265734265734
+    },
+    {
+      "id": "vilawqa_syllo_00213",
+      "thinking": true,
+      "rouge1": 0.4878048780487805,
+      "rouge2": 0.2857142857142857,
+      "rougeL": 0.40975609756097564
+    },
+    {
+      "id": "vilawqa_syllo_00320",
+      "thinking": true,
+      "rouge1": 0.6066176470588236,
+      "rouge2": 0.1955719557195572,
+      "rougeL": 0.338235294117647
+    },
+    {
+      "id": "vilawqa_syllo_00744",
+      "thinking": true,
+      "rouge1": 0.5342960288808664,
+      "rouge2": 0.3636363636363636,
+      "rougeL": 0.4187725631768953
+    },
+    {
+      "id": "vilawqa_syllo_00664",
+      "thinking": true,
+      "rouge1": 0.7272727272727272,
+      "rouge2": 0.5060975609756098,
+      "rougeL": 0.5333333333333333
+    },
+    {
+      "id": "vilawqa_syllo_00442",
+      "thinking": true,
+      "rouge1": 0.531986531986532,
+      "rouge2": 0.4813559322033898,
+      "rougeL": 0.5252525252525253
+    },
+    {
+      "id": "vilawqa_syllo_00561",
+      "thinking": true,
+      "rouge1": 0.8943894389438943,
+      "rouge2": 0.7450331125827815,
+      "rougeL": 0.7260726072607261
+    },
+    {
+      "id": "vilawqa_syllo_00368",
+      "thinking": true,
+      "rouge1": 0.4025157232704403,
+      "rouge2": 0.29299363057324834,
+      "rougeL": 0.36477987421383645
+    },
+    {
+      "id": "vilawqa_syllo_00638",
+      "thinking": true,
+      "rouge1": 0.288659793814433,
+      "rouge2": 0.22797927461139897,
+      "rougeL": 0.28350515463917525
+    },
+    {
+      "id": "vilawqa_syllo_00399",
+      "thinking": true,
+      "rouge1": 0.0,
+      "rouge2": 0.0,
+      "rougeL": 0.0
+    },
+    {
+      "id": "vilawqa_syllo_00416",
+      "thinking": true,
+      "rouge1": 0.6724137931034482,
+      "rouge2": 0.645021645021645,
+      "rougeL": 0.6508620689655173
+    },
+    {
+      "id": "vilawqa_syllo_00770",
+      "thinking": false,
+      "rouge1": 0.3259259259259259,
+      "rouge2": 0.14869888475836432,
+      "rougeL": 0.24814814814814815
+    },
+    {
+      "id": "vilawqa_syllo_00846",
+      "thinking": false,
+      "rouge1": 0.22695035460992907,
+      "rouge2": 0.2142857142857143,
+      "rougeL": 0.22695035460992907
+    },
+    {
+      "id": "vilawqa_syllo_00581",
+      "thinking": false,
+      "rouge1": 0.5733333333333334,
+      "rouge2": 0.4054054054054054,
+      "rougeL": 0.44
+    },
+    {
+      "id": "vilawqa_syllo_00783",
+      "thinking": true,
+      "rouge1": 0.2195845697329377,
+      "rouge2": 0.14328358208955222,
+      "rougeL": 0.20178041543026706
+    },
+    {
+      "id": "vilawqa_syllo_00562",
+      "thinking": true,
+      "rouge1": 0.28054298642533937,
+      "rouge2": 0.1461187214611872,
+      "rougeL": 0.22624434389140272
+    },
+    {
+      "id": "vilawqa_syllo_00970",
+      "thinking": true,
+      "rouge1": 0.3529411764705882,
+      "rouge2": 0.25641025641025644,
+      "rougeL": 0.31932773109243695
+    },
+    {
+      "id": "vilawqa_syllo_00781",
+      "thinking": true,
+      "rouge1": 0.4033613445378152,
+      "rouge2": 0.3983050847457627,
+      "rougeL": 0.4033613445378152
+    },
+    {
+      "id": "vilawqa_syllo_00119",
+      "thinking": false,
+      "rouge1": 0.5601750547045952,
+      "rouge2": 0.32967032967032966,
+      "rougeL": 0.40262582056892776
+    },
+    {
+      "id": "vilawqa_syllo_00435",
+      "thinking": true,
+      "rouge1": 0.31050228310502287,
+      "rouge2": 0.304147465437788,
+      "rougeL": 0.31050228310502287
+    },
+    {
+      "id": "vilawqa_syllo_00436",
+      "thinking": true,
+      "rouge1": 0.4918032786885246,
+      "rouge2": 0.48760330578512395,
+      "rougeL": 0.4918032786885246
+    },
+    {
+      "id": "vilawqa_syllo_00378",
+      "thinking": true,
+      "rouge1": 0.22368421052631576,
+      "rouge2": 0.2185430463576159,
+      "rougeL": 0.22368421052631576
+    },
+    {
+      "id": "vilawqa_syllo_00203",
+      "thinking": true,
+      "rouge1": 0.7932692307692308,
+      "rouge2": 0.7729468599033816,
+      "rougeL": 0.7884615384615383
+    },
+    {
+      "id": "vilawqa_syllo_00173",
+      "thinking": true,
+      "rouge1": 0.40264026402640263,
+      "rouge2": 0.39867109634551495,
+      "rougeL": 0.40264026402640263
+    },
+    {
+      "id": "vilawqa_syllo_00017",
+      "thinking": true,
+      "rouge1": 0.5047318611987381,
+      "rouge2": 0.44444444444444436,
+      "rougeL": 0.47949526813880117
+    },
+    {
+      "id": "vilawqa_syllo_00200",
+      "thinking": true,
+      "rouge1": 0.3010752688172043,
+      "rouge2": 0.2702702702702703,
+      "rougeL": 0.3010752688172043
+    },
+    {
+      "id": "vilawqa_syllo_00488",
+      "thinking": false,
+      "rouge1": 0.4864864864864865,
+      "rouge2": 0.4839506172839506,
+      "rougeL": 0.4864864864864865
+    },
+    {
+      "id": "vilawqa_syllo_00856",
+      "thinking": false,
+      "rouge1": 0.30848329048843187,
+      "rouge2": 0.2945736434108527,
+      "rougeL": 0.30848329048843187
+    },
+    {
+      "id": "vilawqa_syllo_00079",
+      "thinking": true,
+      "rouge1": 0.3167420814479638,
+      "rouge2": 0.31050228310502287,
+      "rougeL": 0.3167420814479638
+    },
+    {
+      "id": "vilawqa_syllo_00647",
+      "thinking": true,
+      "rouge1": 0.005249343832020997,
+      "rouge2": 0.0,
+      "rougeL": 0.005249343832020997
+    },
+    {
+      "id": "vilawqa_syllo_00228",
+      "thinking": true,
+      "rouge1": 0.19487179487179487,
+      "rouge2": 0.13917525773195877,
+      "rougeL": 0.18974358974358976
+    },
+    {
+      "id": "vilawqa_syllo_00802",
+      "thinking": true,
+      "rouge1": 0.47715736040609136,
+      "rouge2": 0.1333333333333333,
+      "rougeL": 0.2944162436548223
+    },
+    {
+      "id": "vilawqa_syllo_00826",
+      "thinking": false,
+      "rouge1": 0.3082706766917293,
+      "rouge2": 0.2878787878787879,
+      "rougeL": 0.3082706766917293
+    },
+    {
+      "id": "vilawqa_syllo_00870",
+      "thinking": true,
+      "rouge1": 0.102803738317757,
+      "rouge2": 0.08490566037735849,
+      "rougeL": 0.102803738317757
+    },
+    {
+      "id": "vilawqa_syllo_00370",
+      "thinking": true,
+      "rouge1": 0.4824561403508772,
+      "rouge2": 0.4247787610619469,
+      "rougeL": 0.46491228070175433
+    },
+    {
+      "id": "vilawqa_syllo_00421",
+      "thinking": true,
+      "rouge1": 0.6834170854271356,
+      "rouge2": 0.6802030456852791,
+      "rougeL": 0.6834170854271356
+    },
+    {
+      "id": "vilawqa_syllo_00261",
+      "thinking": true,
+      "rouge1": 0.8456140350877193,
+      "rouge2": 0.8169014084507041,
+      "rougeL": 0.8175438596491228
+    },
+    {
+      "id": "vilawqa_syllo_00804",
+      "thinking": true,
+      "rouge1": 0.3511777301927195,
+      "rouge2": 0.21505376344086022,
+      "rougeL": 0.3297644539614561
+    },
+    {
+      "id": "vilawqa_syllo_00087",
+      "thinking": true,
+      "rouge1": 0.5714285714285714,
+      "rouge2": 0.5219123505976095,
+      "rougeL": 0.5555555555555556
+    },
+    {
+      "id": "vilawqa_syllo_00767",
+      "thinking": false,
+      "rouge1": 0.358695652173913,
+      "rouge2": 0.14285714285714285,
+      "rougeL": 0.2391304347826087
+    },
+    {
+      "id": "vilawqa_syllo_00990",
+      "thinking": false,
+      "rouge1": 0.47887323943661975,
+      "rouge2": 0.4475920679886686,
+      "rougeL": 0.47323943661971835
+    },
+    {
+      "id": "vilawqa_syllo_00733",
+      "thinking": true,
+      "rouge1": 0.5125858123569794,
+      "rouge2": 0.16091954022988506,
+      "rougeL": 0.30205949656750575
+    },
+    {
+      "id": "vilawqa_syllo_00393",
+      "thinking": true,
+      "rouge1": 0.5052083333333333,
+      "rouge2": 0.5026178010471205,
+      "rougeL": 0.5052083333333333
+    },
+    {
+      "id": "vilawqa_syllo_00875",
+      "thinking": true,
+      "rouge1": 0.0,
+      "rouge2": 0.0,
+      "rougeL": 0.0
+    },
+    {
+      "id": "vilawqa_syllo_00560",
+      "thinking": false,
+      "rouge1": 0.4137931034482759,
+      "rouge2": 0.2558139534883721,
+      "rougeL": 0.3793103448275862
+    },
+    {
+      "id": "vilawqa_syllo_00044",
+      "thinking": false,
+      "rouge1": 0.5140186915887851,
+      "rouge2": 0.3207547169811321,
+      "rougeL": 0.411214953271028
+    },
+    {
+      "id": "vilawqa_syllo_00663",
+      "thinking": false,
+      "rouge1": 0.36619718309859156,
+      "rouge2": 0.3,
+      "rougeL": 0.36619718309859156
+    },
+    {
+      "id": "vilawqa_syllo_00461",
+      "thinking": true,
+      "rouge1": 0.44444444444444436,
+      "rouge2": 0.32,
+      "rougeL": 0.40476190476190477
+    },
+    {
+      "id": "vilawqa_syllo_00530",
+      "thinking": true,
+      "rouge1": 0.3411764705882353,
+      "rouge2": 0.33333333333333337,
+      "rougeL": 0.3411764705882353
+    },
+    {
+      "id": "vilawqa_syllo_00541",
+      "thinking": false,
+      "rouge1": 0.3057324840764331,
+      "rouge2": 0.27564102564102566,
+      "rougeL": 0.2993630573248408
+    },
+    {
+      "id": "vilawqa_syllo_00598",
+      "thinking": true,
+      "rouge1": 0.254071661237785,
+      "rouge2": 0.10491803278688525,
+      "rougeL": 0.22149837133550487
+    },
+    {
+      "id": "vilawqa_syllo_00284",
+      "thinking": true,
+      "rouge1": 0.10619469026548672,
+      "rouge2": 0.0625,
+      "rougeL": 0.10619469026548672
+    },
+    {
+      "id": "vilawqa_syllo_00836",
+      "thinking": true,
+      "rouge1": 0.6524064171122994,
+      "rouge2": 0.47567567567567576,
+      "rougeL": 0.5775401069518716
+    },
+    {
+      "id": "vilawqa_syllo_00382",
+      "thinking": true,
+      "rouge1": 0.37458193979933113,
+      "rouge2": 0.12794612794612792,
+      "rougeL": 0.20066889632107018
+    },
+    {
+      "id": "vilawqa_syllo_00183",
+      "thinking": true,
+      "rouge1": 0.6071428571428571,
+      "rouge2": 0.5179856115107914,
+      "rougeL": 0.5642857142857143
+    },
+    {
+      "id": "vilawqa_syllo_00778",
+      "thinking": true,
+      "rouge1": 0.29765013054830286,
+      "rouge2": 0.15748031496062995,
+      "rougeL": 0.19321148825065274
+    },
+    {
+      "id": "vilawqa_syllo_00043",
+      "thinking": true,
+      "rouge1": 0.2434782608695652,
+      "rouge2": 0.19469026548672566,
+      "rougeL": 0.2434782608695652
+    },
+    {
+      "id": "vilawqa_syllo_00360",
+      "thinking": true,
+      "rouge1": 0.4454976303317535,
+      "rouge2": 0.44019138755980863,
+      "rougeL": 0.4454976303317535
+    },
+    {
+      "id": "vilawqa_syllo_00631",
+      "thinking": false,
+      "rouge1": 0.3106796116504854,
+      "rouge2": 0.29411764705882354,
+      "rougeL": 0.3106796116504854
+    },
+    {
+      "id": "vilawqa_syllo_00544",
+      "thinking": true,
+      "rouge1": 0.08904109589041095,
+      "rouge2": 0.034482758620689655,
+      "rougeL": 0.0684931506849315
+    },
+    {
+      "id": "vilawqa_syllo_00923",
+      "thinking": true,
+      "rouge1": 0.6040268456375839,
+      "rouge2": 0.25,
+      "rougeL": 0.3489932885906041
+    },
+    {
+      "id": "vilawqa_syllo_00590",
+      "thinking": false,
+      "rouge1": 0.21875,
+      "rouge2": 0.13385826771653542,
+      "rougeL": 0.21093749999999997
+    },
+    {
+      "id": "vilawqa_syllo_00422",
+      "thinking": true,
+      "rouge1": 0.5204236006051437,
+      "rouge2": 0.27921092564491656,
+      "rougeL": 0.3237518910741301
+    },
+    {
+      "id": "vilawqa_syllo_00780",
+      "thinking": true,
+      "rouge1": 0.781431334622824,
+      "rouge2": 0.5514563106796115,
+      "rougeL": 0.5647969052224372
+    },
+    {
+      "id": "vilawqa_syllo_00662",
+      "thinking": true,
+      "rouge1": 0.3398058252427184,
+      "rouge2": 0.33333333333333337,
+      "rougeL": 0.3398058252427184
+    },
+    {
+      "id": "vilawqa_syllo_00169",
+      "thinking": false,
+      "rouge1": 0.17834394904458598,
+      "rouge2": 0.16774193548387095,
+      "rougeL": 0.17834394904458598
+    },
+    {
+      "id": "vilawqa_syllo_00505",
+      "thinking": true,
+      "rouge1": 0.08904109589041095,
+      "rouge2": 0.07586206896551724,
+      "rougeL": 0.08904109589041095
+    }
+  ]
+}

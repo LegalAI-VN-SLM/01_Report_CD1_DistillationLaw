@@ -1,0 +1,15 @@
+{
+  "adapter": "outputs/qwen3-1b7-cpt-sft/adapter_final",
+  "thinking_mode": false,
+  "nli_accuracy": 0.6524822695035462,
+  "nli_f1": 0.44763011752550685,
+  "mc_accuracy": 0.32,
+  "syllo_rougeL": 0.595239798348002,
+  "syllo_rouge1": 0.6589290489971572,
+  "nli_acc_thinking": 0.6226415094339622,
+  "mc_acc_thinking": 0.32,
+  "syllo_rl_thinking": 0.5873026277259501,
+  "nli_acc_direct": 0.7428571428571429,
+  "mc_acc_direct": 0.32,
+  "syllo_rl_direct": 0.6190513102141577
+}

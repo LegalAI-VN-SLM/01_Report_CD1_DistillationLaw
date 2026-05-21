@@ -1,0 +1,9 @@
+{
+  "eval_loss": 0.6034,
+  "perplexity": 1.83,
+  "total_tokens": 745248,
+  "model": "unsloth/Qwen3-4B-bnb-4bit",
+  "adapter": "outputs/qwen3-4b-cpt-qlora/adapter_final",
+  "config": "configs/qwen3_4b_cpt_qlora.yaml",
+  "timestamp": "2026-05-16 10:46:41"
+}

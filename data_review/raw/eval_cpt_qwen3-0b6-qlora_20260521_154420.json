@@ -1,0 +1,13 @@
+{
+  "eval_loss": 0.8046,
+  "perplexity": 2.24,
+  "total_tokens": 745248,
+  "model": "unsloth/Qwen3-0.6B-bnb-4bit",
+  "adapter": "outputs/qwen3-0b6-qlora/adapter_final",
+  "config": [
+    "configs/base/cpt.yaml",
+    "configs/model/qwen3_0b6_qlora.yaml",
+    "configs/data/cpt_seallm.yaml"
+  ],
+  "timestamp": "2026-05-21 15:44:20"
+}

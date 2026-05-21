@@ -1,0 +1,15 @@
+{
+  "adapter": "outputs/qwen3-0b6-cpt-qlora-sft/adapter_final",
+  "thinking_mode": false,
+  "nli_accuracy": 0.7163120567375887,
+  "nli_f1": 0.4828359254588763,
+  "mc_accuracy": 0.45,
+  "syllo_rougeL": 0.48321328177862555,
+  "syllo_rouge1": 0.5281724046038798,
+  "nli_acc_thinking": 0.6886792452830188,
+  "mc_acc_thinking": 0.4666666666666667,
+  "syllo_rl_thinking": 0.4945414451378385,
+  "nli_acc_direct": 0.8,
+  "mc_acc_direct": 0.4,
+  "syllo_rl_direct": 0.4492287917009867
+}
