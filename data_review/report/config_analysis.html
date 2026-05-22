@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Config Diff Analysis — LoRA vs QLoRA</title>
+<style>
+:root{--bg:#0f172a;--text:#e2e8f0;--muted:#94a3b8;--accent:#f97316;--accent2:#38bdf8;--green:#22c55e;--red:#ef4444;--yellow:#eab308;--purple:#a78bfa}
+*{box-sizing:border-box}
+body{margin:0;font-family:"IBM Plex Sans","Segoe UI",sans-serif;background:radial-gradient(circle at top,#1e293b,#0b1120 55%,#020617);color:var(--text);line-height:1.6}
+header{padding:40px 24px 12px;text-align:center}
+header h1{margin:0;font-size:2rem;letter-spacing:.02em}
+header .sub{margin-top:6px;color:var(--muted);font-size:.95rem}
+main{max-width:1100px;margin:0 auto;padding:0 24px 60px;display:flex;flex-direction:column;gap:24px}
+.card{background:linear-gradient(135deg,rgba(15,23,42,.92),rgba(2,6,23,.92));border:1px solid rgba(148,163,184,.18);border-radius:16px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.5)}
+h2{margin:0 0 16px;font-size:1.3rem;color:var(--accent)}
+h3{margin:20px 0 10px;color:var(--accent2);font-size:1.05rem}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.88rem}
+th,td{padding:8px 12px;border-bottom:1px solid rgba(148,163,184,.15);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+tbody tr:hover{background:rgba(148,163,184,.06)}
+.diff{background:rgba(249,115,22,.15);font-weight:700;color:var(--accent)}
+.same{color:var(--muted)}
+.insight{background:rgba(249,115,22,.08);border-left:3px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.92rem}
+.insight strong{color:var(--accent)}
+.tag{display:inline-block;padding:2px 10px;border-radius:6px;font-size:.8rem;font-weight:600}
+.tr{background:rgba(239,68,68,.2);color:#fca5a5}
+.tg{background:rgba(34,197,94,.2);color:#86efac}
+.ty{background:rgba(234,179,8,.2);color:#fde047}
+.tb{background:rgba(56,189,248,.2);color:#7dd3fc}
+.tp{background:rgba(167,139,250,.2);color:#c4b5fd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.code{background:#0d1628;border:1px solid rgba(148,163,184,.12);border-radius:10px;padding:16px 20px;font-family:"Cascadia Code","Fira Code",monospace;font-size:.82rem;line-height:1.7;overflow-x:auto;white-space:pre;margin:12px 0}
+.code .key{color:var(--accent2)}
+.code .val{color:var(--green)}
+.code .val-diff{color:var(--accent);font-weight:700}
+.code .comment{color:#6b7280;font-style:italic}
+.mb{background:rgba(148,163,184,.06);border-radius:12px;padding:14px 18px;text-align:center}
+.mb .v{font-size:1.6rem;font-weight:700}
+.mb .l{font-size:.8rem;color:var(--muted);margin-top:4px}
+.arrow{text-align:center;font-size:1.4rem;color:var(--accent2);padding:8px 0}
+.pipeline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.pipeline .step{background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.15);border-radius:10px;padding:10px 16px;text-align:center;flex:1;min-width:120px}
+.pipeline .step .name{font-weight:700;font-size:.9rem}
+.pipeline .step .detail{font-size:.78rem;color:var(--muted);margin-top:2px}
+.pipeline .arrow-r{color:var(--accent2);font-size:1.2rem;flex-shrink:0}
+</style>
+</head>
+<body>
+<header>
+<h1>Config Diff Analysis</h1>
+<p class="sub">So s&aacute;nh chi ti&#7871;t configs gi&#7919;a c&aacute;c pipeline CPT &rarr; SFT</p>
+<p class="sub" style="font-size:.85rem">10 config files | 2 base configs + 8 model configs</p>
+</header>
+<main>
+
+<!-- ═══ 1. BASE CONFIGS ═══ -->
+<section class="card">
+<h2>1. Base Configs &mdash; CPT vs SFT Defaults</h2>
+<p style="color:var(--muted);font-size:.88rem;margin-bottom:12px">T&#7845;t c&#7843; model configs k&#7871; th&#7915;a t&#7915; 2 base configs n&agrave;y. Model configs ch&#7881; override c&aacute;c gi&aacute; tr&#7883; c&#7909; th&#7875;.</p>
+<table>
+<thead><tr><th>Parameter</th><th>base/cpt.yaml</th><th>base/sft.yaml</th><th>Kh&aacute;c?</th></tr></thead>
+<tbody>
+<tr><td>num_train_epochs</td><td>2</td><td>3</td><td class="diff">&#10003;</td></tr>
+<tr><td>per_device_train_batch_size</td><td>4</td><td>2</td><td class="diff">&#10003;</td></tr>
+<tr><td>gradient_accumulation_steps</td><td>4</td><td>4</td><td class="same">-</td></tr>
+<tr><td>learning_rate</td><td>1e-4</td><td class="diff">2e-4</td><td class="diff">&#10003;</td></tr>
+<tr><td>lr_scheduler_type</td><td>cosine</td><td>cosine</td><td class="same">-</td></tr>
+<tr><td>warmup_ratio</td><td>0.05</td><td class="diff">0.1</td><td class="diff">&#10003;</td></tr>
+<tr><td>weight_decay</td><td>0.01</td><td>0.01</td><td class="same">-</td></tr>
+<tr><td>packing</td><td class="diff">true</td><td>false</td><td class="diff">&#10003;</td></tr>
+<tr><td>max_seq_length</td><td>2048</td><td>2048</td><td class="same">-</td></tr>
+<tr><td>eval_strategy</td><td>"no"</td><td class="diff">"steps" (200)</td><td class="diff">&#10003;</td></tr>
+<tr><td>fp16</td><td>true</td><td>true</td><td class="same">-</td></tr>
+<tr><td>optim</td><td>adamw_8bit</td><td>adamw_8bit</td><td class="same">-</td></tr>
+</tbody></table>
+<div class="insight">
+<strong>SFT d&ugrave;ng lr cao h&#417;n (2e-4 vs 1e-4)</strong>, warmup d&agrave;i h&#417;n (10% vs 5%), v&agrave; <strong>kh&ocirc;ng packing</strong> (m&#7895;i sample &#273;&#432;&#7907;c pad ri&ecirc;ng, kh&ocirc;ng gh&eacute;p nhi&#7873;u sample v&agrave;o 1 sequence).
+CPT packing=true gi&uacute;p t&#7889;i &#432;u throughput v&igrave; corpus d&agrave;i, SFT packing=false gi&uacute;p model h&#7885;c &#273;&uacute;ng instruction format.
+</div>
+</section>
+
+<!-- ═══ 2. CRITICAL DIFF: LoRA vs QLoRA 0.6B ═══ -->
+<section class="card">
+<h2>2. Critical Diff &mdash; qwen3-0b6-cpt-sft vs qwen3-0b6-cpt-qlora-sft</h2>
+<p style="color:var(--muted);font-size:.88rem;margin-bottom:8px">&#272;&acirc;y l&agrave; 2 model c&oacute; k&#7871;t qu&#7843; ch&ecirc;nh l&#7879;ch l&#7899;n nh&#7845;t: MC 10% vs 45%</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin:16px 0">
+<div class="mb"><div class="v" style="color:var(--red)">10%</div><div class="l">LoRA MC</div></div>
+<div class="mb"><div class="v" style="color:var(--green)">45%</div><div class="l">QLoRA MC</div></div>
+<div class="mb"><div class="v" style="color:var(--red)">56.7%</div><div class="l">LoRA NLI</div></div>
+<div class="mb"><div class="v" style="color:var(--green)">71.6%</div><div class="l">QLoRA NLI</div></div>
+</div>
+
+<h3>2.1 SFT Config Diff</h3>
+<table>
+<thead><tr><th>Parameter</th><th>cpt-sft (LoRA) <span class="tag tr">10% MC</span></th><th>cpt-qlora-sft (QLoRA) <span class="tag tg">45% MC</span></th><th>Kh&aacute;c?</th></tr></thead>
+<tbody>
+<tr><td>base_model (CPT source)</td><td>outputs/qwen3-0b6-lora/adapter_final</td><td>outputs/qwen3-0b6-qlora/adapter_final</td><td class="diff">&#10003;</td></tr>
+<tr><td>quantization.enabled</td><td class="diff" style="color:var(--red)">false</td><td class="diff" style="color:var(--green)">true (4-bit NF4)</td><td class="diff">&#10003; KEY</td></tr>
+<tr><td>lora.r</td><td>16</td><td>16</td><td class="same">-</td></tr>
+<tr><td>lora.alpha</td><td>32</td><td>32</td><td class="same">-</td></tr>
+<tr><td>lora.alpha/r (scaling)</td><td>2.0</td><td>2.0</td><td class="same">-</td></tr>
+<tr><td>lora.dropout</td><td>0.0</td><td>0.0</td><td class="same">-</td></tr>
+<tr><td>lora.target_modules</td><td colspan="2">q/k/v/o_proj + gate/up/down_proj (7 modules)</td><td class="same">-</td></tr>
+<tr><td>batch_size</td><td>8</td><td>8</td><td class="same">-</td></tr>
+<tr><td>gradient_accumulation</td><td>2</td><td>2</td><td class="same">-</td></tr>
+<tr><td>effective_batch</td><td>16</td><td>16</td><td class="same">-</td></tr>
+<tr style="border-top:2px solid rgba(148,163,184,.2)"><td colspan="4" style="color:var(--muted);font-size:.82rem;text-align:center">
+K&#7871; th&#7915;a t&#7915; base/sft.yaml: epochs=3, lr=2e-4, warmup=0.1, cosine, adamw_8bit</td></tr>
+</tbody></table>
+
+<div class="insight" style="background:rgba(239,68,68,.08);border-color:var(--red)">
+<strong style="color:var(--red)">Ch&#7881; c&oacute; 1 &#273;i&#7875;m kh&aacute;c duy nh&#7845;t &#7903; SFT phase: quantization on/off.</strong><br>
+LoRA r, alpha, target modules, batch size, lr, epochs — t&#7845;t c&#7843; GI&#7888;NG NHAU.<br>
+&#272;i&#7875;m kh&aacute;c th&#7913; 2 l&agrave; CPT source adapter (&#273;&#432;&#7907;c train v&#7899;i config CPT kh&aacute;c nhau &mdash; xem b&ecirc;n d&#432;&#7899;i).
+</div>
+
+<h3>2.2 CPT Config Diff (upstream)</h3>
+<p style="color:var(--muted);font-size:.88rem">2 SFT models load t&#7915; 2 CPT adapters kh&aacute;c nhau. CPT configs c&#361;ng c&oacute; &#273;i&#7875;m kh&aacute;c:</p>
+<table>
+<thead><tr><th>Parameter</th><th>CPT LoRA (qwen3_0b6_lora)</th><th>CPT QLoRA (qwen3_0b6_qlora)</th><th>Kh&aacute;c?</th></tr></thead>
+<tbody>
+<tr><td>base_model</td><td>unsloth/Qwen3-0.6B-Base</td><td>unsloth/Qwen3-0.6B-bnb-4bit</td><td class="diff">&#10003;</td></tr>
+<tr><td>quantization</td><td class="diff" style="color:var(--red)">false</td><td class="diff" style="color:var(--green)">true (4-bit NF4)</td><td class="diff">&#10003;</td></tr>
+<tr><td>lora.r</td><td>16</td><td>16</td><td class="same">-</td></tr>
+<tr><td>lora.alpha</td><td class="diff" style="color:var(--red)">16</td><td class="diff" style="color:var(--green)">32</td><td class="diff">&#10003; KEY</td></tr>
+<tr><td>lora.alpha/r (scaling)</td><td class="diff" style="color:var(--red)">1.0</td><td class="diff" style="color:var(--green)">2.0</td><td class="diff">&#10003; KEY</td></tr>
+<tr><td>CPT Perplexity</td><td style="color:var(--green)">2.19 (t&#7889;t h&#417;n)</td><td>2.24</td><td class="diff">&#10003;</td></tr>
+<tr><td>CPT Loss</td><td style="color:var(--green)">0.7845</td><td>0.8046</td><td class="diff">&#10003;</td></tr>
+</tbody></table>
+
+<div class="insight">
+<strong>Ph&aacute;t hi&#7879;n quan tr&#7885;ng &#7903; CPT phase:</strong><br>
+&bull; CPT LoRA d&ugrave;ng <strong>alpha=16</strong> (scaling=1.0), CPT QLoRA d&ugrave;ng <strong>alpha=32</strong> (scaling=2.0)<br>
+&bull; Scaling factor = alpha/r quy&#7871;t &#273;&#7883;nh m&#7913;c &#273;&#7897; adapter &#7843;nh h&#432;&#7903;ng l&ecirc;n output. Scaling=1.0 ngh&#297;a l&agrave; adapter &#7843;nh h&#432;&#7903;ng y&#7871;u h&#417;n.<br>
+&bull; Ngh&#7883;ch l&yacute;: CPT LoRA c&oacute; PPL t&#7889;t h&#417;n (2.19 vs 2.24) nh&#432;ng downstream SFT t&#7879; h&#417;n nhi&#7873;u (10% vs 45% MC).<br>
+&bull; &rarr; <strong>PPL th&#7845;p kh&ocirc;ng &#273;&#7843;m b&#7843;o downstream performance t&#7889;t.</strong>
+</div>
+
+<h3>2.3 Full Pipeline Comparison</h3>
+<div class="grid">
+<div>
+<h4 style="color:var(--red);margin:0 0 8px">Pipeline A: LoRA &rarr; LoRA SFT <span class="tag tr">MC 10%</span></h4>
+<div class="pipeline">
+<div class="step"><div class="name">Qwen3-0.6B</div><div class="detail">Base (fp16)</div></div>
+<span class="arrow-r">&rarr;</span>
+<div class="step" style="border-color:rgba(249,115,22,.4)"><div class="name">CPT LoRA</div><div class="detail">r=16, <strong style="color:var(--accent)">alpha=16</strong><br>scale=1.0, no quant</div></div>
+<span class="arrow-r">&rarr;</span>
+<div class="step" style="border-color:rgba(239,68,68,.4)"><div class="name">SFT LoRA</div><div class="detail">r=16, alpha=32<br>scale=2.0, <strong style="color:var(--red)">no quant</strong></div></div>
+</div>
+</div>
+<div>
+<h4 style="color:var(--green);margin:0 0 8px">Pipeline B: QLoRA &rarr; QLoRA SFT <span class="tag tg">MC 45%</span></h4>
+<div class="pipeline">
+<div class="step"><div class="name">Qwen3-0.6B</div><div class="detail">Base (4-bit)</div></div>
+<span class="arrow-r">&rarr;</span>
+<div class="step" style="border-color:rgba(34,197,94,.4)"><div class="name">CPT QLoRA</div><div class="detail">r=16, <strong style="color:var(--green)">alpha=32</strong><br>scale=2.0, 4-bit NF4</div></div>
+<span class="arrow-r">&rarr;</span>
+<div class="step" style="border-color:rgba(34,197,94,.4)"><div class="name">SFT QLoRA</div><div class="detail">r=16, alpha=32<br>scale=2.0, <strong style="color:var(--green)">4-bit NF4</strong></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══ 3. ROOT CAUSE ═══ -->
+<section class="card">
+<h2>3. Root Cause Analysis</h2>
+<table>
+<thead><tr><th>#</th><th>Y&#7871;u t&#7889;</th><th>&#7842;nh h&#432;&#7903;ng</th><th>Chi ti&#7871;t</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>CPT LoRA alpha=16 vs 32</strong></td>
+<td><span class="tag tr">Cao</span></td>
+<td>CPT LoRA d&ugrave;ng alpha=16 (scaling=1.0) &mdash; adapter &#7843;nh h&#432;&#7903;ng y&#7871;u h&#417;n l&ecirc;n base model.
+K&#7871;t qu&#7843;: CPT adapter c&oacute; th&#7875; ch&#432;a &ldquo;ghi nh&#7899;&rdquo; &#273;&#7911; legal knowledge v&agrave;o weights, d&ugrave; PPL tr&ocirc;ng t&#7889;t.
+QLoRA d&ugrave;ng alpha=32 (scaling=2.0) &mdash; adapter m&#7841;nh h&#417;n, ghi &#273;&#432;&#7907;c nhi&#7873;u h&#417;n.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Quantization = regularization</strong></td>
+<td><span class="tag ty">Trung b&igrave;nh</span></td>
+<td>4-bit quantization g&acirc;y &ldquo;noise&rdquo; v&agrave;o gradient &mdash; &#273;&oacute;ng vai tr&ograve; regularizer t&#7921; nhi&ecirc;n.
+V&#7899;i SFT data nh&#7887; (~3.4K samples), regularization gi&uacute;p ch&#7889;ng overfit.
+LoRA fp16 kh&ocirc;ng c&oacute; regularization n&agrave;y (dropout=0.0 &#7903; c&#7843; 2 configs).</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Pipeline consistency</strong></td>
+<td><span class="tag tb">G&oacute;p ph&#7847;n</span></td>
+<td>Pipeline B (QLoRA &rarr; QLoRA) nh&#7845;t qu&aacute;n: c&#7843; CPT v&agrave; SFT &#273;&#7873;u d&ugrave;ng 4-bit + alpha=32.
+Pipeline A kh&ocirc;ng nh&#7845;t qu&aacute;n: CPT alpha=16 nh&#432;ng SFT alpha=32 &mdash; c&oacute; th&#7875; g&acirc;y mismatch.</td>
+</tr>
+</tbody></table>
+
+<div class="insight">
+<strong>K&#7871;t lu&#7853;n:</strong> Root cause ch&iacute;nh l&agrave; <strong>CPT alpha=16 vs 32</strong> (scaling factor 1.0 vs 2.0).
+&#272;&acirc;y kh&ocirc;ng ph&#7843;i v&#7845;n &#273;&#7873; LoRA vs QLoRA inherently &mdash; m&agrave; l&agrave; <strong>hyperparameter misconfiguration &#7903; CPT phase</strong>.
+N&#7871;u CPT LoRA c&#361;ng d&ugrave;ng alpha=32 (nh&#432; QLoRA), k&#7871;t qu&#7843; c&oacute; th&#7875; g&#7847;n nhau h&#417;n nhi&#7873;u.
+<br><br>
+<strong>&#272;&#7875; x&aacute;c nh&#7853;n:</strong> Ch&#7841;y l&#7841;i CPT LoRA v&#7899;i alpha=32 r&#7891;i SFT &mdash; n&#7871;u k&#7871;t qu&#7843; c&#7843;i thi&#7879;n, x&aacute;c nh&#7853;n alpha l&agrave; root cause.
+</div>
+</section>
+
+<!-- ═══ 4. ALL CONFIGS MATRIX ═══ -->
+<section class="card">
+<h2>4. Full Config Matrix &mdash; T&#7845;t c&#7843; 8 Model Configs</h2>
+
+<h3>4.1 CPT Configs (3 models)</h3>
+<table>
+<thead><tr><th>Config</th><th>Base Model</th><th>Quant</th><th>LoRA r</th><th>alpha</th><th>scale</th><th>dropout</th><th>batch</th><th>grad_acc</th><th>eff_batch</th></tr></thead>
+<tbody>
+<tr><td>qwen3_0b6_lora</td><td>Qwen3-0.6B-Base</td><td>-</td><td>16</td><td class="diff">16</td><td class="diff">1.0</td><td>0.0</td><td>8</td><td>2</td><td>16</td></tr>
+<tr><td>qwen3_0b6_qlora</td><td>Qwen3-0.6B-bnb-4bit</td><td>4bit NF4</td><td>16</td><td>32</td><td>2.0</td><td>0.0</td><td>8</td><td>2</td><td>16</td></tr>
+<tr><td>qwen3_1b7_lora</td><td>Qwen3-1.7B</td><td>-</td><td>32</td><td class="diff">32</td><td class="diff">1.0</td><td>0.0</td><td>4</td><td>4</td><td>16</td></tr>
+</tbody></table>
+<p style="color:var(--muted);font-size:.82rem">K&#7871; th&#7915;a t&#7915; base/cpt.yaml: epochs=2, lr=1e-4, warmup=0.05, packing=true</p>
+
+<h3>4.2 SFT Configs (5 models)</h3>
+<table>
+<thead><tr><th>Config</th><th>CPT Source</th><th>Quant</th><th>LoRA r</th><th>alpha</th><th>scale</th><th>dropout</th><th>batch</th><th>grad_acc</th><th>eff_batch</th></tr></thead>
+<tbody>
+<tr style="background:rgba(239,68,68,.08)"><td>qwen3_0b6_cpt_sft</td><td>qwen3-0b6-lora adapter</td><td>-</td><td>16</td><td>32</td><td>2.0</td><td>0.0</td><td>8</td><td>2</td><td>16</td></tr>
+<tr style="background:rgba(34,197,94,.08)"><td>qwen3_0b6_cpt_qlora_sft</td><td>qwen3-0b6-qlora adapter</td><td>4bit NF4</td><td>16</td><td>32</td><td>2.0</td><td>0.0</td><td>8</td><td>2</td><td>16</td></tr>
+<tr><td>qwen3_1b7_cpt_sft</td><td>qwen3-1b7-lora adapter</td><td>-</td><td>32</td><td>64</td><td>2.0</td><td>0.0</td><td>4</td><td>4</td><td>16</td></tr>
+<tr><td>qwen3_1b7_cpt_qlora_sft</td><td>qwen3-1b7-qlora adapter</td><td>4bit NF4</td><td>32</td><td>64</td><td>2.0</td><td>0.0</td><td>8</td><td>2</td><td>16</td></tr>
+<tr><td>qwen3_1b7_pretrain_lora_vlsp</td><td>VLSP qwen3-1.7b-legal-pretrain</td><td>-</td><td>16</td><td>32</td><td>2.0</td><td class="diff">0.05</td><td>8</td><td>2</td><td>16</td></tr>
+</tbody></table>
+<p style="color:var(--muted);font-size:.82rem">K&#7871; th&#7915;a t&#7915; base/sft.yaml: epochs=3, lr=2e-4, warmup=0.1, packing=false</p>
+
+<div class="insight">
+<strong>Patterns nh&#7853;n th&#7845;y:</strong>
+<ul style="margin:8px 0 0;padding-left:20px">
+<li><strong>T&#7845;t c&#7843; SFT configs d&ugrave;ng scaling=2.0</strong> (alpha=2*r), nh&#7845;t qu&aacute;n.</li>
+<li><strong>CPT configs kh&ocirc;ng nh&#7845;t qu&aacute;n:</strong> 0.6B LoRA d&ugrave;ng alpha=r (scale=1.0), c&aacute;c c&aacute;i kh&aacute;c d&ugrave;ng alpha=r (scale=1.0 cho 1.7B) ho&#7863;c alpha=2r (scale=2.0 cho QLoRA).</li>
+<li><strong>VLSP model l&agrave; duy nh&#7845;t c&oacute; dropout=0.05</strong> &mdash; c&oacute; th&#7875; g&oacute;p ph&#7847;n v&agrave;o NLI Macro-F1 cao nh&#7845;t (69.5%).</li>
+<li><strong>Effective batch size = 16</strong> &#7903; t&#7845;t c&#7843; configs (kh&aacute;c nhau v&#7873; batch/grad_acc nh&#432;ng t&iacute;ch b&#7857;ng nhau).</li>
+</ul>
+</div>
+</section>
+
+<!-- ═══ 5. SCALING PATTERN ═══ -->
+<section class="card">
+<h2>5. Config Scaling Pattern &mdash; 0.6B vs 1.7B</h2>
+<table>
+<thead><tr><th>Parameter</th><th>0.6B models</th><th>1.7B models</th><th>Pattern</th></tr></thead>
+<tbody>
+<tr><td>LoRA r</td><td>16</td><td>32</td><td>r t&#259;ng theo model size (2x)</td></tr>
+<tr><td>LoRA alpha (SFT)</td><td>32</td><td>64</td><td>alpha = 2 * r (nh&#7845;t qu&aacute;n)</td></tr>
+<tr><td>target_modules</td><td colspan="2">7 modules (q/k/v/o_proj + gate/up/down_proj)</td><td>Gi&#7889;ng nhau</td></tr>
+<tr><td>Effective batch</td><td>16</td><td>16</td><td>Gi&#7889;ng nhau</td></tr>
+<tr><td>dropout</td><td>0.0</td><td>0.0</td><td>Gi&#7889;ng nhau (tr&#7915; VLSP: 0.05)</td></tr>
+</tbody></table>
+</section>
+
+<!-- ═══ 6. RECOMMENDATIONS ═══ -->
+<section class="card">
+<h2>6. Recommendations t&#7915; Config Analysis</h2>
+<table>
+<thead><tr><th>#</th><th>Action</th><th>Priority</th><th>Rationale</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Fix CPT LoRA alpha: 16 &rarr; 32</strong></td>
+<td><span class="tag tr">Urgent</span></td>
+<td>&#272;&acirc;y l&agrave; root cause ch&iacute;nh. Re-train CPT LoRA v&#7899;i alpha=32 r&#7891;i SFT l&#7841;i &mdash; so s&aacute;nh v&#7899;i pipeline QLoRA.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Chu&#7849;n h&oacute;a alpha = 2 * r cho t&#7845;t c&#7843; CPT configs</strong></td>
+<td><span class="tag ty">High</span></td>
+<td>1.7B CPT c&#361;ng d&ugrave;ng alpha=r (scale=1.0). N&ecirc;n &#273;&#7893;i th&agrave;nh alpha=2r &#273;&#7875; nh&#7845;t qu&aacute;n v&#7899;i SFT.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Th&#7917; dropout=0.05 cho c&aacute;c SFT configs kh&aacute;c</strong></td>
+<td><span class="tag tb">Research</span></td>
+<td>VLSP model d&ugrave;ng dropout=0.05 v&agrave; &#273;&#7841;t Macro-F1 cao nh&#7845;t. C&oacute; th&#7875; gi&uacute;p gi&#7843;m overfit.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Apply QLoRA SFT cho qwen3-1b7-cpt-qlora-sft</strong></td>
+<td><span class="tag ty">High</span></td>
+<td>Config &#273;&atilde; c&oacute; s&#7861;n. N&#7871;u pipeline QLoRA &rarr; QLoRA SFT t&#7889;t cho 0.6B, n&oacute; c&oacute; th&#7875; t&#7889;t cho 1.7B.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>SFT v&#7899;i 4B CPT checkpoint</strong></td>
+<td><span class="tag tp">Future</span></td>
+<td>4B CPT &#273;&atilde; s&#7861;n (PPL=1.83). D&ugrave;ng QLoRA SFT recipe (r=64, alpha=128, 4-bit).</td>
+</tr>
+</tbody></table>
+</section>
+
+</main>
+</body>
+</html>

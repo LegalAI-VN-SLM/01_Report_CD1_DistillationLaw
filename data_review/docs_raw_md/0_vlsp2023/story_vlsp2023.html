@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hành Trình Chưng Cất Tri Thức Pháp Luật Việt Nam</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface2: #334155;
+            --accent: #38bdf8;
+            --accent2: #818cf8;
+            --warn: #f59e0b;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --border: #475569;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(129, 140, 248, 0.05) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            animation: bounce 2s infinite;
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            z-index: 1;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Timeline */
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+
+        /* Chapters */
+        .chapter {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.6s ease;
+        }
+
+        .chapter.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .chapter-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .chapter-number.blue { background: var(--accent); color: var(--bg); }
+        .chapter-number.purple { background: var(--accent2); color: white; }
+        .chapter-number.red { background: var(--danger); color: white; }
+        .chapter-number.yellow { background: var(--warn); color: var(--bg); }
+        .chapter-number.green { background: var(--success); color: var(--bg); }
+
+        .chapter-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .chapter-desc {
+            color: var(--text-dim);
+            font-size: 1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .card.info::before { background: var(--accent); }
+        .card.warn::before { background: var(--warn); }
+        .card.danger::before { background: var(--danger); }
+        .card.success::before { background: var(--success); }
+        .card.purple::before { background: var(--accent2); }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card p, .card li {
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .card ul { padding-left: 1.5rem; }
+
+        /* Pipeline diagram */
+        .pipeline {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.8;
+            color: var(--text-dim);
+        }
+
+        .pipeline .highlight { color: var(--accent); font-weight: 600; }
+        .pipeline .warn-text { color: var(--warn); font-weight: 600; }
+        .pipeline .danger-text { color: var(--danger); font-weight: 600; }
+        .pipeline .success-text { color: var(--success); font-weight: 600; }
+        .pipeline .dim { color: #64748b; }
+
+        /* Stats grid */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat {
+            background: var(--surface2);
+            border-radius: 8px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value.blue { color: var(--accent); }
+        .stat-value.red { color: var(--danger); }
+        .stat-value.yellow { color: var(--warn); }
+        .stat-value.green { color: var(--success); }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Table */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: var(--surface2);
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-dim);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.pass { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+        .badge.fail { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .badge.mid { background: rgba(245, 158, 11, 0.15); color: var(--warn); }
+
+        /* Code block */
+        .code {
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            line-height: 1.6;
+            color: #c9d1d9;
+        }
+
+        /* Callout */
+        .callout {
+            border-left: 4px solid;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            background: var(--surface);
+        }
+
+        .callout.insight { border-color: var(--accent2); }
+        .callout.warning { border-color: var(--warn); }
+        .callout.critical { border-color: var(--danger); }
+        .callout.tip { border-color: var(--success); }
+
+        .callout strong { display: block; margin-bottom: 0.3rem; }
+
+        /* Two columns */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .two-col { grid-template-columns: 1fr; }
+        }
+
+        /* Transition section */
+        .transition {
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .transition .arrow {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        .transition p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+            font-style: italic;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Comparison arrows */
+        .compare {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .compare-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .compare-box.before {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .compare-box.after {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .compare-arrow {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        /* Gate list */
+        .gate-list {
+            counter-reset: gate;
+            list-style: none;
+            padding: 0;
+        }
+
+        .gate-list li {
+            counter-increment: gate;
+            padding: 0.8rem 0 0.8rem 3rem;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .gate-list li::before {
+            content: 'G' counter(gate);
+            position: absolute;
+            left: 0;
+            top: 0.8rem;
+            background: var(--surface2);
+            color: var(--accent);
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Nav TOC */
+        .toc {
+            position: fixed;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toc a {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            display: block;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .toc a.active { background: var(--accent); transform: scale(1.3); }
+
+        .toc a:hover::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--surface);
+            color: var(--text);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 1024px) {
+            .toc { display: none; }
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(129, 140, 248, 0.1));
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .highlight-box .big {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation dots -->
+<nav class="toc" id="toc">
+    <a href="#hero" data-label="Mở đầu" class="active"></a>
+    <a href="#ch1" data-label="1. Dữ liệu thô"></a>
+    <a href="#ch2" data-label="2. Pipeline chưng cất"></a>
+    <a href="#ch3" data-label="3. Thử nghiệm đầu tiên"></a>
+    <a href="#ch4" data-label="4. Phát hiện vấn đề"></a>
+    <a href="#ch5" data-label="5. Bước ngoặt"></a>
+    <a href="#ch6" data-label="6. Hệ thống kiểm soát"></a>
+    <a href="#ch7" data-label="7. Con đường phía trước"></a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <h1>Hành Trình Chưng Cất Tri Thức Pháp Luật</h1>
+    <p class="subtitle">
+        Câu chuyện về việc xây dựng một mô hình ngôn ngữ nhỏ gọn có khả năng suy luận pháp lý tiếng Việt
+        &mdash; từ 3,428 câu hỏi thô đến một pipeline distillation hoàn chỉnh.
+    </p>
+    <div class="scroll-hint">&darr;</div>
+</section>
+
+<!-- =========================================== -->
+<!-- CHAPTER 1: Dữ liệu thô -->
+<!-- =========================================== -->
+<section class="timeline chapter" id="ch1">
+    <div class="chapter-header">
+        <div class="chapter-number blue">1</div>
+        <h2 class="chapter-title">Khởi nguồn: 3,428 câu hỏi pháp luật</h2>
+        <p class="chapter-desc">Mọi thứ bắt đầu từ bộ dữ liệu ViLawQA trong cuộc thi VLSP 2023</p>
+    </div>
+
+    <div class="card info">
+        <h3>Bài toán đặt ra</h3>
+        <p>Chúng ta muốn xây dựng một <strong>Student model nhỏ gọn (Qwen3-4B)</strong> có khả năng suy luận pháp lý tiếng Việt. Nhưng dữ liệu hiện có chỉ có câu hỏi và đáp án &mdash; thiếu hoàn toàn phần <em>giải thích vì sao</em>.</p>
+        <p>Ý tưởng: Dùng một mô hình lớn (Teacher) để sinh ra lời giải thích, rồi dùng chính dữ liệu đó để dạy lại model nhỏ.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value blue">1,007</div>
+            <div class="stat-label">Multi-choice</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value blue">1,421</div>
+            <div class="stat-label">NLI</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value blue">1,000</div>
+            <div class="stat-label">Syllogism</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value green">3,428</div>
+            <div class="stat-label">Tổng cộng</div>
+        </div>
+    </div>
+
+    <div class="card info">
+        <h3>Ba dạng bài khác nhau</h3>
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Dạng bài</th>
+                    <th>Mô tả</th>
+                    <th>Ví dụ đầu ra mong muốn</th>
+                </tr>
+                <tr>
+                    <td><strong>Multi-choice</strong></td>
+                    <td>Trắc nghiệm A/B/C/D về kiến thức pháp luật</td>
+                    <td>Đáp án: B &mdash; Giải thích: Theo Điều 15...</td>
+                </tr>
+                <tr>
+                    <td><strong>NLI</strong></td>
+                    <td>Xác định điều luật có liên quan đến câu hỏi hay không</td>
+                    <td>Nhãn: relevant &mdash; Vì điều luật định nghĩa trực tiếp...</td>
+                </tr>
+                <tr>
+                    <td><strong>Syllogism</strong></td>
+                    <td>Trả lời câu hỏi pháp lý kèm căn cứ điều luật</td>
+                    <td>Không quá 10 ngày &mdash; Căn cứ Điều 29...</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="pipeline"><span class="dim">  data/raw/</span>
+  <span class="highlight">vilawqa.parquet</span>          &rarr; 1,007 câu trắc nghiệm
+  <span class="highlight">vilawqa_nli.parquet</span>      &rarr; 1,421 câu NLI
+  <span class="highlight">vilawqa_syllo.parquet</span>    &rarr; 1,000 câu syllogism
+           &darr;
+      <span class="dim">to_jsonl.py (convert &amp; chuẩn hóa)</span>
+           &darr;
+  <span class="success-text">raw_unified.jsonl</span>  (3,428 records, schema thống nhất)</div>
+
+    <div class="callout warning">
+        <strong>Phát hiện sớm:</strong>
+        <span>Có 2 record multi-choice có label = 7 và label = 8 &mdash; bất thường vì MCQ chỉ có 4 đáp án (hợp lệ: 0&ndash;3). Cần sửa trước khi tiếp tục.</span>
+    </div>
+</section>
+
+<!-- =========================================== -->
+<!-- CHAPTER 2: Pipeline chưng cất -->
+<!-- =========================================== -->
+<section class="timeline chapter" id="ch2">
+    <div class="chapter-header">
+        <div class="chapter-number purple">2</div>
+        <h2 class="chapter-title">Xây dựng Pipeline Chưng Cất</h2>
+        <p class="chapter-desc">Thiết kế hệ thống end-to-end từ dữ liệu thô đến "sách giáo khoa" cho Student</p>
+    </div>
+
+    <div class="card purple">
+        <h3>Kiến trúc 4 module</h3>
+        <p>Pipeline được chia thành 4 module rõ ràng, mỗi module một nhiệm vụ:</p>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Module</th><th>File</th><th>Nhiệm vụ</th></tr>
+                <tr><td><strong>Loader</strong></td><td>loader.py</td><td>Tải model + tokenizer vào GPU, patch chat template nếu cần</td></tr>
+                <tr><td><strong>Generator</strong></td><td>generator.py</td><td>Đóng gói prompt theo ChatML, chạy batch inference</td></tr>
+                <tr><td><strong>Parser</strong></td><td>parser.py</td><td>Trích xuất JSON, áp dụng quality gates kiểm tra chất lượng</td></tr>
+                <tr><td><strong>Pipeline</strong></td><td>pipeline.py</td><td>Điều phối toàn bộ luồng, lưu kết quả clean/rejected</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card info">
+        <h3>Tại sao cần Chat Template?</h3>
+        <p>Các mô hình ngôn ngữ lớn được huấn luyện theo định dạng hội thoại. Nếu "quăng" văn bản trần vào, model sẽ bối rối và sinh ra kết quả rác.</p>
+        <div class="code">&lt;|im_start|&gt;system
+Bạn là chuyên gia pháp luật Việt Nam.
+Chỉ trả về JSON hợp lệ. Bắt buộc dùng tiếng Việt.
+&lt;|im_end|&gt;
+
+&lt;|im_start|&gt;user
+Câu hỏi: Con bao nhiêu tuổi có thể tự quản lý tài sản?
+Các phương án: A... B... C... D...
+&lt;|im_end|&gt;
+
+&lt;|im_start|&gt;assistant
+<span style="color: #38bdf8;">&#8678; Model bắt đầu sinh câu trả lời từ đây</span></div>
+    </div>
+
+    <div class="callout critical">
+        <strong>Nguyên tắc sống còn: Chia data TRƯỚC khi distill</strong>
+        <span>Nếu chạy toàn bộ 3,428 records qua Teacher rồi mới chia train/test &rarr; Student sẽ bị <strong>data leakage</strong> và accuracy sẽ ảo. Phải chia 80/10/10 trước, chỉ distill trên phần train.</span>
+    </div>
+
+    <div class="pipeline"><span class="highlight">raw_unified.jsonl</span> (3,428 records)
+       &darr;
+  <span class="dim">split_train_val_test.py (stratify theo task_type)</span>
+       &darr;
+  <span class="success-text">split_train_v1.jsonl</span>   (80% &asymp; 2,742)  &larr; <span class="warn-text">chỉ cái này được distill</span>
+  <span class="dim">split_val_v1.jsonl</span>     (10% &asymp;   343)
+  <span class="danger-text">split_test_v1.jsonl</span>    (10% &asymp;   343)  &larr; <span class="danger-text">KHÔNG BAO GIỜ cho Teacher nhìn</span>
+       &darr;
+  <span class="dim">chunked_distill.py &rarr; Teacher inference &rarr; parser.py</span>
+       &darr;
+  <span class="success-text">distilled_train_clean.jsonl</span>     (samples sạch &rarr; train Student)
+  <span class="danger-text">distilled_train_rejected.jsonl</span>  (samples lỗi &rarr; debug)</div>
+</section>
+
+<!-- =========================================== -->
+<!-- CHAPTER 3: Thử nghiệm đầu tiên -->
+<!-- =========================================== -->
+<section class="timeline chapter" id="ch3">
+    <div class="chapter-header">
+        <div class="chapter-number yellow">3</div>
+        <h2 class="chapter-title">Thử Nghiệm Đầu Tiên: SeaLLMs-v3-7B</h2>
+        <p class="chapter-desc">20 mẫu multi-choice &mdash; và sự thật phũ phàng</p>
+    </div>
+
+    <div class="card warn">
+        <h3>Kết quả thử nghiệm pilot</h3>
+        <p>SeaLLMs-v3-7B-Chat được chọn làm Teacher ban đầu nhờ khả năng tiếng Việt tốt. Thử 20 mẫu multi-choice đầu tiên...</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value yellow">80%</div>
+            <div class="stat-label">Parse thành công</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value red">40%</div>
+            <div class="stat-label">Accuracy tổng thể</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value red">25%</div>
+            <div class="stat-label">Answer sạch (A/B/C/D)</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value red">3/10</div>
+            <div class="stat-label">Reasoning quality</div>
+        </div>
+    </div>
+
+    <div class="card danger">
+        <h3>Loạt vấn đề phát hiện</h3>
+        <ul>
+            <li><strong>Format answer hỗn loạn:</strong> Model sinh ra đủ kiểu &mdash; lúc "C", lúc "The exact answer text is: D...", lúc thì trả "E" dù bài chỉ có A/B/C/D</li>
+            <li><strong>Reasoning không phải reasoning thật:</strong> Nhiều dòng chỉ copy lại đáp án: <em>"The exact answer text is: D..."</em></li>
+            <li><strong>Teacher trả sai nhiều:</strong> Có mẫu reasoning nói B nhưng teacher_answer lại ghi A &mdash; mâu thuẫn nội tại</li>
+            <li><strong>teacher_confidence = 0.95 cố định:</strong> Không phản ánh độ chắc chắn thật, chỉ là placeholder</li>
+        </ul>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <tr><th>ID</th><th>Gold</th><th>Teacher</th><th>Vấn đề</th></tr>
+            <tr><td>vilawqa_mc_00002</td><td><span class="badge pass">D</span></td><td><span class="badge fail">C</span></td><td>Reasoning nhắc cả C và D, chọn sai</td></tr>
+            <tr><td>vilawqa_mc_00004</td><td><span class="badge pass">D</span></td><td><span class="badge fail">E</span></td><td>Sinh đáp án ngoài phạm vi A&ndash;D</td></tr>
+            <tr><td>vilawqa_mc_00006</td><td><span class="badge pass">D</span></td><td><span class="badge fail">A</span></td><td>Sai rõ ràng</td></tr>
+            <tr><td>vilawqa_mc_00011</td><td><span class="badge pass">B</span></td><td><span class="badge fail">A</span></td><td>Reasoning nói B nhưng answer ghi A</td></tr>
+        </table>
+    </div>
+
+    <div class="callout insight">
+        <strong>Nhận định:</strong>
+        <span>File 20 mẫu này phù hợp để <strong>debug pipeline</strong> (8/10 điểm), nhưng hoàn toàn chưa đủ để train Student (3/10 điểm). Nếu dùng data này, Student sẽ học nhiễu: answer sai, format lộn xộn, reasoning yếu.</span>
+    </div>
+</section>
+
+<!-- =========================================== -->
+<!-- CHAPTER 4: Phát hiện vấn đề sâu -->
+<!-- =========================================== -->
+<section class="timeline chapter" id="ch4">
+    <div class="chapter-header">
+        <div class="chapter-number red">4</div>
+        <h2 class="chapter-title">Mổ Xẻ: Ba Vấn Đề Gốc Rễ</h2>
+        <p class="chapter-desc">Human review 3 sample thực tế tiết lộ lỗi hệ thống, không phải lỗi model</p>
+    </div>
+
+    <div class="highlight-box">
+        <div class="big">Vấn đề không nằm ở Teacher &mdash; nằm ở Data Schema và Prompt Objective</div>
+        <p style="color: var(--text-dim);">Đây là phát hiện quan trọng nhất của dự án</p>
+    </div>
+
+    <!-- Root cause 1 -->
+    <div class="card danger">
+        <h3>Root Cause #1: NLI Schema sai từ Converter</h3>
+        <p>File converter <code>to_jsonl.py</code> sinh ra choices bị duplicate và label_semantics hard-code sai.</p>
+        <div class="two-col">
+            <div>
+                <strong style="color: var(--danger);">Choices bị lặp:</strong>
+                <div class="code">A. "không liên quan"
+B. "không liên quan và không thể..."
+C. "không liên quan"      &larr; trùng A
+D. "có liên quan"</div>
+            </div>
+            <div>
+                <strong style="color: var(--danger);">Hậu quả:</strong>
+                <p>Student sẽ học shortcut: "nếu 3 options đầu giống nhau thì chọn cái còn lại" thay vì học semantic relevance thật sự.</p>
+                <p style="margin-top: 0.5rem;"><code>label_semantics</code> ghi <em>"0=relevant"</em> nhưng choices[0] lại là "không liên quan" &rarr; mâu thuẫn.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Root cause 2 -->
+    <div class="card danger">
+        <h3>Root Cause #2: Reasoning tiếng Anh</h3>
+        <p>SeaLLMs-v3 là model đa ngôn ngữ. Khi prompt không đủ chặt, nó tự động chuyển sang tiếng Anh:</p>
+        <div class="code">"teacher_reasoning": "The legal document provided is directly related to the question about endorsement transfer of promissory notes..."</div>
+        <p>Với một legal SLM tiếng Việt, Student sẽ học style trả lời song ngữ &mdash; hoàn toàn không mong muốn.</p>
+    </div>
+
+    <!-- Root cause 3 -->
+    <div class="card danger">
+        <h3>Root Cause #3: Syllogism Objective sai trong Prompt</h3>
+        <p>Prompt cũ hỏi Teacher: <em>"Câu hỏi này có trả lời được không?"</em></p>
+        <div class="compare">
+            <div class="compare-box before">
+                <strong style="color: var(--danger);">Teacher trả lời:</strong>
+                <p style="font-family: monospace; margin-top: 0.5rem;">"answerable"</p>
+                <p style="font-size: 0.8rem; margin-top: 0.3rem;">Classification, không phải QA</p>
+            </div>
+            <div class="compare-arrow">&rarr;</div>
+            <div class="compare-box after">
+                <strong style="color: var(--success);">Cần phải trả lời:</strong>
+                <p style="font-family: monospace; margin-top: 0.5rem;">"Không quá 10 ngày kể từ ngày nhận đủ hồ sơ; nếu cần xác minh thì không quá 45 ngày"</p>
+                <p style="font-size: 0.8rem; margin-top: 0.3rem;">Nội dung pháp lý thực sự</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="callout insight">
+        <strong>Bài học rút ra:</strong>
+        <span><code>teacher_valid = true</code> chỉ có nghĩa là parser parse được JSON &mdash; không có nghĩa sample có chất lượng tốt. Cần thêm nhiều lớp quality gate hơn nữa.</span>
+    </div>
+</section>
+
+<!-- TRANSITION -->
+<div class="transition">
+    <div class="arrow">&darr;</div>
+    <p>"Nhận ra vấn đề không nằm ở năng lực Teacher mà ở cách ta đặt bài toán cho nó, đội ngũ quyết định thay đổi chiến lược từ gốc rễ."</p>
+</div>
+
+<!-- =========================================== -->
+<!-- CHAPTER 5: Bước ngoặt -->
+<!-- =========================================== -->
+<section class="timeline chapter" id="ch5">
+    <div class="chapter-header">
+        <div class="chapter-number green">5</div>
+        <h2 class="chapter-title">Bước Ngoặt: Gold-Conditioned Reasoning</h2>
+        <p class="chapter-desc">Đổi bài toán cho Teacher: từ "hãy chọn đáp án" sang "đáp án đúng là X, hãy giải thích"</p>
+    </div>
+
+    <div class="card success">
+        <h3>Thay đổi chiến lược cốt lõi</h3>
+        <p>SeaLLMs-7B không đủ tin cậy để tự chọn đáp án (accuracy ~40%). Nhưng nó <strong>vẫn rất hữu ích để viết giải thích tiếng Việt nếu đã biết đáp án đúng</strong>.</p>
+    </div>
+
+    <div class="compare" style="margin: 2rem 0;">
+        <div class="compare-box before">
+            <strong style="color: var(--danger); font-size: 1.1rem;">Chiến lược cũ</strong>
+            <p style="margin-top: 0.5rem;">Question + choices</p>
+            <p>&darr;</p>
+            <p>SeaLLMs <strong>tự chọn</strong> answer + reasoning</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--danger);">Accuracy ~40% &rarr; Student học nhiễu</p>
+        </div>
+        <div class="compare-arrow">&rarr;</div>
+        <div class="compare-box after">
+            <strong style="color: var(--success); font-size: 1.1rem;">Chiến lược mới</strong>
+            <p style="margin-top: 0.5rem;">Question + choices + <strong>đáp án đúng</strong></p>
+            <p>&darr;</p>
+            <p>SeaLLMs chỉ <strong>sinh reasoning</strong></p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--success);">Answer luôn đúng &rarr; chỉ cần filter reasoning</p>
+        </div>
+    </div>
+
+    <div class="card info">
+        <h3>Prompt mẫu mới: Multi-choice</h3>
+        <div class="code"><span style="color: #7ee787;">[system]</span> Bạn là chuyên gia pháp luật Việt Nam.
+Chỉ trả về JSON hợp lệ. Bắt buộc dùng tiếng Việt.
+
+<span style="color: #7ee787;">[user]</span> Câu hỏi: {question}
+Các lựa chọn: A. ... B. ... C. ... D. ...
+
+<span style="color: #f0883e;">Đáp án đúng là: {gold_letter}. {gold_answer_text}</span>
+
+Yêu cầu:
+- Không đổi đáp án.
+- Giải thích bằng tiếng Việt vì sao {gold_letter} đúng.
+- Giải thích ngắn vì sao các phương án còn lại sai.
+
+Trả về JSON:
+{
+  "answer": "{gold_letter}",
+  "reasoning": "...",
+  "elimination": {"A": "...", "B": "...", "C": "...", "D": "..."}
+}</div>
+    </div>
+
+    <div class="two-col">
+        <div class="card info">
+            <h3>NLI (Binary Relevance)</h3>
+            <p>Nhãn đúng được đưa vào prompt. Teacher chỉ cần giải thích vì sao điều luật liên quan hoặc không liên quan.</p>
+            <p style="margin-top: 0.5rem;"><strong>NLI schema mới:</strong> Binary <code>relevant/irrelevant</code> thay vì MCQ 4 lựa chọn bị lỗi.</p>
+        </div>
+        <div class="card info">
+            <h3>Syllogism (QA + Rationale)</h3>
+            <p>Câu trả lời chuẩn được đưa vào. Teacher viết lại lời giải pháp lý, giữ đủ con số và thời hạn quan trọng.</p>
+            <p style="margin-top: 0.5rem;"><strong>Yêu cầu mới:</strong> Phải chứa các key facts (10 ngày, 45 ngày...) từ target gốc.</p>
+        </div>
+    </div>
+
+    <div class="card purple">
+        <h3>Đội hình Teacher model</h3>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Model</th><th>Vai trò</th><th>Mức ưu tiên</th></tr>
+                <tr>
+                    <td><strong>CMC-AI-Legal-32B</strong></td>
+                    <td>Teacher chính / Judge cuối cùng</td>
+                    <td><span class="badge pass">Rất cao</span></td>
+                </tr>
+                <tr>
+                    <td><strong>SeaLLMs-v3-7B-Chat</strong></td>
+                    <td>Sinh reasoning khi đã biết gold answer</td>
+                    <td><span class="badge pass">Cao</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Qwen2.5-7B-Instruct</strong></td>
+                    <td>Teacher phụ reasoning</td>
+                    <td><span class="badge mid">Trung bình</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================== -->
+<!-- CHAPTER 6: Quality Gates -->
+<!-- =========================================== -->
+<section class="timeline chapter" id="ch6">
+    <div class="chapter-header">
+        <div class="chapter-number yellow">6</div>
+        <h2 class="chapter-title">9 Cổng Kiểm Soát Chất Lượng</h2>
+        <p class="chapter-desc">Hệ thống parser.py với 9 quality gates &mdash; mỗi gate bắt một loại lỗi cụ thể</p>
+    </div>
+
+    <div class="card warn">
+        <h3>Luồng kiểm tra tuần tự</h3>
+        <p>Mỗi record phải vượt qua tất cả 9 gates. Bất kỳ gate nào reject &rarr; record vào file <code>rejected.jsonl</code> với <code>teacher_error</code> ghi rõ lý do.</p>
+    </div>
+
+    <ol class="gate-list" style="margin: 1.5rem 0;">
+        <li><strong>Validate sample trước khi parse</strong> &mdash; NLI có choices duplicate? label_semantics có khớp? Nếu sai &rarr; reject ngay, không cần gọi Teacher.</li>
+        <li><strong>Parse JSON</strong> &mdash; Thử parse toàn bộ text, sau đó regex tìm JSON block. Cả hai fail &rarr; answer="", reasoning="".</li>
+        <li><strong>Answer rỗng</strong> &mdash; Model sinh JSON nhưng field answer không có giá trị.</li>
+        <li><strong>Reasoning rỗng</strong> &mdash; Model sinh answer nhưng bỏ key reasoning hoặc để trống.</li>
+        <li><strong>Reasoning quá ngắn</strong> &mdash; Multi-choice &ge; 20 ký tự, NLI &ge; 30, Syllogism &ge; 40. "Đúng." hay "B là đáp án." &rarr; reject.</li>
+        <li><strong>Reasoning tiếng Anh</strong> &mdash; Nếu &gt;30% từ là tiếng Anh và không tìm thấy dấu hiệu tiếng Việt &rarr; reject.</li>
+        <li><strong>Answer không khớp gold label</strong> &mdash; Multi-choice: phải đúng chữ cái. NLI: phải là "relevant"/"irrelevant" và khớp gold.</li>
+        <li><strong>Syllogism: answer là answerability label</strong> &mdash; "answerable", "not answerable" &rarr; reject. Cần nội dung pháp lý thực sự.</li>
+        <li><strong>Syllogism: reasoning bỏ qua facts</strong> &mdash; Nếu reasoning chung chung mà thiếu các con số/thời hạn từ target gốc &rarr; reject.</li>
+    </ol>
+
+    <div class="card danger">
+        <h3>Bảng tóm tắt lỗi thường gặp</h3>
+        <div class="table-wrap">
+            <table>
+                <tr><th>teacher_error</th><th>Nguyên nhân gốc</th></tr>
+                <tr><td><code>nli choices contain duplicates</code></td><td>Converter to_jsonl.py sinh choices lặp</td></tr>
+                <tr><td><code>Could not parse JSON from output</code></td><td>Model sinh văn xuôi thay vì JSON</td></tr>
+                <tr><td><code>reasoning appears to be English</code></td><td>Prompt không ép đủ chặt tiếng Việt</td></tr>
+                <tr><td><code>answer B (idx 1) != gold 2</code></td><td>Teacher chọn sai đáp án (chiến lược cũ)</td></tr>
+                <tr><td><code>syllogism answer is answerability label</code></td><td>Prompt cũ biến QA thành classification</td></tr>
+                <tr><td><code>syllogism reasoning is too generic</code></td><td>Thiếu con số/facts cụ thể từ target</td></tr>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================== -->
+<!-- CHAPTER 7: Con đường phía trước -->
+<!-- =========================================== -->
+<section class="timeline chapter" id="ch7">
+    <div class="chapter-header">
+        <div class="chapter-number green">7</div>
+        <h2 class="chapter-title">Con Đường Phía Trước</h2>
+        <p class="chapter-desc">Lộ trình 5 phase từ data đến production</p>
+    </div>
+
+    <div class="card success">
+        <h3>Lộ trình triển khai</h3>
+        <div class="pipeline"><span class="success-text">Phase 0</span>  Split data 80/10/10, stratify theo task_type
+           &darr;
+<span class="success-text">Phase 1</span>  Teacher pilot 100&ndash;300 samples
+           Check: parse_success_rate &ge; 95%
+           &darr;
+<span class="success-text">Phase 2</span>  Distill full train set
+           Filter &rarr; distilled_train_clean.jsonl
+           &darr;
+<span class="highlight">Phase 3</span>  Student SFT (Qwen3-4B + QLoRA)
+           &darr;
+<span class="highlight">Phase 4</span>  Evaluate trên test.jsonl gốc
+           &darr;
+<span class="dim">Phase 5</span>  Production: resume, logging, versioning, model card</div>
+    </div>
+
+    <div class="card warn">
+        <h3>Ngưỡng Go / No-Go trước khi train Student</h3>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value green">&ge;95%</div>
+                <div class="stat-label">Parse success rate</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value green">&ge;98%</div>
+                <div class="stat-label">Answer match gold</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value green">&le;2%</div>
+                <div class="stat-label">Empty reasoning</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value green">&le;1%</div>
+                <div class="stat-label">Invalid answer</div>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 1rem; color: var(--text-dim);">
+            + Manual review 50 records: reasoning đúng pháp lý, tiếng Việt, đủ facts
+        </p>
+    </div>
+
+    <div class="card purple">
+        <h3>Training Config cho Student</h3>
+        <div class="two-col">
+            <div>
+                <strong>Model:</strong>
+                <div class="code">Qwen3-4B-Base (hoặc legal-pretrain)
+QLoRA qua Unsloth
+MAX_SEQ_LENGTH = 4096</div>
+            </div>
+            <div>
+                <strong>Hyperparameters:</strong>
+                <div class="code">LORA_R = 32, LORA_ALPHA = 64
+LR = 1.5e-4
+EPOCHS = 2&ndash;3
+BATCH = 4, GRAD_ACCUM = 4
+BF16 = True</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card info">
+        <h3>4 Lớp Evaluation</h3>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Lớp</th><th>Đo gì?</th><th>Metric</th></tr>
+                <tr><td>Teacher accuracy</td><td>Teacher trả đúng gold label không?</td><td>Accuracy</td></tr>
+                <tr><td>Parser quality</td><td>Extract đúng A/B/C/D không?</td><td>Parse success rate</td></tr>
+                <tr><td>Student accuracy</td><td>Student trả đúng trên held-out test</td><td>Accuracy / Macro-F1</td></tr>
+                <tr><td>Reasoning quality</td><td>Giải thích đúng luật, không hallucinate?</td><td>Human eval / Judge eval</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+        <div class="big">Từ 3,428 câu hỏi thô &rarr; Pipeline distillation hoàn chỉnh &rarr; Student model suy luận pháp lý tiếng Việt</div>
+        <p style="color: var(--text-dim); margin-top: 0.5rem;">Hành trình còn dài, nhưng nền tảng đã vững.</p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>VLSP 2023 &mdash; Legal AI Distillation Pipeline</p>
+    <p style="margin-top: 0.5rem;">Dữ liệu: ViLawQA (multi-choice, NLI, syllogism) &bull; Teacher: SeaLLMs-v3 / CMC-AI-Legal-32B &bull; Student: Qwen3-4B</p>
+</footer>
+
+<script>
+// Scroll animation for chapters
+const chapters = document.querySelectorAll('.chapter');
+const tocLinks = document.querySelectorAll('.toc a');
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1 });
+
+chapters.forEach(ch => observer.observe(ch));
+
+// TOC active state
+const sections = document.querySelectorAll('[id]');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+        const top = section.offsetTop - 200;
+        if (window.scrollY >= top) {
+            current = section.getAttribute('id');
+        }
+    });
+    tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+        }
+    });
+});
+</script>
+
+</body>
+</html>
