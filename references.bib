@@ -1,10 +1,4 @@
-@misc{tdtu_template,
-  author       = {{Ton Duc Thang University}},
-  title        = {Master Thesis Template},
-  year         = {2026},
-  howpublished = {Internal document},
-  note         = {Accessed: 2026-03-17}
-}
+
 
 
 %%% Distillution
@@ -110,5 +104,76 @@ doi = {10.1007/s10506-025-09463-9}
       url={https://arxiv.org/abs/2510.09297}, 
 }
 
+@misc{stacey2024distillingrobustnessnaturallanguage,
+      title={Distilling Robustness into Natural Language Inference Models with Domain-Targeted Augmentation}, 
+      author={Joe Stacey and Marek Rei},
+      year={2024},
+      eprint={2305.13067},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2305.13067}, 
+}
+
+@misc{song2026surveyonpolicydistillationlarge,
+      title={A Survey of On-Policy Distillation for Large Language Models}, 
+      author={Mingyang Song and Mao Zheng},
+      year={2026},
+      eprint={2604.00626},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2604.00626}, 
+}
 
 
+@inproceedings{adarsh-etal-2025-siked,
+    title = "{SIK}e{D}: Self-guided Iterative Knowledge Distillation for Mathematical Reasoning",
+    author = "Adarsh, Shivam  and
+      Shridhar, Kumar  and
+      Gulcehre, Caglar  and
+      Monath, Nicholas  and
+      Sachan, Mrinmaya",
+    editor = "Che, Wanxiang  and
+      Nabende, Joyce  and
+      Shutova, Ekaterina  and
+      Pilehvar, Mohammad Taher",
+    booktitle = "Findings of the Association for Computational Linguistics: ACL 2025",
+    month = jul,
+    year = "2025",
+    address = "Vienna, Austria",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.findings-acl.513/",
+    doi = "10.18653/v1/2025.findings-acl.513",
+    pages = "9868--9880",
+    ISBN = "979-8-89176-256-5",
+    abstract = "Large Language Models (LLMs) can transfer their reasoning skills to smaller models by teaching them to generate the intermediate reasoning process required to solve multistep reasoning tasks. While LLMs can accurately solve reasoning tasks through a variety of strategies, even without fine-tuning, smaller models are not expressive enough to fit the LLMs distribution on all strategies when distilled and tend to prioritize one strategy over the others. This reliance on one strategy poses a challenge for smaller models when attempting to solve reasoning tasks that may be difficult with their preferred strategy. To address this, we propose a distillation method $SIKeD$: **S**elf-guided **I**terative **K**nowledg**e** **D**istillation, where the LLM teaches the smaller model to approach a task using different strategies and the smaller model uses its self-generated on-policy outputs to choose the most suitable strategy for the given task. The training continues in a self-guided iterative manner, where for each training iteration, a decision is made on how to combine the LLM data with the self-generated outputs. Unlike traditional distillation methods, SIKeD allows the smaller model to learn which strategy is suitable for a given task while continuously learning to solve a task using different strategies. Our experiments on various mathematical reasoning datasets show that SIKeD significantly outperforms traditional distillation techniques across smaller models of different sizes."
+}
+
+@misc{zhao2026selfdistilledreasoneronpolicyselfdistillation,
+      title={Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models}, 
+      author={Siyan Zhao and Zhihui Xie and Mengchen Liu and Jing Huang and Guan Pang and Feiyu Chen and Aditya Grover},
+      year={2026},
+      eprint={2601.18734},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2601.18734}, 
+}
+
+@misc{li2026legaldrilldiagnosisdrivensynthesislegal,
+      title={LegalDrill: Diagnosis-Driven Synthesis for Legal Reasoning in Small Language Models}, 
+      author={Tianchun Li and Haochen Liu and Vishwa Pardeshi and Xingchen Wang and Tianci Liu and Huijun Zhao and Wei Fan and Jing Gao},
+      year={2026},
+      eprint={2604.23809},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2604.23809}, 
+}
+
+@misc{zhao2026trainingharnessesonpolicyharness,
+      title={Training with Harnesses: On-Policy Harness Self-Distillation for Complex Reasoning}, 
+      author={Zhengyang Zhao and Lu Ma and Wentao Zhang},
+      year={2026},
+      eprint={2605.08741},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2605.08741}, 
+}

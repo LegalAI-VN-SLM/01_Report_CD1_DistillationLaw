@@ -1,4 +1,10 @@
-\titleformat{\chapter}[block]{\bfseries\fontsize{16}{19}\selectfont\centering}{\thechapter}{0pt}{\MakeUppercase}
-\titlespacing*{\chapter}{0pt}{40pt}{5pt}
+\titleformat{\chapter}[display]{\bfseries\fontsize{16}{19}\selectfont\centering}{\MakeUppercase{\chaptername}\ \thechapter}{0pt}{\MakeUppercase}
+\titlespacing*{\chapter}{0pt}{40pt}{20pt}
+\begingroup
+\emergencystretch=2em
+\setcounter{biburllcpenalty}{9000}
+\setcounter{biburlucpenalty}{9000}
+\setcounter{biburlnumpenalty}{9000}
 \nocite{*}
 \printbibliography[heading=bibintoc,title={REFERENCES}]
+\endgroup
