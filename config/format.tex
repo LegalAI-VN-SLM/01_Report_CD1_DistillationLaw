@@ -9,6 +9,7 @@
 }
 \usepackage[left=3.5cm, right=2cm, top=3.5cm, bottom=3cm]{geometry}
 \usepackage{graphicx,float}
+\usepackage{array,tabularx}
 \usepackage{mathtools}
 \usepackage{amssymb,amsmath}
 \usepackage{mathptmx}       
@@ -40,7 +41,7 @@
 \newlist{abbrv}{itemize}{1}
 \setlist[abbrv,1]{label=,labelwidth=1in,align=parleft,itemsep=0.1\baselineskip,leftmargin=!}
 
-\usepackage[thmmarks]{ntheorem}
+\usepackage[amsmath,thmmarks]{ntheorem}
 
 \theorembodyfont{\normalfont}
 \theoremseparator{.}
@@ -77,6 +78,9 @@
 \renewcommand{\baselinestretch}{1.5}
 \setlength{\parindent}{1.27cm}
 \allowdisplaybreaks
+\emergencystretch=3em
+\tolerance=2000
+\hbadness=10000
 
 \usepackage[labelfont=bf]{caption}
 \numberwithin{figure}{chapter}
