@@ -1,9 +1,57 @@
 \section{Phase 3: Diagnosis-Driven Preference Optimization}
 
+The third and final phase of our framework aligns the student model using preference optimization. In this phase, we target specific reasoning errors, such as logical leaps and statutory misinterpretations, and correct them by constructing preference pairs analyzed by an external judge. The complete workflow of this phase, from error diagnosis to preference alignment, is summarized in Figure~\ref{fig:phase3_dpo}.
+
+\input{figs/tikz/fig_3_4_diagnosis_dpo}
+
 \subsection{Exploration and Error Diagnosis}
+
+Following the second phase of on-policy distillation, the student model achieves improved consistency but may still exhibit localized reasoning flaws, such as statutory misinterpretations or logical inconsistencies. To systematically isolate and correct these remaining vulnerabilities, we implement an exploration and error diagnosis process inspired by the concept of diagnosis-driven learning \parencite{li2026legaldrilldiagnosisdrivensynthesislegal}.
+
+During the exploration phase, the student model generates reasoning rollouts $\hat{y}$ for all prompt samples $x$ in the training corpus $\mathcal{D}_{\text{train}}$. Instead of evaluating these outputs using simple lexical metrics, we deploy an external Audit Agent powered by a frontier Large Language Model (GPT-4o-mini). The Audit Agent performs a deep semantic analysis of the reasoning chain against the statutory provisions and the query. It evaluates both the correctness of the final legal verdict and the logical validity of the intermediate reasoning steps. Each rollout $\hat{y}$ is categorized into one of four distinct diagnostic classes:
+\begin{itemize}
+    \item \texttt{OK}: The reasoning chain is logically rigorous, correctly cites the relevant statutory articles, and reaches the correct final legal verdict.
+    \item \texttt{RISKY}: The final verdict is correct, but the reasoning chain exhibits logical leaps, contains ungrounded assumptions, or bypasses critical statutory interpretation steps.
+    \item \texttt{PARTIAL}: The reasoning chain is partially correct and shows a basic understanding, but it fails to resolve all necessary legal elements or reaches an incorrect sub-verdict on a subset of the facts.
+    \item \texttt{WRONG}: The reasoning chain is fundamentally flawed, citing incorrect statutory rules or exhibiting critical logical fallacies, which leads to an incorrect final verdict.
+\end{itemize}
+This categorical diagnosis allows us to pinpoint the specific logical steps where the student model's reasoning breaks down, facilitating targeted feedback.
 
 \subsection{Preference Pair Construction}
 
+Using the diagnostic outputs from the Audit Agent, we construct a preference dataset $\mathcal{D}_{\text{pref}}$ containing preference triplets $(x, y_w, y_l)$. For each query $x$ where the student's generated rollout $\hat{y}$ is diagnosed with errors (i.e., classified as \texttt{RISKY}, \texttt{PARTIAL}, or \texttt{WRONG}), we build a preference pair:
+\begin{enumerate}
+    \item \textbf{Chosen Response ($y_w$):} The ground-truth gold explanation and answer $y^*$, which serves as the target demonstration of correct, logically complete reasoning.
+    \item \textbf{Rejected Response ($y_l$):} The student model's generated rollout $\hat{y}$ containing the identified reasoning error.
+\end{enumerate}
+By pairing the student's self-generated mistakes ($y_l$) directly against the corresponding correct, expert reasoning paths ($y_w$), we create a highly specific optimization signal. This contrastive signal explicitly teaches the model which reasoning patterns to avoid and which ones to favor. To prevent training on trivial examples, we exclude samples where the student model's output is classified as \texttt{OK}, as they do not provide an error-correction signal.
+
 \subsection{Rule-Based vs. Large Language Model Judge}
 
+In the original LegalDrill framework \parencite{li2026legaldrilldiagnosisdrivensynthesislegal}, the selection of preference samples is guided by an internal, self-reflective difficulty score. For a query $x$, the student model generates its own next-token probabilities at the classification decision step. The difficulty score $d(x)$ is calculated as the entropy of the model's prediction over the label tokens:
+\begin{equation}
+    d(x) = -\sum_{l \in \{\text{correct}, \text{incorrect}\}} P_{\text{student}}(l \mid x, \hat{y}_{\text{reasoning}}) \log P_{\text{student}}(l \mid x, \hat{y}_{\text{reasoning}}).
+\end{equation}
+Samples with a high difficulty score (approaching maximum entropy) are prioritized for synthesis.
+
+However, this self-reflective logits-based mechanism suffers from critical limitations when applied to lightweight Small Language Models (under 3 billion parameters):
+\begin{enumerate}
+    \item \textbf{Calibration Bias:} Small Language Models are known to suffer from severe miscalibration. They often assign high probability (low entropy) to incorrect answers and hallucinations, meaning they are "confidently wrong." Consequently, the internal difficulty score fails to flag these critical errors.
+    \item \textbf{Neglect of Chain-of-Thought Structure:} The logits-based entropy is calculated only at the final decision tokens. It cannot evaluate the intermediate reasoning steps within the \texttt{<think>} block, thereby ignoring logical leaps, formatting issues, or structural tag misalignments.
+\end{enumerate}
+To address these limitations, we propose a paradigm shift. We replace the internal logits-based verification with an external Large Language Model as a Judge evaluator (using GPT-4o-mini) combined with a Stratified Sampling strategy.
+
+The Large Language Model Judge performs semantic validation, checking whether the reasoning steps are logically consistent and legally sound. It labels each rollout with the diagnostic classes discussed in the previous section. Furthermore, to prevent the student model from exploiting surface-level shortcuts (such as learning that responses containing certain XML formats are always preferred), we utilize a Stratified Sampling method. We ensure that the chosen ($y_w$) and rejected ($y_l$) pairs are matched based on their formatting structure (e.g., both containing the \texttt{<think>} tags and similar length distributions). This enforces that the optimization gradient focuses on the semantic and logical validity of the legal reasoning rather than superficial formatting cues.
+
 \subsection{Preference Alignment via Direct Preference Optimization}
+
+Once the preference dataset $\mathcal{D}_{\text{pref}}$ is constructed, we perform preference alignment using Direct Preference Optimization (DPO) \parencite{rafailov2024directpreferenceoptimizationlanguage}. DPO optimizes the student policy $\pi_\theta$ directly on the preference pairs, eliminating the need for a complex and unstable reward model. The objective minimizes:
+\begin{equation}
+    \mathcal{L}_{\text{DPO}}(\theta; \pi_{\text{ref}}) = -\mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}_{\text{pref}}} \left[ \log \sigma \left( \beta \log \frac{\pi_\theta(y_w \mid x)}{\pi_{\text{ref}}(y_w \mid x)} - \beta \log \frac{\pi_\theta(y_l \mid x)}{\pi_{\text{ref}}(y_l \mid x)} \right) \right],
+\end{equation}
+where $\pi_{\text{ref}}$ is the reference policy, which is the frozen student model obtained at the end of Phase 2 (on-policy knowledge distillation).
+
+Here, $\beta$ is a hyperparameter that controls the Kullback-Leibler divergence penalty between the active policy $\pi_\theta$ and the reference policy $\pi_{\text{ref}}$. A smaller $\beta$ allows the model to deviate more from the reference policy to fit the preference data, while a larger $\beta$ keeps the model closer to the reference distribution. In our setup, we set $\beta = 0.1$. The activation function $\sigma$ is the standard sigmoid function.
+
+Direct Preference Optimization mathematically optimizes the log-likelihood margin between the chosen and rejected responses. By maximizing the ratio of the policy probability to the reference probability for $y_w$ relative to $y_l$, DPO shifts the model's generative distribution to prioritize rigorous legal arguments while suppressing the specific reasoning flaws diagnosed in the student's previous rollouts. This preference alignment acts as the final step in our pipeline, solidifying the student's logical reasoning capacities and resulting in a high-performing, lightweight model.
+

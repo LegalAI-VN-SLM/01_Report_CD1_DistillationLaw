@@ -1,1 +1,25 @@
-\section{Research subjects and scope}
+\section{Research Subjects and Scope}
+
+To ensure a structured and rigorous evaluation, we define the specific research subjects and operational boundaries of this study.
+
+\subsection{Research Subjects}
+
+The primary subjects analyzed and developed in this research are categorized into model architectures and evaluation datasets:
+\begin{enumerate}
+    \item \textbf{Small Language Models (SLMs):} We focus on lightweight auto-regressive transformer models with fewer than 3 billion parameters. Specifically, the student architectures evaluated are \texttt{Qwen3-0.6B-Base} and \texttt{Qwen3-1.7B-Base}. These are distilled from a larger, aligned teacher model, \texttt{Qwen3-4B-legal-GRPO}, which serves as the optimization oracle.
+    \item \textbf{Vietnamese Legal Datasets:} The training and evaluation datasets represent three key legal reasoning tasks in the Vietnamese language:
+    \begin{itemize}
+        \item \textit{Natural Language Inference (NLI):} Determining the semantic relationship (e.g., \texttt{relevant}, \texttt{not\_relevant}, or \texttt{unknown}) between factual scenarios and target legal hypotheses.
+        \item \textit{Multiple-Choice Questions (MCQ):} Answering objective legal queries with options A through D.
+        \item \textit{Syllogistic Reasoning:} Generating structured explanations composed of a major premise (statutory rules), a minor premise (case facts application), and a final legal conclusion.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Research Scope}
+
+The scope of this study is bounded by the following parameters:
+\begin{enumerate}
+    \item \textbf{Methodological Boundary:} This research is restricted to post-pretraining adaptation methods. We investigate knowledge distillation (offline logit distillation and on-policy distillation) and direct preference alignment. We do not perform foundational pre-training. Model adjustments are limited to Parameter-Efficient Fine-Tuning (PEFT) techniques, specifically Low-Rank Adaptation (LoRA) and Quantized Low-Rank Adaptation (QLoRA).
+    \item \textbf{Domain and Language Boundary:} The investigation is strictly confined to the Vietnamese legal framework and legal terminology. The models are trained and evaluated on Vietnamese statutory documents, administrative codes, and localized judicial queries.
+    \item \textbf{Hardware and Operational Constraints:} To reflect the operational realities of local judicial offices and small law firms, all training, distillation, and inference processes are restricted to consumer-grade hardware, specifically a single GPU setup with 16GB of Video Random Access Memory (VRAM) (e.g., NVIDIA Tensor Core T4).
+\end{enumerate}

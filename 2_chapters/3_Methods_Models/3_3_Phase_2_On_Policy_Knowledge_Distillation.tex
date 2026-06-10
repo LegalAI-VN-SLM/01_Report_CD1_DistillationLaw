@@ -1,11 +1,69 @@
 \section{Phase 2: On-Policy Knowledge Distillation}
 
+While offline distillation (Phase 1) establishes a baseline capability, it remains bound to a static distribution of training sequences. This section introduces our second phase, designed to break the training-inference alignment gap (exposure bias) through on-policy knowledge distillation. Figure~\ref{fig:phase2_onpolicy} provides an overview of the on-policy training loop described in this section.
+
+\input{figs/tikz/fig_3_3_onpolicy_kd}
+
 \subsection{Motivation: Breaking Exposure Bias}
+
+Under the offline distillation paradigm, the training objective focuses on minimizing the Kullback-Leibler divergence between the teacher and student distributions over a static dataset of gold-standard responses \parencite{hinton2015distillingknowledgeneuralnetwork,sanh2020distilbertdistilledversionbert}. During training (often referred to as teacher-forcing), the student model is conditioned on the ground-truth prefix $y_{<t}^*$ at each step $t$:
+\begin{equation}
+    \mathcal{L}_{\text{offline}} = - \sum_{t=1}^{|y^*|} \sum_{v \in \mathcal{V}} P_{\text{teacher}}(v \mid x, y_{<t}^*) \log P_{\text{student}}(v \mid x, y_{<t}^*).
+\end{equation}
+However, during inference, the ground-truth prefix is unavailable. The student model must generate tokens autoregressively, conditioning on its own previously generated sequence $\hat{y}_{<t}$. This mismatch between training and inference distributions is known as exposure bias \parencite{agarwal2024onpolicydistillationlanguagemodels,song2026surveyonpolicydistillationlarge}. If the student model makes a minor error at step $t$, the error propagates and accumulates quadratically with the sequence length, leading to catastrophic logical failures. This issue is particularly pronounced in complex multi-step reasoning tasks such as legal analysis, where a single logical leap or misinterpretation of a statutory rule can invalidate the entire reasoning chain. On-policy knowledge distillation mitigates this exposure bias by aligning the student model's output distribution on trajectories sampled from its own generative policy.
 
 \subsection{Student-Generated Rollouts}
 
+Specifically, given a query $x$, the student model $\pi_\theta$ generates a sequence $\hat{y} = (\hat{y}_1, \hat{y}_2, \dots, \hat{y}_L)$ token-by-token up to a maximum length $L$. At each step $t$, the probability of generating token $\hat{y}_t$ is determined by the student's policy:
+\begin{equation}
+    \hat{y}_t \sim \pi_\theta(\cdot \mid x, \hat{y}_{<t}).
+\end{equation}
+To ensure sufficient exploration of the logical reasoning space and capture diverse failure modes, the rollout $\hat{y}$ is generated using stochastic decoding. Specifically, we apply temperature-scaled sampling with $T_{\text{sample}} = 0.7$ and nucleus sampling (top-$p$) with $p = 0.9$. Stochastic sampling allows the student model to explore alternative, sometimes suboptimal or erroneous, reasoning trajectories. These rollouts serve as the diagnostic material from which the model learns to correct its own mistakes, mimicking the human learning process of error correction.
+
 \subsection{Teacher as Oracle with Privileged Information}
+
+In traditional on-policy distillation frameworks, the teacher model evaluates student-generated rollouts $\hat{y}$ based solely on the prompt $x$ \parencite{agarwal2024onpolicydistillationlanguagemodels}. However, if the student's trajectory deviates significantly from the correct reasoning path, a vanilla teacher model might generate highly uncertain or even erroneous token distributions, as it is forced to continue a flawed premise. To circumvent this limitation, we deploy the teacher model in an Oracle configuration with access to privileged information \parencite{zhao2026selfdistilledreasoneronpolicyselfdistillation,zhao2026trainingharnessesonpolicyharness}.
+
+For each student rollout $\hat{y}$, the teacher model $\pi_T$ is prompted with the original query $x$, the ground-truth answer $y^*$ (which represents the privileged information), and the student's current generated sequence $\hat{y}_{<t}$. The teacher's next-token distribution is thus conditioned on both the student's path and the correct target:
+\begin{equation}
+    P_{\text{teacher}}(v \mid x, y^*, \hat{y}_{<t}) = \pi_T(v \mid x, y^*, \hat{y}_{<t}).
+\end{equation}
+Conditioning the teacher on the gold-standard answer $y^*$ serves as a strong guide, ensuring that even if the student's prefix $\hat{y}_{<t}$ is incorrect or contains logical fallacies, the teacher can still compute a high-confidence, correct next-token distribution that guides the student back toward the correct reasoning path. The teacher's output represents the ideal probability distribution if an expert were to continue from the student's current state, thereby providing a clear error-correction signal.
 
 \subsection{Kullback-Leibler Divergence Clipping}
 
+At each generation step $t$, we compute the Kullback-Leibler (KL) divergence between the teacher and student probability distributions. Since the teacher model is aligned using Group Relative Policy Optimization (GRPO) to generate structured reasoning chains, its output contains both formatting tags (e.g., \texttt{<think>}, \texttt{<major\_premise>}, \texttt{<minor\_premise>}, \texttt{<conclusion>}) and substantive legal analysis content. We observe that structural tags and highly predictable tokens exhibit extremely low entropy in the teacher's distribution, leading to disproportionately large logit differences. This results in massive spikes in token-level KL divergence, which dominates the overall loss and forces the student model to optimize heavily for formatting style at the expense of legal reasoning semantics.
+
+To mitigate this issue, we introduce a token-level KL divergence clipping mechanism. Let $P_{\text{teacher}}^T$ and $P_{\text{student}}^T$ be the temperature-scaled probability distributions over the vocabulary $\mathcal{V}$ at step $t$:
+\begin{equation}
+    P_{\text{teacher}}^T(v \mid x, y^*, \hat{y}_{<t}) = \frac{\exp\left(z_t^{\text{teacher}}(v) / T\right)}{\sum_{w \in \mathcal{V}} \exp\left(z_t^{\text{teacher}}(w) / T\right)},
+\end{equation}
+\begin{equation}
+    P_{\text{student}}^T(v \mid x, \hat{y}_{<t}) = \frac{\exp\left(z_t^{\text{student}}(v) / T\right)}{\sum_{w \in \mathcal{V}} \exp\left(z_t^{\text{student}}(w) / T\right)},
+\end{equation}
+where $z_t^{\text{teacher}}(v)$ and $z_t^{\text{student}}(v)$ are the logit values for token $v$ at step $t$ for the teacher and student models respectively, and $T$ is the temperature hyperparameter. The token-level KL divergence is computed as:
+\begin{equation}
+    KL_t = \sum_{v \in \mathcal{V}} P_{\text{teacher}}^T(v \mid x, y^*, \hat{y}_{<t}) \log \left( \frac{P_{\text{teacher}}^T(v \mid x, y^*, \hat{y}_{<t})}{P_{\text{student}}^T(v \mid x, \hat{y}_{<t})} \right).
+\end{equation}
+We then apply clipping to bound the divergence at each token by a constant threshold $C > 0$:
+\begin{equation}
+    KL_t^{\text{clipped}} = \min(KL_t, C),
+\end{equation}
+where we set $C = 5.0$ and $T = 1.0$ in our experiments. By bounding the maximum penalty for any single token, the clipping mechanism prevents formatting tokens from generating excessive gradient updates, thereby ensuring that the student model's parameters are updated based on the semantic substance of the reasoning chain.
+
 \subsection{Two-Phase Loss Design}
+
+To prevent the student model from diverging or suffering from catastrophic forgetting of basic language and formatting capabilities during on-policy training, we adopt a two-phase loss formulation. This joint objective balances the on-policy distillation loss with an offline supervised anchor loss:
+\begin{equation}
+    \mathcal{L}_{\text{Phase 2}} = \alpha \mathcal{L}_{KD\text{-onpolicy}} + (1 - \alpha) \mathcal{L}_{CE\text{-anchor}},
+\end{equation}
+where $\alpha \in [0, 1]$ is a balancing coefficient (set to $\alpha \geq 0.5$ in practice to prioritize on-policy adaptation). The supervised anchor loss $\mathcal{L}_{CE\text{-anchor}}$ is the standard cross-entropy loss computed on gold-standard human demonstration sequences:
+\begin{equation}
+    \mathcal{L}_{CE\text{-anchor}} = - \frac{1}{|y^*|} \sum_{t=1}^{|y^*|} \log P_{\text{student}}(y_t^* \mid x, y_{<t}^*).
+\end{equation}
+This anchor term acts as a regularizer, constraining the student's parameters and ensuring it retains foundational syntax and formatting knowledge. The on-policy distillation component $\mathcal{L}_{KD\text{-onpolicy}}$ is computed over the student-generated rollout $\hat{y}$:
+\begin{equation}
+    \mathcal{L}_{KD\text{-onpolicy}} = T^2 \cdot \frac{1}{N_{\text{response}}} \sum_{t=1}^{N_{\text{response}}} KL_t^{\text{clipped}},
+\end{equation}
+where $N_{\text{response}}$ is the length of the student's response. The $T^2$ scaling factor scales the soft-label gradients to match the magnitude of the hard-label cross-entropy gradients. Critically, we detach the teacher's logits during training, treating $P_{\text{teacher}}^T$ as a constant target distribution. This ensures that gradients propagate solely through the student model's parameters $\theta$, optimizing the student policy $\pi_\theta$ to match the teacher's probability distribution on student-generated sequences.
+

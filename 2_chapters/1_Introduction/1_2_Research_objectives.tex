@@ -1,1 +1,18 @@
-\section{Research objectives}
+\section{Research Objectives}
+
+To address the limitations of commercial Large Language Models (LLMs) and the capacity constraints of Small Language Models (SLMs) in the legal domain, this study defines a set of structured research objectives.
+
+\subsection{General Objective}
+
+The primary objective of this research is to develop a secure, computationally efficient, and logically robust legal reasoning framework by distilling advanced reasoning capabilities from a large, reinforcement-learning-aligned Teacher model into a lightweight Student Small Language Model. Specifically, the framework aims to produce a lightweight model that can be deployed on local, on-premise hardware while maintaining high accuracy and consistency in interpreting and applying Vietnamese legal regulations.
+
+\subsection{Specific Objectives}
+
+To achieve the general objective, the research is structured around the following specific tasks:
+\begin{enumerate}
+    \item \textbf{Design a Sequential Distillation Pipeline:} Construct a three-phase optimization pipeline (comprising Offline Logit Distillation, On-Policy Knowledge Distillation, and Diagnosis-Driven Preference Optimization) to progressively transfer, refine, and align legal reasoning capacities.
+    \item \textbf{Mitigate Exposure Bias:} Implement an on-policy distillation protocol where the student model is trained on its own generated trajectories. The teacher model guides this process in an Oracle configuration with privileged access to the ground-truth answers, and a Kullback-Leibler (KL) divergence clipping mechanism is integrated to restrict the gradient influence of formatting tags.
+    \textbf{Develop a Diagnosis-Driven Alignment Framework:} Establish an external semantic verification pipeline that uses a Large Language Model as a Judge to diagnose student reasoning flaws and synthesize targeted preference pairs. This replaces traditional logits-based difficulty scoring, which is prone to calibration bias in models under 3 billion parameters.
+    \item \textbf{Adapt and Evaluate on Vietnamese Legal Benchmarks:} Fine-tune and evaluate the distilled Small Language Models (specifically at the 0.6 billion and 1.7 billion parameter scales) on core legal tasks: Natural Language Inference (NLI), Multiple-Choice Question answering, and Syllogistic reasoning.
+    \item \textbf{Perform Comprehensive Ablation and Empirical Analysis:} Conduct a detailed evaluation of hyperparameter configurations, parameter-efficient options (LoRA vs. QLoRA), and model scale performance, supplemented by qualitative case studies of student reasoning before and after distillation.
+\end{enumerate}

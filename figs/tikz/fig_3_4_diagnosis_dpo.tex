@@ -1,0 +1,35 @@
+% Figure 3.4 - Phase 3: Diagnosis-Driven DPO Alignment workflow
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\small,
+    block/.style={rectangle, draw=blue!50!black, fill=blue!8, text width=2.5cm,
+                  align=center, minimum height=1.4cm, rounded corners=3pt},
+    judge/.style={rectangle, draw=orange!70!black, fill=yellow!12, text width=2.5cm,
+                  align=center, minimum height=1.4cm, rounded corners=3pt},
+    decision/.style={diamond, draw=orange!70!black, fill=yellow!12, text width=1.5cm,
+                     align=center, aspect=1.3, inner sep=1pt},
+    ok/.style={rectangle, draw=green!50!black, fill=green!10, text width=2cm,
+               align=center, minimum height=0.9cm, rounded corners=3pt},
+    dpo/.style={rectangle, draw=red!60!black, fill=red!8, text width=2.5cm,
+                align=center, minimum height=1.4cm, rounded corners=3pt},
+    arrow/.style={-{Stealth[length=2.5mm]}, thick}
+]
+    \node (infer)  [block] {\textbf{Student Rollouts}\\ \footnotesize $\hat{y} \sim \pi_\theta(\cdot \mid x)$};
+    \node (judge)  [judge, right=0.9cm of infer] {\textbf{LLM Judge}\\ \footnotesize GPT-4o-mini\\ \footnotesize semantic audit};
+    \node (decide) [decision, right=0.9cm of judge] {\footnotesize Reasoning error?};
+    \node (ok)     [ok, above=0.7cm of decide] {\texttt{OK} $\rightarrow$ discard};
+    \node (sample) [block, right=0.9cm of decide, fill=gray!10, draw=gray!70] {\textbf{Stratified Sampling}\\ \footnotesize pairs $(x, y_w, y_l)$};
+    \node (dpoAlign) [dpo, below=0.8cm of sample] {\textbf{DPO Alignment}\\ \footnotesize $\beta = 0.1$, ref.\ $= \pi_{\text{Phase 2}}$};
+
+    \draw [arrow] (infer) -- (judge);
+    \draw [arrow] (judge) -- (decide);
+    \draw [arrow] (decide) -- node[left, font=\footnotesize] {No} (ok);
+    \draw [arrow] (decide) -- node[above, font=\footnotesize] {Yes} (sample);
+    \draw [arrow] (sample) -- (dpoAlign);
+    \draw [arrow, dashed, red!70!black] (dpoAlign.west) -| (infer.south)
+        node[pos=0.25, below, font=\footnotesize] {align student $\pi_\theta$};
+\end{tikzpicture}
+\caption{Diagnosis-driven preference optimization workflow in Phase 3. An external LLM Judge audits student rollouts; erroneous samples are paired with gold answers via stratified sampling to form preference pairs $(x, y_w, y_l)$ for DPO training.}
+\label{fig:phase3_dpo}
+\end{figure}

@@ -1,0 +1,42 @@
+% Figure 3.2 - Phase 1: Offline Logit Distillation mechanism
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\small,
+    block/.style={rectangle, draw=blue!50!black, fill=blue!8, text width=2.8cm,
+                  align=center, minimum height=1.3cm, rounded corners=3pt},
+    data/.style={rectangle, draw=gray!70, fill=gray!10, text width=2.1cm,
+                 align=center, minimum height=1.3cm, rounded corners=3pt},
+    loss/.style={rectangle, draw=red!60!black, fill=red!8, text width=3.3cm,
+                 align=center, minimum height=1.3cm, rounded corners=3pt},
+    total/.style={rectangle, draw=orange!70!black, fill=orange!12, text width=3.1cm,
+                  align=center, minimum height=1.3cm, rounded corners=3pt},
+    arrow/.style={-{Stealth[length=2.5mm]}, thick},
+    backprop/.style={-{Stealth[length=2.5mm]}, thick, dashed, red!70!black}
+]
+    \node (input)   [data] {\textbf{Input Data}\\ \footnotesize Prompt + Gold $y^*$};
+    \node (teacher) [block, above right=0.35cm and 0.9cm of input] {\textbf{Teacher (Frozen)}\\ \footnotesize Top-50 logits};
+    \node (student) [block, below right=0.35cm and 0.9cm of input] {\textbf{Student}\\ \footnotesize QLoRA adapters};
+    \node (kdloss)  [loss, right=0.9cm of teacher] {Soft Loss\\ \footnotesize $\mathcal{L}_{KD} = T^2 D_{KL}\!\left(P^{T}_{\text{tea}} \,\|\, P^{T}_{\text{stu}}\right)$};
+    \node (celoss)  [loss, right=0.9cm of student] {Hard Loss\\ \footnotesize $\mathcal{L}_{CE}$ (gold tokens)};
+    \node (totalloss) [total] at ($($(kdloss.east)!0.5!(celoss.east)$)+(2.6cm,0)$) {\textbf{Total Loss}\\ \footnotesize $\alpha \mathcal{L}_{KD} + (1-\alpha)\mathcal{L}_{CE}$};
+
+    \draw [arrow] (input.north) |- (teacher.west);
+    \draw [arrow] (input.south) |- (student.west);
+    \draw [arrow] (teacher) -- (kdloss);
+    \draw [arrow] (student) -- (celoss);
+    \draw [arrow] (student.east) -- ++(0.45,0) |- ($(kdloss.west)+(0,-0.35)$);
+    \draw [arrow] (kdloss.east) -- ++(0.35,0) |- ($(totalloss.west)+(0,0.25)$);
+    \draw [arrow] (celoss.east) -- ++(0.35,0) |- ($(totalloss.west)+(0,-0.25)$);
+
+    % Backpropagation: route clearly below the lowest box (celoss), label under the line
+    \coordinate (bpy) at ($(celoss.south)+(0,-0.9)$);
+    \coordinate (bp) at (totalloss.south |- bpy);
+    \draw [backprop] (totalloss.south) -- (bp) -| (student.south);
+    \node [below=3pt, font=\footnotesize, text=red!70!black]
+        at ($(student.south |- bp)!0.5!(bp)$)
+        {Backpropagation (update LoRA adapters)};
+\end{tikzpicture}
+\caption{Computation flow of offline logit distillation in Phase 1. The frozen teacher provides Top-$K$ soft labels, while the trainable student is optimized with a weighted combination of soft-label KL divergence and hard-label cross-entropy anchored on the gold output.}
+\label{fig:phase1_distillation}
+\end{figure}

@@ -1,0 +1,25 @@
+% Figure 3.1 - Overall three-phase pipeline
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\small,
+    block/.style={rectangle, draw=blue!50!black, fill=blue!8, text width=2.5cm,
+                  align=center, minimum height=1.6cm, rounded corners=3pt},
+    final/.style={rectangle, draw=green!50!black, fill=green!10, text width=2.5cm,
+                  align=center, minimum height=1.6cm, rounded corners=3pt},
+    arrow/.style={-{Stealth[length=2.5mm]}, thick}
+]
+    \node (sft)    [block] {\textbf{SFT Base}\\ \footnotesize Qwen3\\ \footnotesize 0.6B / 1.7B};
+    \node (phase1) [block, right=0.55cm of sft] {\textbf{Phase 1}\\ \footnotesize Offline Logit KD\\ \footnotesize $\mathcal{L}_{CE} + \mathcal{L}_{KD}$};
+    \node (phase2) [block, right=0.55cm of phase1] {\textbf{Phase 2}\\ \footnotesize On-Policy KD\\ \footnotesize Oracle + KL Clip};
+    \node (phase3) [block, right=0.55cm of phase2] {\textbf{Phase 3}\\ \footnotesize Diagnosis-Driven\\ \footnotesize DPO Alignment};
+    \node (final)  [final, right=0.55cm of phase3] {\textbf{Final}\\ \textbf{Legal SLM}};
+
+    \draw [arrow] (sft) -- (phase1);
+    \draw [arrow] (phase1) -- (phase2);
+    \draw [arrow] (phase2) -- (phase3);
+    \draw [arrow] (phase3) -- (final);
+\end{tikzpicture}
+\caption{Overall architecture of the proposed three-phase distillation pipeline: the SFT base student model is sequentially refined through offline logit distillation, on-policy knowledge distillation, and diagnosis-driven preference optimization.}
+\label{fig:overall_pipeline}
+\end{figure}

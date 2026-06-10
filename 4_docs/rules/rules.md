@@ -18,7 +18,8 @@ Các viết cite.
 \parencite{}
 
 --
-đọc cite ở đây E:\DoCode\CD2\01_Report_CD2_FashionRecommendation\references.bib
+đọc cite ở đây 
+E:\DoCode\1 VN-Legal-AI\01_Report_CD1_DistillationLaw\references.bib
 
 ---
 

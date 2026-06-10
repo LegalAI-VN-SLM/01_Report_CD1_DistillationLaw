@@ -1,0 +1,47 @@
+% Figure 3.3 - Phase 2: On-Policy Knowledge Distillation loop
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\small,
+    block/.style={rectangle, draw=blue!50!black, fill=blue!8, text width=3cm,
+                  align=center, minimum height=1.4cm, rounded corners=3pt},
+    data/.style={rectangle, draw=gray!70, fill=gray!10, text width=1.9cm,
+                 align=center, minimum height=1.4cm, rounded corners=3pt},
+    rollout/.style={rectangle, draw=orange!70!black, fill=yellow!12, text width=3cm,
+                    align=center, minimum height=1.4cm, rounded corners=3pt},
+    loss/.style={rectangle, draw=red!60!black, fill=red!8, text width=3cm,
+                 align=center, minimum height=1.4cm, rounded corners=3pt},
+    arrow/.style={-{Stealth[length=2.5mm]}, thick},
+    priv/.style={-{Stealth[length=2.5mm]}, thick, dashed, gray},
+    backprop/.style={-{Stealth[length=2.5mm]}, thick, dashed, red!70!black}
+]
+    % Bottom row: generation flow
+    \node (prompt)  [data] {\textbf{Prompt} $x$};
+    \node (student) [block, right=1.1cm of prompt] {\textbf{Student} $\pi_\theta$\\ \footnotesize stochastic decoding\\ \footnotesize $T{=}0.7$, top-$p{=}0.9$};
+    \node (rollout) [rollout, right=1.1cm of student] {\textbf{Rollout} $\hat{y}$\\ \footnotesize on-policy sample\\ \footnotesize $\hat{y} \sim \pi_\theta(\cdot \mid x)$};
+    % Top row: supervision flow (klclip vertically above student, teacher above rollout)
+    \node (klclip)  [loss, above=1.5cm of student] {\textbf{Clipped KL Loss}\\ \footnotesize $KL_t^{\text{clip}} = \min(KL_t, C)$};
+    \node (teacher) [block, above=1.5cm of rollout] {\textbf{Teacher Oracle} $\pi_T$\\ \footnotesize privileged gold $y^*$};
+
+    % Forward flow
+    \draw [arrow] (prompt) -- (student);
+    \draw [arrow] (student) -- (rollout);
+    \draw [arrow] (rollout) -- (teacher)
+        node[midway, right, font=\footnotesize] {$\hat{y}$};
+    \draw [arrow] (teacher) -- (klclip)
+        node[midway, above, font=\footnotesize] {$P^{T}_{\text{tea}}$};
+    % Student distribution up to the loss (left lane), update back down (right lane)
+    \draw [arrow] ($(student.north)+(-0.6,0)$) -- ($(klclip.south)+(-0.6,0)$)
+        node[midway, left, font=\footnotesize] {$P^{T}_{\text{stu}}$};
+    \draw [backprop] ($(klclip.south)+(0.6,0)$) -- ($(student.north)+(0.6,0)$)
+        node[midway, right, font=\footnotesize] {update $\theta$};
+    % Privileged information: routed above the whole diagram, clear of every box
+    \coordinate (privy) at ($(klclip.north)+(0,0.55)$);
+    \draw [priv] (prompt.north) |- (privy) -| (teacher.north);
+    \node [above=3pt, font=\footnotesize, text=gray]
+        at ($(klclip.north |- privy)!0.5!(teacher.north |- privy)$)
+        {privileged info: $x$, gold $y^*$};
+\end{tikzpicture}
+\caption{On-policy knowledge distillation loop in Phase 2. The student generates its own rollouts $\hat{y}$; the teacher, operating as an Oracle with privileged access to the gold answer $y^*$, supplies corrective token-level distributions, and the student is updated through clipped KL divergence.}
+\label{fig:phase2_onpolicy}
+\end{figure}

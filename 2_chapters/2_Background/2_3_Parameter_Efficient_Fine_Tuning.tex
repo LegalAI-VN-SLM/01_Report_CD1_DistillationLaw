@@ -13,7 +13,7 @@ This formulation yields several critical advantages. First, it significantly red
 
 \subsection{Quantized Low-Rank Adaptation as Implicit Regularization}
 
-To further lower the hardware requirements of adaptation, quantization techniques have been integrated with parameter-efficient adapters. By quantizing the base model's weights to lower bit-widths (such as 4-bit or 8-bit precision) while utilizing high-precision (e.g., 16-bit floating-point) adapters, developers can fine-tune large models on consumer-grade hardware with minimal performance degradation \parencite{dettmers2022llmint88bitmatrixmultiplication}. 
+To further lower the hardware requirements of adaptation, quantization techniques have been integrated with parameter-efficient adapters. By quantizing the base model's weights to lower bit-widths (such as 4-bit or 8-bit precision) while utilizing high-precision (e.g., 16-bit floating-point) adapters, developers can fine-tune large models on consumer-grade hardware with minimal performance degradation \parencite{dettmers2022llmint88bitmatrixmultiplication, dettmers2023qloraefficientfinetuningquantized}. 
 
 In the context of distilling legal knowledge into Small Language Models (SLMs), this quantized configuration serves a dual purpose. Beyond memory conservation, freezing the base weights in a low-precision quantized state while training only low-rank adapters acts as an **implicit regularization** mechanism. 
 
