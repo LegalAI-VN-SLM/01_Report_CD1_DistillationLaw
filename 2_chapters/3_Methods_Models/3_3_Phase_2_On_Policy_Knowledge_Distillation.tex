@@ -55,9 +55,9 @@ where we set $C = 5.0$ and $T = 1.0$ in our experiments. By bounding the maximum
 
 To prevent the student model from diverging or suffering from catastrophic forgetting of basic language and formatting capabilities during on-policy training, we adopt a two-phase loss formulation. This joint objective balances the on-policy distillation loss with an offline supervised anchor loss:
 \begin{equation}
-    \mathcal{L}_{\text{Phase 2}} = \alpha \mathcal{L}_{KD\text{-onpolicy}} + (1 - \alpha) \mathcal{L}_{CE\text{-anchor}},
+    \mathcal{L}_{\text{Phase 2}} = \alpha_2 \mathcal{L}_{KD\text{-onpolicy}} + (1 - \alpha_2) \mathcal{L}_{CE\text{-anchor}},
 \end{equation}
-where $\alpha \in [0, 1]$ is a balancing coefficient (set to $\alpha \geq 0.5$ in practice to prioritize on-policy adaptation). The supervised anchor loss $\mathcal{L}_{CE\text{-anchor}}$ is the standard cross-entropy loss computed on gold-standard human demonstration sequences:
+where $\alpha_2 \in [0, 1]$ is a balancing coefficient (set to $\alpha_2 = 0.5$ in our experiments to equally balance on-policy adaptation with the supervised SFT anchor objective). The supervised anchor loss $\mathcal{L}_{CE\text{-anchor}}$ is the standard cross-entropy loss computed on gold-standard human demonstration sequences:
 \begin{equation}
     \mathcal{L}_{CE\text{-anchor}} = - \frac{1}{|y^*|} \sum_{t=1}^{|y^*|} \log P_{\text{student}}(y_t^* \mid x, y_{<t}^*).
 \end{equation}
@@ -66,4 +66,5 @@ This anchor term acts as a regularizer, constraining the student's parameters an
     \mathcal{L}_{KD\text{-onpolicy}} = T^2 \cdot \frac{1}{N_{\text{response}}} \sum_{t=1}^{N_{\text{response}}} KL_t^{\text{clipped}},
 \end{equation}
 where $N_{\text{response}}$ is the length of the student's response. The $T^2$ scaling factor scales the soft-label gradients to match the magnitude of the hard-label cross-entropy gradients. Critically, we detach the teacher's logits during training, treating $P_{\text{teacher}}^T$ as a constant target distribution. This ensures that gradients propagate solely through the student model's parameters $\theta$, optimizing the student policy $\pi_\theta$ to match the teacher's probability distribution on student-generated sequences.
+
 

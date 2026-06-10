@@ -17,6 +17,8 @@ During the exploration phase, the student model generates reasoning rollouts $\h
 \end{itemize}
 This categorical diagnosis allows us to pinpoint the specific logical steps where the student model's reasoning breaks down, facilitating targeted feedback.
 
+It is important to emphasize the architectural boundary between training-time optimization and inference-time deployment regarding data privacy. While the Audit Agent relies on an external, proprietary Large Language Model API (GPT-4o-mini) to diagnose reasoning errors, this diagnostic verification is performed exclusively during the offline training phase. The queries and reasoning paths transmitted to the external API are drawn entirely from publicly available legal benchmark datasets (such as VLSP-NLI and ALQAC), which contain no proprietary client details or sensitive case files. During actual deployment, the fully fine-tuned student Small Language Model (SLM) operates 100\% locally on-premise without requiring any active internet connection or external API dependencies. This hybrid configuration utilizes advanced Large Language Model feedback for training-time alignment while strictly preserving absolute data sovereignty and complying with national cybersecurity regulations during operational deployment.
+
 \subsection{Preference Pair Construction}
 
 Using the diagnostic outputs from the Audit Agent, we construct a preference dataset $\mathcal{D}_{\text{pref}}$ containing preference triplets $(x, y_w, y_l)$. For each query $x$ where the student's generated rollout $\hat{y}$ is diagnosed with errors (i.e., classified as \texttt{RISKY}, \texttt{PARTIAL}, or \texttt{WRONG}), we build a preference pair:

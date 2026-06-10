@@ -27,13 +27,13 @@ To optimize storage and computational efficiency, rather than computing the Kull
 \end{equation}
 where $z_t(v)$ represents the logit value for token $v$ at step $t$.
 
-The soft-label distillation loss $\mathcal{L}_{KD}$ is defined as the KL divergence between these temperature-scaled distributions, scaled by a factor of $T^2$ to preserve gradient magnitude:
+The soft-label distillation loss $\mathcal{L}_{KD}$ is defined as the KL divergence between these temperature-scaled distributions, normalized by the sequence length $N_{\text{out}}$ and scaled by a factor of $T^2$ to preserve gradient magnitude:
 \begin{equation}
-    \mathcal{L}_{KD} = T^2 \cdot D_{KL}\left( P_{\text{teacher}}^T \parallel P_{\text{student}}^T \right) = T^2 \sum_{t=1}^{N_{\text{out}}} \sum_{v \in V_{\text{top}}} P_{\text{teacher}}^T(v) \log \left( \frac{P_{\text{teacher}}^T(v)}{P_{\text{student}}^T(v)} \right).
+    \mathcal{L}_{KD} = T^2 \cdot D_{KL}\left( P_{\text{teacher}}^T \parallel P_{\text{student}}^T \right) = T^2 \cdot \frac{1}{N_{\text{out}}} \sum_{t=1}^{N_{\text{out}}} \sum_{v \in V_{\text{top}}} P_{\text{teacher}}^T(v) \log \left( \frac{P_{\text{teacher}}^T(v)}{P_{\text{student}}^T(v)} \right).
 \end{equation}
-The final joint objective for Phase 1 is a weighted combination controlled by the hyperparameter $\alpha \in [0, 1]$:
+The final joint objective for Phase 1 is a weighted combination controlled by the hyperparameter $\alpha_1 \in [0, 1]$:
 \begin{equation}
-    \mathcal{L}_{\text{Phase 1}} = \alpha \mathcal{L}_{KD} + (1 - \alpha) \mathcal{L}_{CE}.
+    \mathcal{L}_{\text{Phase 1}} = \alpha_1 \mathcal{L}_{KD} + (1 - \alpha_1) \mathcal{L}_{CE}.
 \end{equation}
 The complete computation flow of this phase, covering the parallel teacher--student forward passes and the combination of the two loss components, is depicted in Figure~\ref{fig:phase1_distillation}.
 
@@ -45,8 +45,9 @@ To perform offline logit distillation on resource-constrained hardware, we apply
 
 By freezing the base pre-trained weights, QLoRA prevents the model from experiencing catastrophic forgetting --- a common failure mode where a model loses its general language comprehension capabilities during specialized domain adaptation. The low-rank updates are forced to capture only the essential delta required to align the student's output logits with the teacher's distribution, thereby stabilizing the gradient flow and reducing the risk of memorization on the static dataset.
 
-\subsection{Hyperparameter Corrections}
+\subsection{Hyperparameter Design and Justification}
 
-During empirical validation of the offline distillation phase, we identified significant performance differences between the initial configuration (KD V1) and our revised configuration (KD V2). Under KD V1, the model suffered from catastrophic forgetting and logical instability due to suboptimal hyperparameter selections, specifically a high learning rate ($1 \times 10^{-4}$), a high distillation weight ($\alpha = 0.5$), and a small batch size (16). 
+The selection of training hyperparameters is critical to prevent catastrophic forgetting and stabilize the learning trajectory of the student model. Small Language Models (SLMs) are particularly vulnerable to gradient variance and model collapse when adapted using high learning rates. Consequently, rather than employing standard fine-tuning hyperparameters, we formulate a conservative training configuration designed to stabilize the adaptation process.
 
-In KD V2, we corrected these hyperparameters to stabilize the training trajectory. We decreased the learning rate to $2 \times 10^{-5}$ and reduced the distillation weight $\alpha$ to $0.3$, allowing the hard-label cross-entropy anchor $\mathcal{L}_{CE}$ to exercise stronger guidance over the parameter updates. Furthermore, we increased the effective batch size to 64. These corrections successfully mitigated gradient variance, preventing the student model from diverging and ensuring a smooth, monotonic convergence of the training loss.
+First, we restrict the learning rate to $2 \times 10^{-5}$ to prevent large weight updates from disrupting pre-trained parameters. Second, the distillation weight $\alpha_1$ is set to $0.3$, ensuring that the hard-label cross-entropy anchor $\mathcal{L}_{CE}$ exerts stronger guidance (with weight $1 - \alpha_1 = 0.7$) over the learning process. Third, we establish a larger effective batch size of 64 to reduce gradient variance and ensure a smooth, monotonic convergence of the joint loss. This design balances the alignment of specific legal vocabulary with the preservation of general linguistic capabilities.
+

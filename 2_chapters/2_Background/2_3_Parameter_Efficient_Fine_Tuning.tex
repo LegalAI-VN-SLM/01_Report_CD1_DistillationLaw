@@ -6,10 +6,10 @@ As large language models continue to scale, standard full-parameter fine-tuning 
 
 LoRA is motivated by the hypothesis that the weight updates during adaptation have a low "intrinsic dimension". Consequently, instead of optimizing the full pre-trained weight matrix $W_0 \in \mathbb{R}^{d \times k}$, LoRA decomposes the weight update $\Delta W$ into the product of two low-rank matrices $B \in \mathbb{R}^{d \times r}$ and $A \in \mathbb{R}^{r \times k}$, where the rank $r \ll \min(d, k)$. During the fine-tuning process, the original weights $W_0$ are frozen, and gradient updates are applied exclusively to $A$ and $B$. For any input vector $x$, the modified forward pass is formulated as:
 \begin{equation}
-    h = W_0 x + \Delta W x = W_0 x + \frac{\alpha}{r} B A x,
-\end{equation} where $\alpha$ is a constant scaling hyperparameter that controls the influence of the adapter. Matrix $A$ is typically initialized using a Gaussian distribution, while matrix $B$ is initialized to zero, ensuring that $\Delta W = 0$ at the start of training.
+    h = W_0 x + \Delta W x = W_0 x + \frac{\alpha_{\text{LoRA}}}{r} B A x,
+\end{equation} where $\alpha_{\text{LoRA}}$ is a constant scaling hyperparameter that controls the influence of the adapter. Matrix $A$ is typically initialized using a Gaussian distribution, while matrix $B$ is initialized to zero, ensuring that $\Delta W = 0$ at the start of training.
 
-This formulation yields several critical advantages. First, it significantly reduces the number of trainable parameters (often by a factor of 10,000), reducing memory constraints and storage costs. Second, it maintains training stability and prevents catastrophic forgetting since the pre-trained weights remain unaltered. Third, during deployment, the low-rank matrices can be permanently merged with the base weights via $W_{\text{merged}} = W_0 + \frac{\alpha}{r} BA$, thereby incurring zero additional latency during inference.
+This formulation yields several critical advantages. First, it significantly reduces the number of trainable parameters (often by a factor of 10,000), reducing memory constraints and storage costs. Second, it maintains training stability and prevents catastrophic forgetting since the pre-trained weights remain unaltered. Third, during deployment, the low-rank matrices can be permanently merged with the base weights via $W_{\text{merged}} = W_0 + \frac{\alpha_{\text{LoRA}}}{r} BA$, thereby incurring zero additional latency during inference.
 
 \subsection{Quantized Low-Rank Adaptation as Implicit Regularization}
 
