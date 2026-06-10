@@ -49,28 +49,6 @@
 
 
 
-%%2024
-@article{10.1145/3628602,
-author = {Bozdag, Mustafa and Sevim, Nurullah and Ko\c{c}, Aykut},
-title = {Measuring and Mitigating Gender Bias in Legal Contextualized Language Models},
-year = {2024},
-issue_date = {May 2024},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-volume = {18},
-number = {4},
-issn = {1556-4681},
-url = {https://doi.org/10.1145/3628602},
-doi = {10.1145/3628602},
-abstract = {Transformer-based contextualized language models constitute the state-of-the-art in several natural language processing (NLP) tasks and applications. Despite their utility, contextualized models can contain human-like social biases, as their training corpora generally consist of human-generated text. Evaluating and removing social biases in NLP models has been a major research endeavor. In parallel, NLP approaches in the legal domain, namely, legal NLP or computational law, have also been increasing. Eliminating unwanted bias in legal NLP is crucial, since the law has the utmost importance and effect on people. In this work, we focus on the gender bias encoded in BERT-based models. We propose a new template-based bias measurement method with a new bias evaluation corpus using crime words from the FBI database. This method quantifies the gender bias present in BERT-based models for legal applications. Furthermore, we propose a new fine-tuning-based debiasing method using the European Court of Human Rights (ECtHR) corpus to debias legal pre-trained models. We test the debiased models’ language understanding performance on the LexGLUE benchmark to confirm that the underlying semantic vector space is not perturbed during the debiasing process. Finally, we propose a bias penalty for the performance scores to emphasize the effect of gender bias on model performance.},
-journal = {ACM Trans. Knowl. Discov. Data},
-month = feb,
-articleno = {79},
-numpages = {26},
-keywords = {Legal NLP, gender bias, contextualized models, BERT, LegalBERT}
-}
-
-
 %========================================
 %%% Chưng cất tri thức (KD) & Hiệu suất mô hình
 % 2025
@@ -176,4 +154,62 @@ doi = {10.1007/s10506-025-09463-9}
       archivePrefix={arXiv},
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2605.08741}, 
+}
+
+@misc{dong2026vlegalbenchcognitivelygroundedbenchmark,
+      title={VLegal-Bench: Cognitively Grounded Benchmark for Vietnamese Legal Reasoning of Large Language Models}, 
+      author={Nguyen Tien Dong and Minh-Anh Nguyen and Thanh Dat Hoang and Nguyen Tuan Ngoc and Dao Xuan Quang Minh and Phan Phi Hai and Nguyen Thi Ngoc Anh and Dang Van Tu and Binh Vu},
+      year={2026},
+      eprint={2512.14554},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2512.14554}, 
+}
+
+@inproceedings{le-etal-2025-overview,
+    title = "Overview of the {L}egal{SLM} Shared Task: Evaluating Legal Reasoning of {V}ietnamese Small Language Models",
+    author = "Le, Anh-Cuong  and
+      Duong, Trong-Chi  and
+      Nguyen, Viet-Ha  and
+      Le, Thang VQ",
+    editor = "Mai, Luong Chi  and
+      Huyen, Nguyen Thi Minh  and
+      Trang, Nguyen Thi Thu",
+    booktitle = "Proceedings of the 11th International Workshop on Vietnamese Language and Speech Processing",
+    month = oct,
+    year = "2025",
+    address = "Hanoi, Vietnam",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.vlsp-1.21/",
+    pages = "147--152"
+}
+
+@misc{hinton2015distillingknowledgeneuralnetwork,
+      title={Distilling the Knowledge in a Neural Network}, 
+      author={Geoffrey Hinton and Oriol Vinyals and Jeff Dean},
+      year={2015},
+      eprint={1503.02531},
+      archivePrefix={arXiv},
+      primaryClass={stat.ML},
+      url={https://arxiv.org/abs/1503.02531}, 
+}
+
+@misc{agarwal2024onpolicydistillationlanguagemodels,
+      title={On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes}, 
+      author={Rishabh Agarwal and Nino Vieillard and Yongchao Zhou and Piotr Stanczyk and Sabela Ramos and Matthieu Geist and Olivier Bachem},
+      year={2024},
+      eprint={2306.13649},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2306.13649}, 
+}
+
+@misc{rafailov2024directpreferenceoptimizationlanguage,
+      title={Direct Preference Optimization: Your Language Model is Secretly a Reward Model}, 
+      author={Rafael Rafailov and Archit Sharma and Eric Mitchell and Stefano Ermon and Christopher D. Manning and Chelsea Finn},
+      year={2024},
+      eprint={2305.18290},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2305.18290}, 
 }

@@ -2,4 +2,18 @@
 
 \subsection{Opportunities and Constraints}
 
-\subsection{Reasoning Challenges in Legal Artificial Intelligence}
+In recent years, the rapid advancement of Large Language Models (LLMs) has transformed various professional domains, including the legal field. However, deploying closed-source or extremely large models in practical legal workflows presents severe constraints. First, legal services deal with highly sensitive client data, raising critical concerns regarding data privacy, confidentiality, and compliance with data sovereignty regulations. Sending proprietary or confidential case files to external cloud-based APIs is often prohibited. Second, the substantial computational cost and latency associated with querying giant models hinder their scalability for day-to-day operations.
+
+Consequently, Small Language Models (SLMs) --- generally defined as models with fewer than 3 billion or 7 billion parameters --- have emerged as a highly viable alternative. SLMs present significant opportunities for local on-premise deployment, which inherently guarantees complete data privacy and security. Furthermore, their low computational footprint drastically reduces operational expenses and enables real-time inference on consumer-grade hardware.
+
+Despite these opportunities, SLMs are constrained by their limited parameter capacity. This constraint severely restricts their generalization capabilities, making them prone to logical leaps and semantic drift. Unlike larger models, SLMs frequently struggle with complex, multi-step sequential reasoning, and they are highly susceptible to misinterpreting domain-specific legal terminology or applying incorrect statutory rules to factual scenarios. These constraints necessitate the development of specialized domain adaptation and reasoning enhancement techniques to bridge the performance gap between SLMs and their larger counterparts \parencite{le-etal-2025-overview}.
+
+\subsection{Legal Reasoning Challenges}
+
+Legal Artificial Intelligence (Legal AI) presents unique challenges that differentiate it from general-domain natural language processing. These challenges stem from the inherent characteristics of legal texts, legislative dynamics, and the structured nature of legal reasoning.
+
+First, legal language is highly formalized, featuring dense semantic structures, archaic terminology, and long-range dependencies. Statutory frameworks, particularly in Civil Law jurisdictions such as Vietnam, exhibit strict hierarchical relationships structured into Codes, Articles, Clauses, and Points. To analyze a legal situation, models must parse these highly nested structures and accurately resolve cross-references across multiple regulatory documents.
+
+Second, legislative evolution introduces a temporal challenge. Laws, decrees, and circulars are periodically amended, supplemented, or repealed. An effective legal AI system must track the temporal validity of specific regulations to prevent obsolete laws from being applied to active cases.
+
+Third, legal decision-making requires multi-step and multi-hop reasoning. The reasoning process is not merely associative but follows formal paradigms such as the syllogistic framework (comprising a major premise, a minor premise, and a conclusion) or the Issue-Rule-Application-Conclusion (IRAC) methodology. Models must synthesize facts, extract relevant statutory rules, and apply them systematically to reach a legally sound conclusion. Standard language models often fail at these multi-step processes, as demonstrated in benchmark studies such as VLegal-Bench \parencite{dong2026vlegalbenchcognitivelygroundedbenchmark}. To address these challenges, current research focuses on knowledge distillation from large language models \parencite{article} and structured diagnostic frameworks like LegalDrill \parencite{li2026legaldrilldiagnosisdrivensynthesislegal} to improve the logical consistency and reasoning depth of smaller legal models.

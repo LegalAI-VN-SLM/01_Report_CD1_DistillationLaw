@@ -1,6 +1,6 @@
 Prompt mẫu 2: viết theo kiểu method paper
 text
-Hãy chuyển nội dung sau thành phong cách bài method paper trong recommender systems.
+Hãy chuyển nội dung sau thành phong cách bài method paper tron
 Yêu cầu:
 - Mở bài theo problem-solution framing.
 - Nêu đóng góp thành 3-4 bullet rõ ràng.
