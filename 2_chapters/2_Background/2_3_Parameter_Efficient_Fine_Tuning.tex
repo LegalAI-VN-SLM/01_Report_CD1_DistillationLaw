@@ -2,4 +2,19 @@
 
 \subsection{Low-Rank Adaptation}
 
+As large language models continue to scale, standard full-parameter fine-tuning becomes increasingly impractical due to the massive computational overhead and storage requirements of maintaining distinct model checkpoints for individual downstream tasks. To address these inefficiencies, Parameter-Efficient Fine-Tuning (PEFT) techniques have been developed. Among these, Low-Rank Adaptation (LoRA) has emerged as one of the most prominent and effective paradigms \parencite{hu2021loralowrankadaptationlarge}.
+
+LoRA is motivated by the hypothesis that the weight updates during adaptation have a low "intrinsic dimension". Consequently, instead of optimizing the full pre-trained weight matrix $W_0 \in \mathbb{R}^{d \times k}$, LoRA decomposes the weight update $\Delta W$ into the product of two low-rank matrices $B \in \mathbb{R}^{d \times r}$ and $A \in \mathbb{R}^{r \times k}$, where the rank $r \ll \min(d, k)$. During the fine-tuning process, the original weights $W_0$ are frozen, and gradient updates are applied exclusively to $A$ and $B$. For any input vector $x$, the modified forward pass is formulated as:
+\begin{equation}
+    h = W_0 x + \Delta W x = W_0 x + \frac{\alpha}{r} B A x,
+\end{equation} where $\alpha$ is a constant scaling hyperparameter that controls the influence of the adapter. Matrix $A$ is typically initialized using a Gaussian distribution, while matrix $B$ is initialized to zero, ensuring that $\Delta W = 0$ at the start of training.
+
+This formulation yields several critical advantages. First, it significantly reduces the number of trainable parameters (often by a factor of 10,000), reducing memory constraints and storage costs. Second, it maintains training stability and prevents catastrophic forgetting since the pre-trained weights remain unaltered. Third, during deployment, the low-rank matrices can be permanently merged with the base weights via $W_{\text{merged}} = W_0 + \frac{\alpha}{r} BA$, thereby incurring zero additional latency during inference.
+
 \subsection{Quantized Low-Rank Adaptation as Implicit Regularization}
+
+To further lower the hardware requirements of adaptation, quantization techniques have been integrated with parameter-efficient adapters. By quantizing the base model's weights to lower bit-widths (such as 4-bit or 8-bit precision) while utilizing high-precision (e.g., 16-bit floating-point) adapters, developers can fine-tune large models on consumer-grade hardware with minimal performance degradation \parencite{dettmers2022llmint88bitmatrixmultiplication}. 
+
+In the context of distilling legal knowledge into Small Language Models (SLMs), this quantized configuration serves a dual purpose. Beyond memory conservation, freezing the base weights in a low-precision quantized state while training only low-rank adapters acts as an **implicit regularization** mechanism. 
+
+Legal datasets are often small and highly specialized, which puts standard full-parameter fine-tuning at a high risk of overfitting and memorization of training labels. When the base model's weights are quantized and frozen, their capacity to adapt is restricted. The low-rank updates are forced to capture only the most crucial structural reasoning patterns needed for the legal tasks, rather than memorizing surface-level lexical correlations. This constraint prevents the model from distorting its underlying pre-trained semantic space, effectively mitigating catastrophic forgetting of general language capabilities while adapting robustly to complex legal reasoning structures.

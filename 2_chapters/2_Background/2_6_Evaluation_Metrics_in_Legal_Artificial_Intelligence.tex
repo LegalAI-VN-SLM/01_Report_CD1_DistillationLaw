@@ -1,5 +1,50 @@
 \section{Evaluation Metrics in Legal Reasoning}
 
+Evaluating the capabilities of models in the legal domain requires a comprehensive set of metrics that span both classification and generation tasks. Because legal texts demand high logical precision and are characterized by domain-specific structures, standard NLP metrics must be selected and interpreted with careful consideration of the legal context.
+
 \subsection{Classification Metrics}
 
+Classification tasks in legal Artificial Intelligence (AI) include document retrieval, statute prediction, and Natural Language Inference (NLI). In NLI, for instance, a model must determine whether a premise (such as a factual scenario) entails, contradicts, or remains neutral relative to a hypothesis (such as a specific legal condition). 
+
+To evaluate these classification models, four standard metrics are employed: Accuracy, Precision, Recall, and the F1-score. 
+Accuracy measures the proportion of correct predictions out of the total test set:
+\begin{equation}
+    \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN},
+\end{equation}
+where $TP$, $TN$, $FP$, and $FN$ represent True Positives, True Negatives, False Positives, and False Negatives, respectively. Precision measures the model's accuracy in predicting positive instances, whereas Recall (Sensitivity) measures the model's ability to identify all actual positive instances:
+\begin{equation}
+    \text{Precision} = \frac{TP}{TP + FP}, \quad \text{Recall} = \frac{TP}{TP + FN}.
+\end{equation}
+The F1-score is the harmonic mean of Precision and Recall, providing a balanced measure of performance:
+\begin{equation}
+    F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}.
+\end{equation}
+
+In practical legal applications, datasets are frequently characterized by severe class imbalance. For example, statutory violations of common offenses appear in the training corpora far more frequently than rare constitutional or corporate infractions. In such scenarios, raw Accuracy can be a misleading indicator of model performance, as a naive classifier that consistently predicts the majority class will yield high accuracy while failing to identify rare events. 
+
+To address this imbalance, the Macro-F1 score is used as the primary evaluation metric. Macro-F1 calculates the F1-score for each class independently and computes their unweighted arithmetic mean:
+\begin{equation}
+    \text{Macro-F1} = \frac{1}{C} \sum_{i=1}^C F_{1, i},
+\end{equation}
+where $C$ is the total number of classes. By treating all classes equally regardless of their support size, Macro-F1 ensures that the model's predictive capability on rare legal concepts is accurately represented.
+
 \subsection{Generation Metrics}
+
+For generative tasks in legal AI --- such as court view generation, legal summarization, and syllogistic explanation synthesis --- models must be evaluated on their ability to produce coherent and contextually appropriate text. Traditionally, two lexical matching metrics are utilized: BLEU and ROUGE.
+
+Bilingual Evaluation Understudy (BLEU) measures the n-gram precision of the generated text against a set of reference summaries, combined with a brevity penalty (BP) to discourage overly short outputs:
+\begin{equation}
+    \text{BLEU} = \text{BP} \cdot \exp\left(\sum_{n=1}^N w_n \log p_n\right),
+\end{equation}
+where $p_n$ is the precision of n-grams, and $w_n$ is the weight for each n-gram size (typically $N=4$ and $w_n = 1/N$).
+
+Recall-Oriented Understudy for Gisting Evaluation (ROUGE) focuses on recall, measuring the overlap of n-grams between the generated text and references. ROUGE-L, in particular, is based on the Longest Common Subsequence (LCS) between reference sequence $X$ (of length $m$) and generated sequence $Y$ (of length $n$):
+\begin{equation}
+    R_{LCS} = \frac{\text{LCS}(X, Y)}{m}, \quad P_{LCS} = \frac{\text{LCS}(X, Y)}{n},
+\end{equation}
+\begin{equation}
+    \text{ROUGE-L} = \frac{(1 + \beta^2) R_{LCS} P_{LCS}}{R_{LCS} + \beta^2 P_{LCS}},
+\end{equation}
+where $\beta$ is a parameter that balances the importance of precision and recall (usually set to 1).
+
+Although BLEU and ROUGE are standard in language generation tasks, they possess critical limitations in the legal domain. Because these metrics rely strictly on lexical overlap, they cannot assess semantic accuracy or logical reasoning consistency. A model can generate a response that shares a high density of terms with the reference text (resulting in high BLEU/ROUGE scores) but contains a critical logical inversion, such as omitting a negative marker (e.g., generating "is guilty" instead of "is not guilty"). Such a mistake changes the legal conclusion entirely but is minimally penalized by n-gram overlap. Conversely, a model that generates a legally flawless argument using synonyms and different sentence structures will receive low scores. This lexical dependency necessitates the use of advanced semantic evaluators, such as LLM-as-a-Judge, to augment surface-level metrics.
