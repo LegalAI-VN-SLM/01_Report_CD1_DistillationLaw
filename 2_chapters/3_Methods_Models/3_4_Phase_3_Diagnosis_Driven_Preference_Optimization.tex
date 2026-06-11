@@ -6,7 +6,7 @@ The third and final phase of our framework aligns the student model using prefer
 
 \subsection{Exploration and Error Diagnosis}
 
-Following the second phase of on-policy distillation, the student model achieves improved consistency but may still exhibit localized reasoning flaws, such as statutory misinterpretations or logical inconsistencies. To systematically isolate and correct these remaining vulnerabilities, we implement an exploration and error diagnosis process inspired by the concept of diagnosis-driven learning \parencite{li2026legaldrilldiagnosisdrivensynthesislegal}.
+Building on the Phase 1 offline-distilled checkpoint, the student model exhibits baseline competence but may still contain localized reasoning flaws, such as statutory misinterpretations or logical inconsistencies. To systematically isolate and correct these remaining vulnerabilities, we implement an exploration and error diagnosis process inspired by the concept of diagnosis-driven learning \parencite{li2026legaldrilldiagnosisdrivensynthesislegal}.
 
 During the exploration phase, the student model generates reasoning rollouts $\hat{y}$ for all prompt samples $x$ in the training corpus $\mathcal{D}_{\text{train}}$. Instead of evaluating these outputs using simple lexical metrics, we deploy an external Audit Agent powered by a frontier Large Language Model (GPT-4o-mini). The Audit Agent performs a deep semantic analysis of the reasoning chain against the statutory provisions and the query. It evaluates both the correctness of the final legal verdict and the logical validity of the intermediate reasoning steps. Each rollout $\hat{y}$ is categorized into one of four distinct diagnostic classes:
 \begin{itemize}
@@ -17,7 +17,7 @@ During the exploration phase, the student model generates reasoning rollouts $\h
 \end{itemize}
 This categorical diagnosis allows us to pinpoint the specific logical steps where the student model's reasoning breaks down, facilitating targeted feedback.
 
-It is important to emphasize the architectural boundary between training-time optimization and inference-time deployment regarding data privacy. While the Audit Agent relies on an external, proprietary Large Language Model API (GPT-4o-mini) to diagnose reasoning errors, this diagnostic verification is performed exclusively during the offline training phase. The queries and reasoning paths transmitted to the external API are drawn entirely from publicly available legal benchmark datasets (such as VLSP-NLI and ALQAC), which contain no proprietary client details or sensitive case files. During actual deployment, the fully fine-tuned student Small Language Model (SLM) operates 100\% locally on-premise without requiring any active internet connection or external API dependencies. This hybrid configuration utilizes advanced Large Language Model feedback for training-time alignment while strictly preserving absolute data sovereignty and complying with national cybersecurity regulations during operational deployment.
+It is important to emphasize the architectural boundary between training-time optimization and inference-time deployment regarding data privacy. While the Audit Agent relies on an external, proprietary Large Language Model API (GPT-4o-mini) to diagnose reasoning errors, this diagnostic verification is performed exclusively during the offline training phase. The queries and reasoning paths transmitted to the external API are drawn entirely from the publicly available ViLawQA benchmark corpus (covering the multiple-choice, natural language inference, and syllogism tasks), which contains no proprietary client details or sensitive case files. During actual deployment, the fully fine-tuned student Small Language Model (SLM) operates 100\% locally on-premise without requiring any active internet connection or external API dependencies. This hybrid configuration utilizes advanced Large Language Model feedback for training-time alignment while strictly preserving absolute data sovereignty and complying with national cybersecurity regulations during operational deployment.
 
 \subsection{Preference Pair Construction}
 
@@ -51,7 +51,7 @@ Once the preference dataset $\mathcal{D}_{\text{pref}}$ is constructed, we perfo
 \begin{equation}
     \mathcal{L}_{\text{DPO}}(\theta; \pi_{\text{ref}}) = -\mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}_{\text{pref}}} \left[ \log \sigma \left( \beta \log \frac{\pi_\theta(y_w \mid x)}{\pi_{\text{ref}}(y_w \mid x)} - \beta \log \frac{\pi_\theta(y_l \mid x)}{\pi_{\text{ref}}(y_l \mid x)} \right) \right],
 \end{equation}
-where $\pi_{\text{ref}}$ is the reference policy, which is the frozen student model obtained at the end of Phase 2 (on-policy knowledge distillation).
+where $\pi_{\text{ref}}$ is the reference policy, which is the frozen student model obtained from Phase 1 (offline logit distillation)---the same checkpoint used to initialize this phase.
 
 Here, $\beta$ is a hyperparameter that controls the Kullback-Leibler divergence penalty between the active policy $\pi_\theta$ and the reference policy $\pi_{\text{ref}}$. A smaller $\beta$ allows the model to deviate more from the reference policy to fit the preference data, while a larger $\beta$ keeps the model closer to the reference distribution. In our setup, we set $\beta = 0.1$. The activation function $\sigma$ is the standard sigmoid function.
 

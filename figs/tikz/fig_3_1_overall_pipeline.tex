@@ -12,16 +12,18 @@
     arrow/.style={-{Stealth[length=2.5mm]}, thick}
 ]
     \node (sft)    [block] {\textbf{SFT Base}\\ \footnotesize Qwen3\\ \footnotesize 0.6B / 1.7B};
-    \node (phase1) [block, right=0.55cm of sft] {\textbf{Phase 1}\\ \footnotesize Offline Logit KD\\ \footnotesize $\mathcal{L}_{CE} + \mathcal{L}_{KD}$};
-    \node (phase2) [block, right=0.55cm of phase1] {\textbf{Phase 2}\\ \footnotesize On-Policy KD\\ \footnotesize Oracle + KL Clip};
-    \node (phase3) [block, right=0.55cm of phase2] {\textbf{Phase 3}\\ \footnotesize Diagnosis-Driven\\ \footnotesize DPO Alignment};
-    \node (final)  [final, right=0.55cm of phase3] {\textbf{Final}\\ \textbf{Legal SLM}};
+    \node (phase1) [block, right=0.6cm of sft] {\textbf{Phase 1}\\ \footnotesize Offline Logit KD\\ \footnotesize $\mathcal{L}_{CE} + \mathcal{L}_{KD}$};
+    \node (phase2) [block, above right=0.35cm and 1.0cm of phase1] {\textbf{Phase 2}\\ \footnotesize On-Policy KD\\ \footnotesize Oracle + KL Clip};
+    \node (phase3) [block, below right=0.35cm and 1.0cm of phase1] {\textbf{Phase 3}\\ \footnotesize Diagnosis-Driven\\ \footnotesize DPO Alignment};
+    \node (out2)   [final, right=0.6cm of phase2] {\textbf{On-Policy}\\ \textbf{SLM}};
+    \node (out3)   [final, right=0.6cm of phase3] {\textbf{DPO-Aligned}\\ \textbf{SLM}};
 
     \draw [arrow] (sft) -- (phase1);
-    \draw [arrow] (phase1) -- (phase2);
-    \draw [arrow] (phase2) -- (phase3);
-    \draw [arrow] (phase3) -- (final);
+    \draw [arrow] (phase1.east) -- (phase2.west);
+    \draw [arrow] (phase1.east) -- (phase3.west);
+    \draw [arrow] (phase2) -- (out2);
+    \draw [arrow] (phase3) -- (out3);
 \end{tikzpicture}
-\caption{Overall architecture of the proposed three-phase distillation pipeline: the SFT base student model is sequentially refined through offline logit distillation, on-policy knowledge distillation, and diagnosis-driven preference optimization.}
+\caption{Overall architecture of the proposed multi-phase distillation framework. Phase 1 (offline logit distillation) produces a shared foundation checkpoint, from which two complementary refinement branches are independently applied: Phase 2 (on-policy knowledge distillation) and Phase 3 (diagnosis-driven preference optimization).}
 \label{fig:overall_pipeline}
 \end{figure}
