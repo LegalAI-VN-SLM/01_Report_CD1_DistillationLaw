@@ -1,5 +1,43 @@
 \section{Ablation Study}
 
+To attribute the observed performance gains to specific design decisions rather than to incidental factors, we conduct two targeted ablations. The first isolates the role of the quantized adapter in preventing catastrophic forgetting during offline distillation, and the second isolates the role of the diagnosis mechanism used to construct the preference data for Direct Preference Optimization (DPO).
+
 \subsection{Quantized Low-Rank Adaptation vs. Low-Rank Adaptation}
 
+While Section~4.3 reported the end-task scores of the LoRA and QLoRA variants, this ablation examines the underlying training dynamics that explain the difference, namely the trajectory of the hard-label cross-entropy loss on the 0.6B student under the identical V2 configuration. The cross-entropy loss is a direct proxy for how well the student retains its supervised fine-tuning (SFT) knowledge: an increasing trend signals that the model is overwriting its prior parameters to chase the teacher distribution, whereas a decreasing trend signals stable knowledge retention.
+
+Under the standard LoRA configuration (A1), the cross-entropy loss rises steadily over the course of training, drifting from approximately 0.3 to 0.7. This upward trend is the signature of catastrophic forgetting: because the full base model remains trainable through the adapter pathway, the optimizer progressively erodes the anchored SFT knowledge in favor of imitating the teacher. By contrast, the QLoRA configuration (A2) freezes the base weights in a 4-bit (NF4) representation and restricts all updates to the low-rank adapter. This constraint operates as a form of implicit regularization: the cross-entropy loss decreases smoothly from 0.5 to 0.25, confirming that the prior knowledge is preserved while the new distillation signal is absorbed. The contrasting loss trajectories, summarized in Table~\ref{tab:qlora_ablation}, corroborate the end-task observation that QLoRA is necessary at the 0.6B scale to prevent forgetting, and justify its adoption as the default adaptation strategy for the smaller student.
+
+\begin{table}[htbp]
+\centering
+\caption{Cross-Entropy Loss Trend: LoRA vs. QLoRA on the 0.6B Student (V2 Configuration)}
+\label{tab:qlora_ablation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\hline
+\textbf{Adapter} & \textbf{CE Loss Trend} & \textbf{Knowledge Retention} & \textbf{Syllogism R-L} \\ \hline
+LoRA (A1)  & $0.3 \rightarrow 0.7$ (rising)   & Eroded (forgetting)   & 0.1741 \\
+QLoRA (A2) & $0.5 \rightarrow 0.25$ (falling) & Preserved (anchored)  & \textbf{0.3804} \\ \hline
+\end{tabular}%
+}
+\end{table}
+
 \subsection{Rule-Based vs. Large Language Model Judge}
+
+The second ablation evaluates the quality of the error-diagnosis mechanism that determines which student rollouts become rejected responses in the DPO preference set. We compare a rule-based diagnoser, which relies on regular expressions and ROUGE-L thresholding, against an LLM-as-a-Judge diagnoser (\texttt{GPT-4o-mini}) that performs a semantic assessment of both the \texttt{<think>} reasoning trace and the final verdict. The comparison is conducted on the 2,603 training-set rollouts of the 0.6B student (A2), and the resulting diagnosis distribution is reported in Table~\ref{tab:judge_ablation}.
+
+The rule-based diagnoser exhibits two systematic failure modes. First, owing to its rigid format matching, it recognizes only 290 fully acceptable (\texttt{OK}) samples (11.1\%), misclassifying semantically correct responses that deviate syntactically from the expected template. Second, it admits an inflated 898 \texttt{RISKY} samples (34.5\%) in which the multiple-choice answer is coincidentally correct but the underlying \texttt{<think>} reasoning is entirely flawed, thereby treating spurious ``lucky guesses'' as near-valid. The LLM judge corrects both deficiencies. On the one hand, its semantic evaluation rehabilitates format-deviant but correct answers, raising the genuine \texttt{OK} count to 538 (20.7\%). On the other hand, its deeper inspection of the reasoning chain demotes the spurious lucky guesses to their true category: the \texttt{RISKY} pool shrinks from 898 (34.5\%) to 404 (15.5\%), while the count of correctly identified \texttt{WRONG} samples rises from 1,054 (40.5\%) to 1,652 (63.5\%). This sharper separation between genuinely sound and genuinely flawed responses yields a markedly cleaner preference dataset, which directly improves the quality and stability of the subsequent DPO alignment.
+
+\begin{table}[htbp]
+\centering
+\caption{Diagnosis Quality on the 0.6B Student Training Rollouts: Rule-Based vs. LLM Judge}
+\label{tab:judge_ablation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\hline
+\textbf{Diagnoser} & \textbf{OK (acceptable)} & \textbf{RISKY (lucky guess)} & \textbf{WRONG (detected)} \\ \hline
+Rule-Based (Regex + ROUGE-L) & 290 (11.1\%) & 898 (34.5\%) & 1{,}054 (40.5\%) \\
+LLM Judge (\texttt{GPT-4o-mini}) & \textbf{538 (20.7\%)} & 404 (15.5\%) & \textbf{1{,}652 (63.5\%)} \\ \hline
+\end{tabular}%
+}
+\end{table}

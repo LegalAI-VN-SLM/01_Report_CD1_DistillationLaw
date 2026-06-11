@@ -8,11 +8,11 @@ We utilize a pre-aligned, instruct-tuned model as our teacher optimization oracl
 
 We evaluate two distinct student architectures to analyze the impact of model parameter scale on legal reasoning:
 \begin{enumerate}
-    \item \textbf{Qwen3-0.6B-Base:} A lightweight student model containing 0.6 billion parameters, trained using Quantized Low-Rank Adaptation (QLoRA) adapters to evaluate extremely resource-constrained deployment environments.
-    \item \textbf{Qwen3-1.7B-Base:} A moderately sized student model containing 1.7 billion parameters, fine-tuned using standard Low-Rank Adaptation (LoRA) adapters to evaluate complex reasoning capacities.
+    \item \textbf{Qwen3-0.6B-SFT:} A lightweight student model containing 0.6 billion parameters, initialized from the supervised fine-tuning checkpoint (either the full-parameter \texttt{HoangVuSnape/qwen3-0.6b-sft} or the quantized adapter version \texttt{HoangVuSnape/qwen3-0.6b-qlora-sft}) and trained using Quantized Low-Rank Adaptation (QLoRA) adapters.
+    \item \textbf{Qwen3-1.7B-SFT:} A moderately sized student model containing 1.7 billion parameters, initialized from the supervised fine-tuning checkpoint \texttt{HoangVuSnape/qwen3-1.7b-sft} and fine-tuned using standard Low-Rank Adaptation (LoRA) adapters.
 \end{enumerate}
 
-Both student models inherit weights from their respective Vietnamese base checkpoints, and their adapters are initialized prior to the first phase of distillation.
+Both student models are initialized from their respective supervised fine-tuning (SFT) checkpoints to ensure they possess baseline legal query-answering capabilities before the logit distillation process begins.
 
 \subsection{Configuration Space and Hyperparameters}
 
@@ -56,13 +56,3 @@ Due to varying memory requirements across the training phases, execution was div
 \end{enumerate}
 
 The software frameworks utilized include: (i) \texttt{Unsloth} for accelerating parameter-efficient fine-tuning (PEFT) and reducing memory utilization, (ii) \texttt{TRL} (Transformer Reinforcement Learning) for training via the \texttt{DPOTrainer} class, and (iii) \texttt{bitsandbytes} for quantized model loading and 8-bit optimizer implementations.
-
-\subsection{Bug Fixes and Lessons Learned}
-
-During development, several critical failures were identified and resolved to ensure stable training and evaluation:
-\begin{itemize}
-    \item \textbf{Causal Logit Alignment Shift:} In auto-regressive language modeling, the logits output at token position $i$ predict the token at position $i+1$. Initial implementations of logit distillation compared unshifted logits, causing the student to learn incorrect token mappings. This was resolved by shifting the student and teacher logits (\texttt{logits[:, :-1, :]}) consistently before calculating the loss mask.
-    \item \textbf{KL Divergence Numerical Instability (NaN Loss):} Manual implementation of the KL divergence loss encountered mathematical instability ($0 \times \log(0)$), yielding \texttt{NaN} values. This was resolved by migrating to PyTorch's native \texttt{F.kl\_div(log\_target=True)} operator.
-    \item \textbf{Out-of-Memory (OOM) Recovery:} Long-running On-Policy training runs frequently crashed due to unexpected memory spikes from processing long legal contexts. We implemented an active exception handling wrapper: when a \texttt{torch.cuda.OutOfMemoryError} is caught, the system clears the cache using \texttt{torch.cuda.empty\_cache()}, resets the gradients, logs the occurrence, and skips the current batch, allowing the training run to continue.
-    \item \textbf{Formatting Errors and Loop Penalization:} Evaluation scores originally deteriorated due to model formatting drift (such as outputting \texttt{/think} instead of \texttt{<think>}) and token repetition loops. This was resolved by standardizing prompt templates via a unified formatting script, increasing \texttt{max\_new\_tokens} to 1,024, converting target strings to lowercase before string-matching, and applying a repetition penalty of $1.2$.
-\end{itemize}

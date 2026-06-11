@@ -86,7 +86,6 @@
 - 4.2.1 Teacher and Student Models
 - 4.2.2 Configuration space and Hyperparameters
 - 4.2.3 Hardware and framework
-- 4.2.4 Bug fixes and lessons learned
 
 **4.3 Results and Analysis**
 - 4.3.1 Impact of Hyperparameter Tuning
