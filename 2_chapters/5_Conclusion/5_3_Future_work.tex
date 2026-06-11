@@ -1,1 +1,15 @@
 \section{Future work}
+
+Building on the limitations identified above, we outline four directions for future research, each addressing a specific shortcoming observed in our experiments.
+
+\paragraph{Systematically Resolving Catastrophic Forgetting.}
+Our results show that QLoRA only \emph{mitigates} catastrophic forgetting by freezing the quantized base weights; the 0.6B student still collapses under on-policy and preference optimization, and the distilled models still forget the general competence reflected in their out-of-distribution scores. A principled remedy lies in continual-learning techniques that explicitly protect prior knowledge while absorbing the distillation signal. Promising avenues include \emph{rehearsal-based replay}, in which a portion of the original SFT data is interleaved during distillation; \emph{parameter regularization} that anchors the model to a reference checkpoint, such as Elastic Weight Consolidation (EWC), L2-SP penalties, or an explicit KL anchor toward the SFT policy; and \emph{adapter merging} or low-rank weight arithmetic that fuses old and new knowledge without overwriting either. The objective is to retain both the foundational generalization and the specialized distilled knowledge, thereby resolving the specialist-versus-generalist trade-off observed on the Public-Test.
+
+\paragraph{Capacity-Aware Alignment for Small Models.}
+The collapse of the 0.6B student under DPO motivates alignment strategies tailored to low-capacity networks. Future work could introduce a curriculum that gradually increases preference difficulty, or replace DPO with alternative objectives that impose a gentler probability penalty, such as KTO, ORPO, or IPO. The goal is to enable models below one billion parameters to benefit from preference alignment without destabilizing their reasoning behavior.
+
+\paragraph{Counteracting Over-Specialization to Preserve Generalization.}
+To close the gap between in-distribution specialists and out-of-distribution generalists, distillation could be regularized to remain closer to the broadly-capable SFT policy. Concrete strategies include mixing general-domain data and replay buffers during distillation, and penalizing divergence from the SFT behavior, so that the student acquires task-specific reasoning without discarding the wide coverage that benefits unseen legal distributions.
+
+\paragraph{Scaling the Student and Diversifying the Teacher.}
+Finally, the performance ceiling imposed by a single teacher and limited compute should be raised. Future work could distill into larger students (4B parameters and beyond), adopt multi-teacher or self-distillation schemes to aggregate complementary reasoning signals, and expand both the volume of training data and the range of legal sub-domains, thereby strengthening the robustness and breadth of the resulting legal reasoning models.
