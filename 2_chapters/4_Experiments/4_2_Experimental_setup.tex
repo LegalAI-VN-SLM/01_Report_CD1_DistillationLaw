@@ -1,9 +1,68 @@
 \section{Experimental Setup}
 
+To validate the efficiency of the proposed 3-phase distillation and alignment framework, we establish a standardized experimental environment. In the following subsections, we describe the specific architectural parameters of the teacher and student models, the hyperparameter configuration space utilized across each optimization phase, the hardware and software systems employed, and the key debugging corrections implemented to ensure numerical stability and generalization.
+
 \subsection{Teacher and Student Models}
+
+We utilize a pre-aligned, instruct-tuned model as our teacher optimization oracle: \texttt{Qwen3-4B-legal-GRPO} (accessible on Hugging Face as \texttt{thangvip/qwen3-4b-vietnamese-legal-grpo}). This model was pre-trained on Vietnamese legal statutes and aligned via Group Relative Policy Optimization (GRPO) to generate structured reasoning chains. To operate within a constrained hardware setup, the teacher model is loaded in 4-bit NormalFloat (NF4) quantized format during the distillation phases, allowing it to serve as a frozen target while maintaining a low VRAM footprint.
+
+We evaluate two distinct student architectures to analyze the impact of model parameter scale on legal reasoning:
+\begin{enumerate}
+    \item \textbf{Qwen3-0.6B-Base:} A lightweight student model containing 0.6 billion parameters, trained using Quantized Low-Rank Adaptation (QLoRA) adapters to evaluate extremely resource-constrained deployment environments.
+    \item \textbf{Qwen3-1.7B-Base:} A moderately sized student model containing 1.7 billion parameters, fine-tuned using standard Low-Rank Adaptation (LoRA) adapters to evaluate complex reasoning capacities.
+\end{enumerate}
+
+Both student models inherit weights from their respective Vietnamese base checkpoints, and their adapters are initialized prior to the first phase of distillation.
 
 \subsection{Configuration Space and Hyperparameters}
 
+The optimization framework is executed sequentially across three distinct training phases. The hyperparameter configuration space for each phase is specified below:
+
+\paragraph{Phase 1: Offline Logit Distillation}
+During the offline logit distillation phase, the student model is trained on soft target probabilities (logits) provided by the teacher model alongside the hard labels.
+\begin{itemize}
+    \item \textbf{Learning Rate ($\eta$):} Set to $2.0 \times 10^{-5}$ (optimized in version 2 to prevent forgetting).
+    \item \textbf{Loss Balancing Weight ($\alpha$):} Set to $0.3$, representing a relative weighting of 70\% for the hard Cross-Entropy loss and 30\% for the Kullback-Leibler (KL) divergence loss.
+    \item \textbf{Distillation Temperature ($T$):} Set to $1.5$ to soften the logit probability distribution.
+    \item \textbf{Logit Space ($K$):} Restricted to the top $K=50$ logits (Top-50 sparse representation) to optimize communication and computational efficiency.
+    \item \textbf{Effective Batch Size:} Maintained at $64$ using gradient accumulation.
+\end{itemize}
+
+\paragraph{Phase 2: On-Policy Knowledge Distillation}
+In this phase, the student model generates its own reasoning paths on-policy, and the teacher provides online token-level feedback.
+\begin{itemize}
+    \item \textbf{Learning Rate ($\eta$):} Set to $1.0 \times 10^{-5}$ to preserve the weights learned during Phase 1.
+    \item \textbf{Loss Balancing Weight ($\alpha$):} Set to $0.5$, providing equal weight to the on-policy KL divergence loss and the hard label Cross-Entropy loss.
+    \item \textbf{KL Clipping Threshold ($C$):} Set to $5.0$ to prune extreme gradient signals and prevent optimization instability.
+    \item \textbf{Student Generation Sampling:} Configured with temperature $T=0.7$ and nucleus sampling $p=0.9$.
+\end{itemize}
+
+\paragraph{Phase 3: Direct Preference Optimization (DPO) Alignment}
+In the final alignment phase, the student model is aligned using preference pairs containing correct and incorrect reasoning rollouts.
+\begin{itemize}
+    \item \textbf{Learning Rate ($\eta$):} Restricted to $5.0 \times 10^{-6}$ to prevent catastrophic forgetting of the distilled knowledge.
+    \item \textbf{DPO Penalty Weight ($\beta$):} Set to $0.1$ to constrain policy deviation from the reference policy.
+    \item \textbf{Optimizer:} The \texttt{adamw\_8bit} optimizer is utilized to conserve VRAM.
+    \item \textbf{Context Length:} Maximum sequence length is set to $2,048$ tokens, with prompt length limited to $1,024$ tokens.
+    \item \textbf{Training Epochs:} Conducted for $2$ epochs.
+\end{itemize}
+
 \subsection{Hardware and Framework}
 
+Due to varying memory requirements across the training phases, execution was divided between two hardware environments:
+\begin{enumerate}
+    \item \textbf{Kaggle Multi-GPU Environment (2x NVIDIA Tesla T4 16GB VRAM):} Used for Phase 1 Offline KD, Phase 3 DPO, and the training of the 0.6B student model during Phase 2 On-Policy KD. To support On-Policy training within this VRAM constraint, we implement a \textit{Model Split} strategy: the trainable student model is loaded onto GPU 0 (\texttt{cuda:0}), while the teacher oracle is loaded in frozen 4-bit mode on GPU 1 (\texttt{cuda:1}). Student rollouts are generated on GPU 0 and transferred to GPU 1 for logit calculation, and the resulting teacher logits are transferred back to GPU 0 to calculate the loss and run backpropagation.
+    \item \textbf{Dedicated Docker Environment (1x NVIDIA RTX 6000 Ada 48GB VRAM):} Utilized for the training of the larger 1.7B student model during Phase 2 On-Policy KD. The 48GB VRAM capacity allows both the teacher and student models to reside on the same device, supporting a larger batch size (batch size of 8) and reducing training time from 10 hours to 5 hours.
+\end{enumerate}
+
+The software frameworks utilized include: (i) \texttt{Unsloth} for accelerating parameter-efficient fine-tuning (PEFT) and reducing memory utilization, (ii) \texttt{TRL} (Transformer Reinforcement Learning) for training via the \texttt{DPOTrainer} class, and (iii) \texttt{bitsandbytes} for quantized model loading and 8-bit optimizer implementations.
+
 \subsection{Bug Fixes and Lessons Learned}
+
+During development, several critical failures were identified and resolved to ensure stable training and evaluation:
+\begin{itemize}
+    \item \textbf{Causal Logit Alignment Shift:} In auto-regressive language modeling, the logits output at token position $i$ predict the token at position $i+1$. Initial implementations of logit distillation compared unshifted logits, causing the student to learn incorrect token mappings. This was resolved by shifting the student and teacher logits (\texttt{logits[:, :-1, :]}) consistently before calculating the loss mask.
+    \item \textbf{KL Divergence Numerical Instability (NaN Loss):} Manual implementation of the KL divergence loss encountered mathematical instability ($0 \times \log(0)$), yielding \texttt{NaN} values. This was resolved by migrating to PyTorch's native \texttt{F.kl\_div(log\_target=True)} operator.
+    \item \textbf{Out-of-Memory (OOM) Recovery:} Long-running On-Policy training runs frequently crashed due to unexpected memory spikes from processing long legal contexts. We implemented an active exception handling wrapper: when a \texttt{torch.cuda.OutOfMemoryError} is caught, the system clears the cache using \texttt{torch.cuda.empty\_cache()}, resets the gradients, logs the occurrence, and skips the current batch, allowing the training run to continue.
+    \item \textbf{Formatting Errors and Loop Penalization:} Evaluation scores originally deteriorated due to model formatting drift (such as outputting \texttt{/think} instead of \texttt{<think>}) and token repetition loops. This was resolved by standardizing prompt templates via a unified formatting script, increasing \texttt{max\_new\_tokens} to 1,024, converting target strings to lowercase before string-matching, and applying a repetition penalty of $1.2$.
+\end{itemize}

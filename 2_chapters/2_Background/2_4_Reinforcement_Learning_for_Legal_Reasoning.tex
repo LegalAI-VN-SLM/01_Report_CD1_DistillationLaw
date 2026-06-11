@@ -9,9 +9,13 @@ To mitigate these resource constraints, Group Relative Policy Optimization (GRPO
     A_i = \frac{r_i - \frac{1}{G}\sum_{j=1}^G r_j}{\text{std}(r_1, \dots, r_G)}.
 \end{equation}
 The policy objective of GRPO is to maximize:
-\begin{equation}
-    \mathcal{L}_{\text{GRPO}}(\theta) = \frac{1}{G} \sum_{i=1}^G \left[ \min\left( \frac{\pi_\theta(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)} A_i, \text{clip}\left(\frac{\pi_\theta(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)}, 1-\epsilon, 1+\epsilon\right) A_i \right) - \beta D_{KL}(\pi_\theta \parallel \pi_{\text{ref}}) \right],
-\end{equation}
+\begin{align}
+    \mathcal{L}_{\text{GRPO}}(\theta) = \frac{1}{G} \sum_{i=1}^G \Bigg[ &\min\left(
+    \frac{\pi_\theta(o_i \mid q)}{\pi_{\theta_{\text{old}}}(o_i \mid q)} A_i,
+    \text{clip}\left(\frac{\pi_\theta(o_i \mid q)}{\pi_{\theta_{\text{old}}}(o_i \mid q)}, 1-\epsilon, 1+\epsilon\right) A_i
+    \right) \notag\\
+    &{} - \beta D_{KL}(\pi_\theta \parallel \pi_{\text{ref}}) \Bigg],
+\end{align}
 where $\pi_{\text{ref}}$ is a frozen reference policy, $\epsilon$ is the clipping threshold, and $\beta$ is the Kullback-Leibler (KL) divergence penalty coefficient that restricts the active policy from drifting too far from the reference policy. 
 
 In legal reasoning tasks (such as syllogistic deduction), where verification rules are strict, GRPO enables the policy to learn optimal structural and logical reasoning paths. By optimizing the model on verifiable rewards --- such as matching specific tags like \texttt{<think>}, \texttt{<major\_premise>}, \texttt{<minor\_premise>}, and \texttt{<conclusion>} --- the teacher model acquires strong reasoning behaviors without the need for resource-intensive value network training.
