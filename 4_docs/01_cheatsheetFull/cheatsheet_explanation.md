@@ -99,9 +99,4 @@ These tables document the datasets, configuration tuning, training progressions,
   * **Rule-Based Diagnoser:** Suffered from severe false positives and negatives, recognizing only 11.1% of valid responses as OK due to formatting deviations, and classifying 34.5% of flawed responses with correct answers (lucky guesses) as acceptable (Risky).
   * **LLM Judge:** Correctly audited the reasoning chain, raising the OK count to 20.7% (by accepting format-deviant but correct answers) and demoting lucky guesses, which expanded the identified WRONG samples to 63.5%. This yielded a much cleaner dataset for DPO.
 
-### Table 4.7: Nine-Sample Inference Comparison (Correct Responses per Task)
-* **Source File:** [4_5_Qualitative_Analysis.tex](file:///E:/DoCode/1%20VN-Legal-AI/01_Report_CD1_DistillationLaw/2_chapters/4_Experiments/4_5_Qualitative_Analysis.tex#L9-L21)
-* **Description:** A manual audit showing correctness on nine specific representative samples (3 NLI, 3 MCQ, 3 Syllogism).
-* **Key Insights:**
-  * **Error Correction:** For the 0.6B student, distillation corrected a faulty NLI verdict (2/3 to 3/3). For the 1.7B student, it corrected an MCQ choice (1/3 to 2/3).
-  * **Scale Ceiling:** Regardless of distillation, the 0.6B student failed all three Syllogism cases (0/3), showing that capacity limitations cannot be solved by distillation alone. The 1.7B model solved one Syllogism case.
+

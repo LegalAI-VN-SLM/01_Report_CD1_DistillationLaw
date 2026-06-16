@@ -155,9 +155,9 @@ Thông điệp cuối: **một pipeline được dàn dựng cẩn thận, neo b
 🎤 *Khi hỏi chi tiết VLSP2025.*
 "Dạ đây là bảng đầy đủ trên 440 mẫu OOD — SFT 1.7B cao nhất Overall và MCQ, On-Policy 1.7B cao nhất NLI và Syllogism trong nhóm chưng cất."
 
-### Slide 19 — Data: Ablations & Qualitative (Table 4.5, 4.6, 4.7)
-🎤 *Khi hỏi số liệu ablation hoặc ví dụ định tính.*
-"Dạ ba bảng: LoRA-vs-QLoRA, chất lượng chẩn đoán luật-vs-Judge với số tuyệt đối, và đối chiếu chín mẫu — 0.6B trượt toàn bộ Syllogism, đúng trần quy mô."
+### Slide 19 — Data: Ablations (Table 4.5, 4.6)
+🎤 *Khi hỏi số liệu ablation.*
+"Dạ hai bảng: LoRA-vs-QLoRA, và chất lượng chẩn đoán luật-vs-Judge với số tuyệt đối."
 
 ### Slide 20 — Data: Key Hyperparameters
 🎤 *Khi hỏi cấu hình huấn luyện / khả năng tái lập.*

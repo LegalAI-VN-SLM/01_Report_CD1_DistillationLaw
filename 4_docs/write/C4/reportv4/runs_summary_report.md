@@ -59,9 +59,6 @@ Báo cáo này thu thập, tổng hợp và phân tích toàn bộ dữ liệu c
 | **Syllogism ROUGE-L** | 0.1741 | **0.3804** | Tăng mạnh khả năng suy luận tự do |
 | **Overall Score** | 0.452 | **0.462** | **A2 QLoRA là hướng đi đúng cho 0.6B** |
 
-### 2.3. So sánh định tính 9 mẫu kiểm thử (A2 vs A3)
-*   **A2 (0.6B QLoRA) đạt 5/9 câu đúng:** KD sửa thành công lỗi đoán sai của SFT ở câu NLI. Tuy nhiên, mô hình hoàn toàn bất lực trước cả 3 câu Tam đoạn luận (Syllogism 0/3) do giới hạn kích thước mô hình.
-*   **A3 (1.7B LoRA) đạt 6/9 câu đúng:** KD sửa thành công lỗi của SFT ở câu trắc nghiệm (MC). Đồng thời giải được 1/3 câu Tam đoạn luận, trích xuất chính xác số liệu pháp lý.
 
 ---
 

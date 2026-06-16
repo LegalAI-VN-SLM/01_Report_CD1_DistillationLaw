@@ -350,24 +350,3 @@ LLM Judge (\texttt{GPT-4o-mini}) & \textbf{538 (20.7\%)} & 404 (15.5\%) & \textb
 \end{table}
 ```
 
----
-
-### Table 4.7: Nine-Sample Inference Comparison (Correct Responses per Task, Greedy Decoding)
-* **Source File:** [2_chapters/4_Experiments/4_5_Qualitative_Analysis.tex](file:///E:/DoCode/1%20VN-Legal-AI/01_Report_CD1_DistillationLaw/2_chapters/4_Experiments/4_5_Qualitative_Analysis.tex#L9-L21)
-* **Lines:** 9-21
-
-```latex
-\begin{table}[htbp]
-\centering
-\caption{Nine-Sample Inference Comparison (Correct Responses per Task, Greedy Decoding)}
-\label{tab:nine_sample}
-\begin{tabular}{lcccc}
-\hline
-\textbf{Model} & \textbf{NLI (3)} & \textbf{MCQ (3)} & \textbf{Syllogism (3)} & \textbf{Total} \\ \hline
-0.6B SFT & 2/3 & 2/3 & 0/3 & 4/9 \\
-0.6B KD  & 3/3 & 2/3 & 0/3 & 5/9 \\
-1.7B SFT & 3/3 & 1/3 & 1/3 & 5/9 \\
-1.7B KD  & 3/3 & 2/3 & 1/3 & \textbf{6/9} \\ \hline
-\end{tabular}
-\end{table}
-```
