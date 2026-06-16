@@ -16,26 +16,62 @@ Both student models are initialized from their respective supervised fine-tuning
 
 \subsection{Configuration Space and Hyperparameters}
 
-Each of the three phases is configured with a conservative hyperparameter setting tailored to its objective. Both refinement tracks---Phase 2 (on-policy) and the Phase 1$\rightarrow$Phase 3 offline track---start from the same supervised fine-tuned (SFT) base. The complete configuration is summarized in Table~\ref{tab:hparams}.
+Each of the three phases is configured with a conservative hyperparameter setting tailored to its objective. Both refinement tracks---Phase 2 (on-policy) and the Phase 1$\rightarrow$Phase 3 offline track---start from the same supervised fine-tuned (SFT) base. The configurations are summarized in Tables~\ref{tab:hparams_phase1}, \ref{tab:hparams_phase2}, and \ref{tab:hparams_phase3}.
 
 \begin{table}[htbp]
 \centering
-\caption{Hyperparameter configuration across the three training phases. A dash (---) denotes a setting not applicable to that phase.}
+\caption{Hyperparameter configurations across the three training phases.}
 \label{tab:hparams}
-\begin{tabular}{lccc}
+
+\begin{subtable}{\linewidth}
+\centering
+\caption{Phase 1 (Offline Logit Distillation)}
+\label{tab:hparams_phase1}
+\begin{tabular}{lc}
 \hline
-\textbf{Hyperparameter} & \textbf{Phase 1 (Offline KD)} & \textbf{Phase 2 (On-Policy KD)} & \textbf{Phase 3 (DPO)} \\ \hline
-Learning rate $\eta$    & $2.0 \times 10^{-5}$ & $2.0 \times 10^{-5}$ & $5.0 \times 10^{-6}$ \\
-Loss weight             & $\alpha = 0.3$       & $\alpha = 0.5$       & $\beta = 0.1$ \\
-Temperature $T$         & $1.5$ (soft labels)  & $0.7$ (sampling)     & --- \\
-Top-$K$ logits          & $50$                 & ---                  & --- \\
-KL clip $C$             & ---                  & $5.0$                & --- \\
-Nucleus top-$p$         & ---                  & $0.9$                & --- \\
-Effective batch size    & $64$                 & $32$                 & --- \\
-Optimizer               & ---                  & ---                  & \texttt{adamw\_8bit} \\
-Max context (prompt)    & ---                  & ---                  & $2{,}048$ ($1{,}024$) \\
-Epochs                  & ---                  & ---                  & $2$ \\ \hline
+\textbf{Hyperparameter} & \textbf{Value} \\ \hline
+Learning rate $\eta$    & $2.0 \times 10^{-5}$ \\
+Distillation weight $\alpha$ & $0.3$ ($70\%$ CE anchor, $30\%$ KD loss) \\
+Temperature $T$         & $1.5$ \\
+Top-$K$ logits cache size & $50$ \\
+Effective batch size    & $64$ \\ \hline
 \end{tabular}
+\end{subtable}
+
+\vspace{1.5em}
+
+\begin{subtable}{\linewidth}
+\centering
+\caption{Phase 2 (On-Policy Knowledge Distillation)}
+\label{tab:hparams_phase2}
+\begin{tabular}{lc}
+\hline
+\textbf{Hyperparameter} & \textbf{Value} \\ \hline
+Learning rate $\eta$    & $2.0 \times 10^{-5}$ \\
+Distillation weight $\alpha$ & $0.5$ ($50\%$ SFT anchor, $50\%$ on-policy KD) \\
+Sampling temperature $T$ & $0.7$ \\
+Nucleus sampling top-$p$ & $0.9$ \\
+KL clipping threshold $C$ & $5.0$ \\
+Effective batch size    & $32$ \\ \hline
+\end{tabular}
+\end{subtable}
+
+\vspace{1.5em}
+
+\begin{subtable}{\linewidth}
+\centering
+\caption{Phase 3 (Diagnosis-Driven DPO Alignment)}
+\label{tab:hparams_phase3}
+\begin{tabular}{lc}
+\hline
+\textbf{Hyperparameter} & \textbf{Value} \\ \hline
+Learning rate $\eta$    & $5.0 \times 10^{-6}$ \\
+DPO loss weight $\beta$ & $0.1$ \\
+Optimizer               & \texttt{adamw\_8bit} \\
+Max context (prompt / response) & $2{,}048$ ($1{,}024$) \\
+Epochs                  & $2$ \\ \hline
+\end{tabular}
+\end{subtable}
 \end{table}
 
 Several choices warrant explanation. Across all phases we keep the learning rate low---down to $5.0 \times 10^{-6}$ for DPO---to prevent catastrophic forgetting of the distilled knowledge. In Phase 1 the weight $\alpha = 0.3$ places $70\%$ of the loss on the hard-label cross-entropy anchor and $30\%$ on the KL-divergence term, while the top-$K=50$ sparse logit representation reduces the storage and computation of the teacher targets. In Phase 2 the teacher operates as an oracle with privileged access to the gold answer, the student samples its own rollouts at temperature $0.7$ with nucleus sampling $p=0.9$, and KL clipping at $C=5.0$ restricts the gradient influence of formatting tags. Phase 3 uses the \texttt{adamw\_8bit} optimizer to conserve VRAM and takes the Phase 1 checkpoint as the DPO reference policy.
