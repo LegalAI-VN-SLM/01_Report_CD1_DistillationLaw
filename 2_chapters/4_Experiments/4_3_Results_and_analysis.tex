@@ -38,24 +38,24 @@ Parameter capacity proves decisive for deep, multi-step legal reasoning. To quan
 
 \subsection{Supervised Fine-Tuning vs. Offline Knowledge Distillation}
 
-We now assess the contribution of offline logit distillation \parencite{hinton2015distillingknowledgeneuralnetwork} relative to the SFT baselines, using the progression reported in Table~\ref{tab:progression}. Rather than claiming a uniform improvement, we analyze the effect on a per-task basis, since the baselines and the distilled models exhibit complementary strengths. The 0.6B SFT baseline (B2) is already competent at NLI and free-form reasoning (NLI Accuracy 0.7160, Syllogism ROUGE-L 0.4280) but is weak at multiple-choice selection (MC Accuracy 0.1400). Offline distillation transfers the teacher's soft probability distribution and corrects precisely this deficiency, raising the MC Accuracy to 0.4158 and lifting the Overall score from 0.4282 to 0.4622. Symmetrically, the 1.7B SFT baseline (B3) is strong at MCQ (0.5000) but weak at syllogistic reasoning (ROUGE-L 0.2070); here distillation more than doubles the Syllogism ROUGE-L to 0.4208 and improves the Overall score from 0.4840 to 0.5322. These results confirm that the soft labels supply task-specific corrective signal beyond what the hard labels alone provide.
+We now assess the contribution of offline knowledge distillation \parencite{hinton2015distillingknowledgeneuralnetwork} relative to the SFT baselines, using the progression reported in Table~\ref{tab:progression}. Rather than claiming a uniform improvement, we analyze the effect on a per-task basis, since the baselines and the distilled models exhibit complementary strengths. The 0.6B SFT baseline (B2) is already competent at NLI and free-form reasoning (NLI Accuracy 0.7160, Syllogism ROUGE-L 0.4280) but is weak at multiple-choice selection (MC Accuracy 0.1400). Offline distillation transfers the teacher's soft probability distribution and corrects precisely this deficiency, raising the MC Accuracy to 0.4158 and lifting the Overall score from 0.4282 to 0.4622. Symmetrically, the 1.7B SFT baseline (B3) is strong at MCQ (0.5000) but weak at syllogistic reasoning (ROUGE-L 0.2070); here distillation more than doubles the Syllogism ROUGE-L to 0.4208 and improves the Overall score from 0.4840 to 0.5322. These results confirm that the soft labels supply task-specific corrective signal beyond what the hard labels alone provide.
 
 \begin{table}[htbp]
 \centering
 \caption{Performance Progression Across Training Phases on the 325-sample Split-Test}
 \label{tab:progression}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{llcccccc}
+\begin{tabular}{llccccccc}
 \hline
-\textbf{Run} & \textbf{Stage} & \textbf{Size} & \textbf{MC Acc} & \textbf{NLI Acc} & \textbf{NLI F1} & \textbf{Syl R-L} & \textbf{Overall} \\ \hline
-B2 & SFT (baseline)   & 0.6B & 0.1400 & 0.7160 & 0.4730 & 0.4280 & 0.4282 \\
-A2 & Offline KD (V2)  & 0.6B & 0.4158 & 0.5886 & 0.4390 & 0.3804 & 0.4622 \\
-A2 & On-Policy KD     & 0.6B & 0.1600 & 0.4960 & 0.3800 & 0.2750 & 0.3104 \\
-A2 & DPO Alignment    & 0.6B & 0.1000 & 0.3191 & 0.2387 & 0.1392 & 0.1861 \\ \hline
-B3 & SFT (baseline)   & 1.7B & 0.5000 & 0.7450 & 0.5040 & 0.2070 & 0.4840 \\
-A3 & Offline KD (V2)  & 1.7B & 0.4455 & 0.7305 & 0.5018 & 0.4208 & 0.5322 \\
-A3 & On-Policy KD     & 1.7B & 0.3600 & 0.7870 & 0.5310 & 0.3750 & 0.5075 \\
-A3 & DPO Alignment    & 1.7B & 0.2000 & 0.8156 & 0.8333 & 0.5684 & \textbf{0.5280} \\ \hline
+\textbf{Run} & \textbf{Stage} & \textbf{Size} & \textbf{MC Acc} & \textbf{NLI Acc} & \textbf{NLI F1} & \textbf{Syl R-1} & \textbf{Syl R-L} & \textbf{Overall} \\ \hline
+B2 & SFT (baseline)   & 0.6B & 0.1400 & 0.7160 & 0.4730 & \underline{0.5090} & \underline{0.4280} & 0.4282 \\
+A2 & Offline KD (V2)  & 0.6B & 0.4158 & 0.5886 & 0.4390 & 0.4168 & 0.3804 & 0.4622 \\
+A2 & On-Policy KD     & 0.6B & 0.1600 & 0.4960 & 0.3800 & 0.3610 & 0.2750 & 0.3104 \\
+A2 & DPO Alignment    & 0.6B & 0.1000 & 0.3191 & 0.2387 & 0.1721 & 0.1392 & 0.1861 \\ \hline
+B3 & SFT (baseline)   & 1.7B & \textbf{0.5000} & 0.7450 & 0.5040 & 0.2670 & 0.2070 & 0.4840 \\
+A3 & Offline KD (V2)  & 1.7B & \underline{0.4455} & 0.7305 & 0.5018 & 0.4805 & 0.4208 & \textbf{0.5322} \\
+A3 & On-Policy KD     & 1.7B & 0.3600 & \underline{0.7870} & \underline{0.5310} & 0.4390 & 0.3750 & 0.5075 \\
+A3 & DPO Alignment    & 1.7B & 0.2000 & \textbf{0.8156} & \textbf{0.8333} & \textbf{0.6231} & \textbf{0.5684} & \underline{0.5280} \\ \hline
 \end{tabular}%
 }
 \end{table}
@@ -87,11 +87,11 @@ The preceding analysis characterizes in-distribution behavior. To assess general
 B2 & SFT          & 0.6B & 0.541 & 0.707 & 0.480 & 0.449 & 0.266 & 0.5047 \\
 B3 & SFT          & 1.7B & \textbf{0.740} & 0.873 & 0.590 & 0.581 & 0.305 & \textbf{0.6395} \\
 A2 & KD V2        & 0.6B & 0.199 & 0.607 & 0.428 & 0.610 & 0.331 & 0.3787 \\
-A3 & KD V2        & 1.7B & 0.219 & 0.720 & 0.525 & 0.667 & 0.353 & 0.4307 \\
+A3 & KD V2        & 1.7B & 0.219 & 0.720 & 0.525 & \underline{0.667} & \underline{0.353} & 0.4307 \\
 A2 & KD + DPO     & 0.6B & 0.151 & 0.207 & 0.177 & 0.165 & 0.122 & 0.1599 \\
-A3 & KD + DPO     & 1.7B & 0.212 & 0.893 & \textbf{0.897} & 0.409 & 0.282 & 0.4627 \\
+A3 & KD + DPO     & 1.7B & 0.212 & \underline{0.893} & \textbf{0.897} & 0.409 & 0.282 & 0.4627 \\
 A2 & On-Policy KD & 0.6B & 0.055 & 0.673 & 0.482 & 0.609 & 0.313 & 0.3471 \\
-A3 & On-Policy KD & 1.7B & 0.555 & \textbf{0.920} & 0.617 & \textbf{0.679} & \textbf{0.372} & 0.6155 \\ \hline
+A3 & On-Policy KD & 1.7B & \underline{0.555} & \textbf{0.920} & \underline{0.617} & \textbf{0.679} & \textbf{0.372} & \underline{0.6155} \\ \hline
 \end{tabular}%
 }
 \end{table}
@@ -99,3 +99,29 @@ A3 & On-Policy KD & 1.7B & 0.555 & \textbf{0.920} & 0.617 & \textbf{0.679} & \te
 Three findings emerge. First, the 1.7B SFT baseline (B3) achieves the highest Overall score on the Public-Test (0.6395), surpassing all distilled and aligned variants. This indicates that knowledge distillation, while effective on in-distribution data, over-specializes the student toward the training distribution at the expense of generalization, a tendency most visible on the MCQ task. Second, among the distilled models, the 1.7B On-Policy KD checkpoint (A3) is the strongest generalizer (Overall 0.6155, second overall), attaining both the highest NLI Accuracy (0.920) and the highest Syllogism ROUGE-L (0.372) in the entire table; this demonstrates that breaking exposure bias confers a generalization advantage that persists on unseen data. Third, MCQ accuracy is a systematic weakness of every distilled model (all below 0.56, versus 0.74 for the 1.7B SFT baseline), and the 0.6B On-Policy model nearly loses the capability altogether (0.055).
 
 Taken together, the in-distribution and out-of-distribution results yield two consistent conclusions. Model scale is the dominant factor: the 1.7B family outperforms its 0.6B counterpart across every pipeline stage, frequently by a factor of $1.5$–$2\times$. Moreover, the optimal checkpoint is contingent on both the evaluation regime and the target task: in-distribution, A3\_offline\_kd attains the highest Overall score while A3\_dpo dominates the NLI and syllogistic-reasoning tasks; under distribution shift, the 1.7B On-Policy KD model is the most robust distilled configuration. We therefore refrain from designating a single universally optimal model and instead report the trade-off explicitly.
+
+\subsection{Summary of Overall Performance}
+
+To facilitate a direct, holistic comparison across all experimental phases and benchmarks, we aggregate the complete set of in-distribution and out-of-distribution metrics into a single unified dashboard in Table~\ref{tab:evaluation_results}. This combined view highlights the divergence in task profiles across model scales, illustrating how the distillation pipeline shifts behavior from SFT to offline KD, on-policy alignment, and preference optimization.
+
+\begin{table}[htbp]
+\centering
+\caption{Comprehensive evaluation results across training phases on both in-distribution (Split-Test) and out-of-distribution (VLSP2025 Public-Test) benchmarks. Values are rounded to four decimal places for consistency.}
+\label{tab:evaluation_results}
+\setlength{\tabcolsep}{2.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lll cccccc | cccccc}
+\hline
+& & & \multicolumn{6}{c}{\textbf{Split-Test (In-Distribution)}} & \multicolumn{6}{c}{\textbf{VLSP2025 Public-Test (Out-of-Distribution)}} \\ \cline{4-9} \cline{10-15}
+\textbf{Run} & \textbf{Stage} & \textbf{Size} & \textbf{MC Acc} & \textbf{NLI Acc} & \textbf{NLI F1} & \textbf{Syl R-1} & \textbf{Syl R-L} & \textbf{Overall} & \textbf{MC Acc} & \textbf{NLI Acc} & \textbf{NLI F1} & \textbf{Syl R-1} & \textbf{Syl R-L} & \textbf{Overall} \\ \hline
+B2 & SFT (baseline)   & 0.6B & 0.1400 & 0.7160 & 0.4730 & \underline{0.5090} & \underline{0.4280} & 0.4282 & 0.5410 & 0.7070 & 0.4800 & 0.4490 & 0.2660 & 0.5047 \\
+A2 & Offline KD (V2)  & 0.6B & 0.4158 & 0.5886 & 0.4390 & 0.4168 & 0.3804 & 0.4622 & 0.1990 & 0.6070 & 0.4280 & 0.6100 & 0.3310 & 0.3787 \\
+A2 & On-Policy KD     & 0.6B & 0.1600 & 0.4960 & 0.3800 & 0.3610 & 0.2750 & 0.3104 & 0.0550 & 0.6730 & 0.4820 & 0.6090 & 0.3130 & 0.3471 \\
+A2 & DPO Alignment    & 0.6B & 0.1000 & 0.3191 & 0.2387 & 0.1721 & 0.1392 & 0.1861 & 0.1510 & 0.2070 & 0.1770 & 0.1650 & 0.1220 & 0.1599 \\ \hline
+B3 & SFT (baseline)   & 1.7B & \textbf{0.5000} & 0.7450 & 0.5040 & 0.2670 & 0.2070 & 0.4840 & \textbf{0.7400} & 0.8730 & 0.5900 & 0.5810 & 0.3050 & \textbf{0.6395} \\
+A3 & Offline KD (V2)  & 1.7B & \underline{0.4455} & 0.7305 & 0.5018 & 0.4805 & 0.4208 & \textbf{0.5322} & 0.2190 & 0.7200 & 0.5250 & \underline{0.6670} & \underline{0.3530} & 0.4307 \\
+A3 & On-Policy KD     & 1.7B & 0.3600 & \underline{0.7870} & \underline{0.5310} & 0.4390 & 0.3750 & 0.5075 & \underline{0.5550} & \textbf{0.9200} & \underline{0.6170} & \textbf{0.6790} & \textbf{0.3720} & \underline{0.6155} \\
+A3 & DPO Alignment    & 1.7B & 0.2000 & \textbf{0.8156} & \textbf{0.8333} & \textbf{0.6231} & \textbf{0.5684} & \underline{0.5280} & 0.2120 & \underline{0.8930} & \textbf{0.8970} & 0.4090 & 0.2820 & 0.4627 \\ \hline
+\end{tabular}%
+}
+\end{table}
