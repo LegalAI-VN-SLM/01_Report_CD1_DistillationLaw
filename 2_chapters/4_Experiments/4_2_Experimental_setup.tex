@@ -16,36 +16,29 @@ Both student models are initialized from their respective supervised fine-tuning
 
 \subsection{Configuration Space and Hyperparameters}
 
-The optimization framework is executed sequentially across three distinct training phases. The hyperparameter configuration space for each phase is specified below:
+Each of the three phases is configured with a conservative hyperparameter setting tailored to its objective. Both refinement tracks---Phase 2 (on-policy) and the Phase 1$\rightarrow$Phase 3 offline track---start from the same supervised fine-tuned (SFT) base. The complete configuration is summarized in Table~\ref{tab:hparams}.
 
-\paragraph{Phase 1: Offline Logit Distillation}
-During the offline logit distillation phase, the student model is trained on soft target probabilities (logits) provided by the teacher model alongside the hard labels.
-\begin{itemize}
-    \item \textbf{Learning Rate ($\eta$):} Set to $2.0 \times 10^{-5}$ (optimized in version 2 to prevent forgetting).
-    \item \textbf{Loss Balancing Weight ($\alpha$):} Set to $0.3$, representing a relative weighting of 70\% for the hard Cross-Entropy loss and 30\% for the Kullback-Leibler (KL) divergence loss.
-    \item \textbf{Distillation Temperature ($T$):} Set to $1.5$ to soften the logit probability distribution.
-    \item \textbf{Logit Space ($K$):} Restricted to the top $K=50$ logits (Top-50 sparse representation) to optimize communication and computational efficiency.
-    \item \textbf{Effective Batch Size:} Maintained at $64$ using gradient accumulation.
-\end{itemize}
+\begin{table}[htbp]
+\centering
+\caption{Hyperparameter configuration across the three training phases. A dash (---) denotes a setting not applicable to that phase.}
+\label{tab:hparams}
+\begin{tabular}{lccc}
+\hline
+\textbf{Hyperparameter} & \textbf{Phase 1 (Offline KD)} & \textbf{Phase 2 (On-Policy KD)} & \textbf{Phase 3 (DPO)} \\ \hline
+Learning rate $\eta$    & $2.0 \times 10^{-5}$ & $2.0 \times 10^{-5}$ & $5.0 \times 10^{-6}$ \\
+Loss weight             & $\alpha = 0.3$       & $\alpha = 0.5$       & $\beta = 0.1$ \\
+Temperature $T$         & $1.5$ (soft labels)  & $0.7$ (sampling)     & --- \\
+Top-$K$ logits          & $50$                 & ---                  & --- \\
+KL clip $C$             & ---                  & $5.0$                & --- \\
+Nucleus top-$p$         & ---                  & $0.9$                & --- \\
+Effective batch size    & $64$                 & $32$                 & --- \\
+Optimizer               & ---                  & ---                  & \texttt{adamw\_8bit} \\
+Max context (prompt)    & ---                  & ---                  & $2{,}048$ ($1{,}024$) \\
+Epochs                  & ---                  & ---                  & $2$ \\ \hline
+\end{tabular}
+\end{table}
 
-\paragraph{Phase 2: On-Policy Knowledge Distillation}
-In this phase, the student model generates its own reasoning paths on-policy, and the teacher provides online token-level feedback.
-\begin{itemize}
-    \item \textbf{Learning Rate ($\eta$):} Set to $1.0 \times 10^{-5}$ to preserve the weights learned during Phase 1.
-    \item \textbf{Loss Balancing Weight ($\alpha$):} Set to $0.5$, providing equal weight to the on-policy KL divergence loss and the hard label Cross-Entropy loss.
-    \item \textbf{KL Clipping Threshold ($C$):} Set to $5.0$ to prune extreme gradient signals and prevent optimization instability.
-    \item \textbf{Student Generation Sampling:} Configured with temperature $T=0.7$ and nucleus sampling $p=0.9$.
-\end{itemize}
-
-\paragraph{Phase 3: Direct Preference Optimization (DPO) Alignment}
-In the final alignment phase, the student model is aligned using preference pairs containing correct and incorrect reasoning rollouts.
-\begin{itemize}
-    \item \textbf{Learning Rate ($\eta$):} Restricted to $5.0 \times 10^{-6}$ to prevent catastrophic forgetting of the distilled knowledge.
-    \item \textbf{DPO Penalty Weight ($\beta$):} Set to $0.1$ to constrain policy deviation from the reference policy.
-    \item \textbf{Optimizer:} The \texttt{adamw\_8bit} optimizer is utilized to conserve VRAM.
-    \item \textbf{Context Length:} Maximum sequence length is set to $2,048$ tokens, with prompt length limited to $1,024$ tokens.
-    \item \textbf{Training Epochs:} Conducted for $2$ epochs.
-\end{itemize}
+Several choices warrant explanation. Across all phases we keep the learning rate low---down to $5.0 \times 10^{-6}$ for DPO---to prevent catastrophic forgetting of the distilled knowledge. In Phase 1 the weight $\alpha = 0.3$ places $70\%$ of the loss on the hard-label cross-entropy anchor and $30\%$ on the KL-divergence term, while the top-$K=50$ sparse logit representation reduces the storage and computation of the teacher targets. In Phase 2 the teacher operates as an oracle with privileged access to the gold answer, the student samples its own rollouts at temperature $0.7$ with nucleus sampling $p=0.9$, and KL clipping at $C=5.0$ restricts the gradient influence of formatting tags. Phase 3 uses the \texttt{adamw\_8bit} optimizer to conserve VRAM and takes the Phase 1 checkpoint as the DPO reference policy.
 
 \subsection{Hardware and Framework}
 
