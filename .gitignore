@@ -19,3 +19,4 @@
 !*.yml
 !*.json
 /raw
+/5_data_visualization/data_wandb/distillation_v2

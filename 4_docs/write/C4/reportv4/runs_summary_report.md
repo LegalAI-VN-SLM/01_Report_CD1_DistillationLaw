@@ -54,9 +54,9 @@ Báo cáo này thu thập, tổng hợp và phân tích toàn bộ dữ liệu c
 
 | Chỉ số / Trạng thái | `A1_offline_kd` (LoRA) | `A2_offline_kd` (QLoRA) | Ý nghĩa thực nghiệm |
 | :--- | :---: | :---: | :--- |
-| **Đường cong ce_loss** | Tăng dần cuối epoch (0.3 $\to$ 0.7) | Giảm dần ổn định (0.5 $\to$ 0.25) | QLoRA chống Catastrophic Forgetting tốt hơn |
+| **Đường cong ce_loss** | Duy trì ở mức cao ($1.00 \to 0.56$) | Giảm dần ổn định ($0.64 \to 0.37$) | QLoRA chống Catastrophic Forgetting tốt hơn |
 | **Hội tụ** | Đạt đỉnh sớm ở step 60 rồi sụt giảm | Đạt đỉnh ở step 120, xu hướng đi lên | QLoRA ổn định trọng số SFT |
-| **Syllogism ROUGE-L** | 0.285 | **0.380** (+33%) | Tăng mạnh khả năng suy luận tự do |
+| **Syllogism ROUGE-L** | 0.1741 | **0.3804** | Tăng mạnh khả năng suy luận tự do |
 | **Overall Score** | 0.452 | **0.462** | **A2 QLoRA là hướng đi đúng cho 0.6B** |
 
 ### 2.3. So sánh định tính 9 mẫu kiểm thử (A2 vs A3)

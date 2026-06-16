@@ -25,19 +25,20 @@ This document contains the exact LaTeX source code for all the figures and table
     arrow/.style={-{Stealth[length=2.5mm]}, thick}
 ]
     \node (sft)    [block] {\textbf{SFT Base}\\ \footnotesize Qwen3\\ \footnotesize 0.6B / 1.7B};
-    \node (phase1) [block, right=0.6cm of sft] {\textbf{Phase 1}\\ \footnotesize Offline Logit KD\\ \footnotesize $\mathcal{L}_{CE} + \mathcal{L}_{KD}$};
-    \node (phase2) [block, above right=0.35cm and 1.0cm of phase1] {\textbf{Phase 2}\\ \footnotesize On-Policy KD\\ \footnotesize Oracle + KL Clip};
-    \node (phase3) [block, below right=0.35cm and 1.0cm of phase1] {\textbf{Phase 3}\\ \footnotesize Diagnosis-Driven\\ \footnotesize DPO Alignment};
-    \node (out2)   [final, right=0.6cm of phase2] {\textbf{On-Policy}\\ \textbf{SLM}};
-    \node (out3)   [final, right=0.6cm of phase3] {\textbf{DPO-Aligned}\\ \textbf{SLM}};
+    \node (phase2) [block, above right=0.4cm and 1.1cm of sft] {\textbf{Phase 2}\\ \footnotesize On-Policy KD\\ \footnotesize Oracle + KL Clip};
+    \node (phase1) [block, below right=0.4cm and 1.1cm of sft] {\textbf{Phase 1}\\ \footnotesize Offline Logit KD\\ \footnotesize $\mathcal{L}_{CE} + \mathcal{L}_{KD}$};
+    \node (phase3) [block, right=1.0cm of phase1] {\textbf{Phase 3}\\ \footnotesize Diagnosis-Driven\\ \footnotesize DPO Alignment};
+    \node (out3)   [final, right=0.7cm of phase3] {\textbf{DPO-Aligned}\\ \textbf{SLM}};
+    \node (out2)   [final] at (out3 |- phase2) {\textbf{On-Policy}\\ \textbf{SLM}};
 
-    \draw [arrow] (sft) -- (phase1);
-    \draw [arrow] (phase1.east) -- (phase2.west);
-    \draw [arrow] (phase1.east) -- (phase3.west);
-    \draw [arrow] (phase2) -- (out2);
+    \draw [arrow] (sft.east) -- (phase2.west);
+    \draw [arrow] (sft.east) -- (phase1.west);
+    \draw [arrow] (phase2.east) -- (out2.west);
+    \draw [arrow] (phase1) -- (phase3);
     \draw [arrow] (phase3) -- (out3);
+    \draw [arrow, dashed, gray] (phase1.south) to[out=-30,in=-150] node[midway, below, font=\footnotesize, text=gray] {reference policy} (phase3.south);
 \end{tikzpicture}
-\caption{Overall architecture of the proposed multi-phase distillation framework. Phase 1 (offline logit distillation) produces a shared foundation checkpoint, from which two complementary refinement branches are independently applied: Phase 2 (on-policy knowledge distillation) and Phase 3 (diagnosis-driven preference optimization).}
+\caption{Overall architecture of the proposed multi-phase distillation framework. From a shared SFT base, two distillation tracks branch \emph{independently}: an on-policy track (Phase 2, on-policy knowledge distillation) and an offline track (Phase 1, offline logit distillation). Phase 3 (diagnosis-driven preference optimization) then refines the Phase 1 checkpoint, which also serves as the DPO reference policy. The two tracks share only the SFT initialization.}
 \label{fig:overall_pipeline}
 \end{figure}
 ```
@@ -178,7 +179,7 @@ This document contains the exact LaTeX source code for all the figures and table
     \node (decide) [decision, right=0.9cm of judge] {\footnotesize Error?};
     \node (ok)     [ok, above=0.7cm of decide] {\texttt{OK} $\rightarrow$ discard};
     \node (sample) [block, right=0.9cm of decide, fill=gray!10, draw=gray!70] {\textbf{Stratified Sampling}\\ \footnotesize pairs $(x, y_w, y_l)$};
-    \node (dpoAlign) [dpo, below=0.8cm of sample] {\textbf{DPO Alignment}\\ \footnotesize $\beta = 0.1$, ref.\ $= \pi_{\text{Phase 2}}$};
+    \node (dpoAlign) [dpo, below=0.8cm of sample] {\textbf{DPO Alignment}\\ \footnotesize $\beta = 0.1$, ref.\ $= \pi_{\text{Phase 1}}$};
 
     \draw [arrow] (infer) -- (judge);
     \draw [arrow] (judge) -- (decide);
@@ -311,14 +312,14 @@ A3 & On-Policy KD & 1.7B & 0.555 & \textbf{0.920} & 0.617 & \textbf{0.679} & \te
 ```latex
 \begin{table}[htbp]
 \centering
-\caption{Cross-Entropy Loss Trend: LoRA vs. QLoRA on the 0.6B Student (V2 Configuration)}
+\caption{Cross-Entropy Loss: LoRA vs. QLoRA on the 0.6B Student (V2 Configuration)}
 \label{tab:qlora_ablation}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc}
 \hline
-\textbf{Adapter} & \textbf{CE Loss Trend} & \textbf{Knowledge Retention} & \textbf{Syllogism R-L} \\ \hline
-LoRA (A1)  & $0.3 \rightarrow 0.7$ (rising)   & Eroded (forgetting)   & 0.1741 \\
-QLoRA (A2) & $0.5 \rightarrow 0.25$ (falling) & Preserved (anchored)  & \textbf{0.3804} \\ \hline
+\textbf{Adapter} & \textbf{CE Loss ($L_{CE}$: start $\rightarrow$ settle)} & \textbf{Knowledge Retention} & \textbf{Syllogism R-L} \\ \hline
+LoRA (A1)  & $1.00 \rightarrow 0.56$ (stays high)        & Higher CE (weaker)   & 0.1741 \\
+QLoRA (A2) & $0.64 \rightarrow 0.37$ (steady $\downarrow$) & Lower CE (anchored)  & \textbf{0.3804} \\ \hline
 \end{tabular}%
 }
 \end{table}

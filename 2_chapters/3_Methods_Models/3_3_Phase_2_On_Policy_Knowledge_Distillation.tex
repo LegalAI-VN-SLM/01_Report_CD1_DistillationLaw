@@ -1,6 +1,6 @@
 \section{Phase 2: On-Policy Knowledge Distillation}
 
-While offline distillation (Phase 1) establishes a baseline capability, it remains bound to a static distribution of training sequences. This section introduces our second phase, designed to break the training-inference alignment gap (exposure bias) through on-policy knowledge distillation. Figure~\ref{fig:phase2_onpolicy} provides an overview of the on-policy training loop described in this section.
+While offline distillation (Phase 1) establishes a baseline capability, it remains bound to a static distribution of training sequences. This section introduces our second phase---applied as an independent track directly on the SFT base, rather than as a continuation of the Phase 1 checkpoint---designed to break the training-inference alignment gap (exposure bias) through on-policy knowledge distillation. Figure~\ref{fig:phase2_onpolicy} provides an overview of the on-policy training loop described in this section.
 
 \input{figs/tikz/fig_3_3_onpolicy_kd}
 

@@ -97,7 +97,7 @@ eval_steps: 100 → 50       (bắt best checkpoint sớm)
 | Metric | A1 (LoRA) | A2 (QLoRA) |
 |---|---|---|
 | Best overall | 0.452 (sớm, rồi sụt) | **0.462** (tiếp tục tăng) |
-| Syllogism ROUGE-L | 0.285 | **0.380** (+33%) |
+| Syllogism ROUGE-L | 0.1741 | **0.3804** |
 | Forgetting | Nặng | Không |
 
 ### 2.2 Giai Đoạn DPO

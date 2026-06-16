@@ -4,20 +4,20 @@ To attribute the observed performance gains to specific design decisions rather 
 
 \subsection{Quantized Low-Rank Adaptation vs. Low-Rank Adaptation}
 
-While Section~4.3 reported the end-task scores of the LoRA and QLoRA variants, this ablation examines the underlying training dynamics that explain the difference, namely the trajectory of the hard-label cross-entropy loss on the 0.6B student under the identical V2 configuration. The cross-entropy loss is a direct proxy for how well the student retains its supervised fine-tuning (SFT) knowledge: an increasing trend signals that the model is overwriting its prior parameters to chase the teacher distribution, whereas a decreasing trend signals stable knowledge retention.
+While Section~4.3 reported the end-task scores of the LoRA and QLoRA variants, this ablation examines the underlying training dynamics that explain the difference, namely the trajectory of the hard-label cross-entropy loss on the 0.6B student under the identical V2 configuration. The hard-label cross-entropy loss is a direct proxy for how well the student retains its supervised fine-tuning (SFT) knowledge: a persistently higher loss signals that the model is overwriting its prior parameters to chase the teacher distribution, whereas a lower, steadily decreasing loss signals stable knowledge retention. Both runs use the identical V2 weighting ($\alpha=0.3$, i.e.\ a hard-label CE weight of $1-\alpha=0.7$), so the contrast isolates the effect of the adapter alone.
 
-Under the standard LoRA configuration (A1), the cross-entropy loss rises steadily over the course of training, drifting from approximately 0.3 to 0.7. This upward trend is the signature of catastrophic forgetting: because the full base model remains trainable through the adapter pathway, the optimizer progressively erodes the anchored SFT knowledge in favor of imitating the teacher. By contrast, the QLoRA configuration (A2) freezes the base weights in a 4-bit (NF4) representation and restricts all updates to the low-rank adapter. This constraint operates as a form of implicit regularization: the cross-entropy loss decreases smoothly from 0.5 to 0.25, confirming that the prior knowledge is preserved while the new distillation signal is absorbed. The contrasting loss trajectories, summarized in Table~\ref{tab:qlora_ablation}, corroborate the end-task observation that QLoRA is necessary at the 0.6B scale to prevent forgetting, and justify its adoption as the default adaptation strategy for the smaller student.
+Under the standard LoRA configuration (A1), the cross-entropy loss remains elevated throughout training: after the initial warmup it settles at approximately 0.56 and drifts slightly upward in the later steps rather than continuing to descend. This persistently high loss is the signature of catastrophic forgetting: because the full base model remains trainable through the adapter pathway, the optimizer progressively erodes the anchored SFT knowledge in favor of imitating the teacher. By contrast, the QLoRA configuration (A2) freezes the base weights in a 4-bit (NF4) representation and restricts all updates to the low-rank adapter. This constraint operates as a form of implicit regularization: the cross-entropy loss decreases steadily to approximately 0.37 and remains consistently below the LoRA trajectory throughout, confirming that the prior knowledge is preserved while the new distillation signal is absorbed. The contrasting loss levels, summarized in Table~\ref{tab:qlora_ablation}, corroborate the end-task observation that QLoRA is necessary at the 0.6B scale to prevent forgetting, and justify its adoption as the default adaptation strategy for the smaller student.
 
 \begin{table}[htbp]
 \centering
-\caption{Cross-Entropy Loss Trend: LoRA vs. QLoRA on the 0.6B Student (V2 Configuration)}
+\caption{Cross-Entropy Loss: LoRA vs. QLoRA on the 0.6B Student (V2 Configuration)}
 \label{tab:qlora_ablation}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc}
 \hline
-\textbf{Adapter} & \textbf{CE Loss Trend} & \textbf{Knowledge Retention} & \textbf{Syllogism R-L} \\ \hline
-LoRA (A1)  & $0.3 \rightarrow 0.7$ (rising)   & Eroded (forgetting)   & 0.1741 \\
-QLoRA (A2) & $0.5 \rightarrow 0.25$ (falling) & Preserved (anchored)  & \textbf{0.3804} \\ \hline
+\textbf{Adapter} & \textbf{CE Loss ($L_{CE}$: start $\rightarrow$ settle)} & \textbf{Knowledge Retention} & \textbf{Syllogism R-L} \\ \hline
+LoRA (A1)  & $1.00 \rightarrow 0.56$ (stays high)        & Higher CE (weaker)   & 0.1741 \\
+QLoRA (A2) & $0.64 \rightarrow 0.37$ (steady $\downarrow$) & Lower CE (anchored)  & \textbf{0.3804} \\ \hline
 \end{tabular}%
 }
 \end{table}

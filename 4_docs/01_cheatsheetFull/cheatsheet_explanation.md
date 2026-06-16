@@ -12,12 +12,11 @@ These figures illustrate the overall multi-phase distillation framework and the 
 * **Source File:** [fig_3_1_overall_pipeline.tex](file:///E:/DoCode/1%20VN-Legal-AI/01_Report_CD1_DistillationLaw/figs/tikz/fig_3_1_overall_pipeline.tex)
 * **Description:** Represents the high-level routing of our distillation pipeline. 
 * **Key Details:**
-  * **Input:** Starts with a Supervised Fine-Tuning (SFT) Base model (Qwen3-0.6B or 1.7B).
-  * **Phase 1 (Offline Logit KD):** The student is trained on static teacher logits. This produces a shared foundation checkpoint.
-  * **Branching Refinement:** Rather than a linear progression, Phase 2 and Phase 3 are alternative refinement branches initialized from the Phase 1 checkpoint:
-    * **Phase 2 (On-Policy KD):** Addresses exposure bias using a teacher Oracle and clipped KL divergence.
-    * **Phase 3 (Diagnosis-Driven DPO):** Optimizes the student using semantic error-diagnosis pairs $(x, y_w, y_l)$ evaluated by an LLM Judge.
-  * **Outputs:** Produces two distinct final variants: **On-Policy SLM** and **DPO-Aligned SLM**.
+  * **Input (shared root):** Starts with a Supervised Fine-Tuning (SFT) Base model (Qwen3-0.6B or 1.7B). This SFT base is the only thing the two tracks share.
+  * **Two independent tracks (not a linear chain):** From the SFT base, two tracks branch in parallel:
+    * **On-policy track — Phase 2 (On-Policy KD):** Applied **directly to the SFT base** (independent of Phase 1). Addresses exposure bias using a teacher Oracle and clipped KL divergence.
+    * **Offline track — Phase 1 (Offline Logit KD) → Phase 3 (Diagnosis-Driven DPO):** Phase 1 trains from the SFT base on static teacher logits; **Phase 3 then continues from the Phase 1 checkpoint**, optimizing the student using semantic error-diagnosis pairs $(x, y_w, y_l)$ from an LLM Judge. The Phase 1 checkpoint is also the DPO reference policy.
+  * **Outputs:** Produces two distinct final variants: **On-Policy SLM** (top track) and **DPO-Aligned SLM** (bottom track).
 
 ### Figure 3.2: Computation Flow of Offline Logit Distillation (Phase 1)
 * **Source File:** [fig_3_2_offline_logit_kd.tex](file:///E:/DoCode/1%20VN-Legal-AI/01_Report_CD1_DistillationLaw/figs/tikz/fig_3_2_offline_logit_kd.tex)
@@ -46,7 +45,7 @@ These figures illustrate the overall multi-phase distillation framework and the 
   * An external **LLM Judge** (`GPT-4o-mini`) audits the rollouts semantically.
   * If no error is found (OK), the rollout is discarded.
   * If an error is detected, the sample is sent to **Stratified Sampling** to form a preference pair $(x, y_w, y_l)$, where $y_w$ is the chosen (gold) response and $y_l$ is the rejected (erroneous) student rollout.
-  * The preference pair is used in **DPO Alignment** with $\beta = 0.1$ and the Phase 2 checkpoint as the reference model, updating the student $\pi_\theta$.
+  * The preference pair is used in **DPO Alignment** with $\beta = 0.1$ and the **Phase 1 (offline KD) checkpoint** as both the initialization and the reference model, updating the student $\pi_\theta$.
 
 ---
 
@@ -90,8 +89,8 @@ These tables document the datasets, configuration tuning, training progressions,
 * **Source File:** [4_4_Ablation_Study.tex](file:///E:/DoCode/1%20VN-Legal-AI/01_Report_CD1_DistillationLaw/2_chapters/4_Experiments/4_4_Ablation_Study.tex#L11-L23)
 * **Description:** Ablates the adapter choice by comparing standard LoRA with 4-bit QLoRA.
 * **Key Insights:**
-  * **LoRA (A1):** The cross-entropy loss rose from 0.3 to 0.7, indicating that standard low-rank adaptation erodes SFT knowledge over time. The resulting Syllogism ROUGE-L was **0.1741**.
-  * **QLoRA (A2):** Freezing base weights in 4-bit NF4 representation served as an **implicit regularizer**. The CE loss fell smoothly from 0.5 to 0.25, and Syllogism ROUGE-L surged to **0.3804**.
+  * **LoRA (A1):** The cross-entropy loss stays elevated, settling around 0.56 after the warmup peak (and drifting slightly upward late), indicating that standard low-rank adaptation retains SFT knowledge less well. The resulting Syllogism ROUGE-L was **0.1741**.
+  * **QLoRA (A2):** Freezing base weights in 4-bit NF4 representation served as an **implicit regularizer**. The CE loss decreases steadily to around 0.37, staying consistently below the LoRA curve, and Syllogism ROUGE-L surged to **0.3804**.
 
 ### Table 4.6: Diagnosis Quality on the 0.6B Rollouts: Rule-Based vs. LLM Judge
 * **Source File:** [4_4_Ablation_Study.tex](file:///E:/DoCode/1%20VN-Legal-AI/01_Report_CD1_DistillationLaw/2_chapters/4_Experiments/4_4_Ablation_Study.tex#L31-L46)

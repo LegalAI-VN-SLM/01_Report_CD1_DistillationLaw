@@ -110,7 +110,7 @@ Dưới đây là mô tả chi tiết của 6 biểu đồ PNG được tạo ra
 
 ### 2. `phase1_ce_loss_trend.png` (Hướng 1 - Nâng cao)
 * **Nội dung:** Vẽ đường cong xu hướng `train/ce_loss` theo global step giữa `E1_offline_kd` (LoRA V1), `A1_offline_kd` (LoRA V2) và `A2_offline_kd` (QLoRA V2).
-* **Ý nghĩa:** Làm rõ hiện tượng **Catastrophic Forgetting** (Quên lãng thảm họa) khi CE loss tăng dần ở LoRA V1 (0.3 → 0.7) vs sự hội tụ bền vững của QLoRA (CE loss giảm dần đều 0.5 → 0.25). Đóng băng base model ở dạng 4-bit hoạt động như một bộ điều chuẩn tự nhiên tuyệt vời.
+* **Ý nghĩa:** Làm rõ hiện tượng **Catastrophic Forgetting** (Quên lãng thảm họa) khi CE loss tăng dần ở LoRA V1 (0.3 → 0.7) vs sự hội tụ bền vững của QLoRA (CE loss giảm dần ổn định $0.64 \to 0.37$ so với LoRA V2 duy trì ở mức cao $1.00 \to 0.56$). Đóng băng base model ở dạng 4-bit hoạt động như một bộ điều chuẩn tự nhiên tuyệt vời.
 
 ### 3. `phase2_onpolicy_vs_offline.png` (Hướng 2)
 * **Nội dung:** So sánh Offline KD vs On-Policy KD trên cả 3 task (NLI, Syllogism, MCQ) ở hai kích thước 0.6B và 1.7B.

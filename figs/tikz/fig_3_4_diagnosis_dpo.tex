@@ -20,7 +20,7 @@
     \node (decide) [decision, right=0.9cm of judge] {\footnotesize Error?};
     \node (ok)     [ok, above=0.7cm of decide] {\texttt{OK} $\rightarrow$ discard};
     \node (sample) [block, right=0.9cm of decide, fill=gray!10, draw=gray!70] {\textbf{Stratified Sampling}\\ \footnotesize pairs $(x, y_w, y_l)$};
-    \node (dpoAlign) [dpo, below=0.8cm of sample] {\textbf{DPO Alignment}\\ \footnotesize $\beta = 0.1$, ref.\ $= \pi_{\text{Phase 2}}$};
+    \node (dpoAlign) [dpo, below=0.8cm of sample] {\textbf{DPO Alignment}\\ \footnotesize $\beta = 0.1$, ref.\ $= \pi_{\text{Phase 1}}$};
 
     \draw [arrow] (infer) -- (judge);
     \draw [arrow] (judge) -- (decide);
