@@ -4,12 +4,12 @@ To validate the efficiency of the proposed 3-phase distillation and alignment fr
 
 \subsection{Teacher and Student Models}
 
-We utilize a pre-aligned, instruct-tuned model as our teacher optimization oracle: \texttt{Qwen3-4B-legal-GRPO} (accessible on Hugging Face as \texttt{thangvip/qwen3-4b-vietnamese-legal-grpo}). This model was pre-trained on Vietnamese legal statutes and aligned via Group Relative Policy Optimization (GRPO) to generate structured reasoning chains. To operate within a constrained hardware setup, the teacher model is loaded in 4-bit NormalFloat (NF4) quantized format during the distillation phases, allowing it to serve as a frozen target while maintaining a low VRAM footprint.
+We utilize a pre-aligned, instruct-tuned model as our teacher optimization oracle: Qwen3-4B-legal-GRPO (accessible on Hugging Face as thangvip/qwen3-4b-vietnamese-legal-grpo). This model was pre-trained on Vietnamese legal statutes and aligned via Group Relative Policy Optimization (GRPO) to generate structured reasoning chains. To operate within a constrained hardware setup, the teacher model is loaded in 4-bit NormalFloat (NF4) quantized format during the distillation phases, allowing it to serve as a frozen target while maintaining a low VRAM footprint.
 
 We evaluate two distinct student architectures to analyze the impact of model parameter scale on legal reasoning:
 \begin{enumerate}
-    \item \textbf{Qwen3-0.6B-SFT:} A lightweight student model containing 0.6 billion parameters, initialized from the supervised fine-tuning checkpoint (either the full-parameter \texttt{HoangVuSnape/qwen3-0.6b-sft} or the quantized adapter version \texttt{HoangVuSnape/qwen3-0.6b-qlora-sft}) and trained using Quantized Low-Rank Adaptation (QLoRA) adapters.
-    \item \textbf{Qwen3-1.7B-SFT:} A moderately sized student model containing 1.7 billion parameters, initialized from the supervised fine-tuning checkpoint \texttt{HoangVuSnape/qwen3-1.7b-sft} and fine-tuned using standard Low-Rank Adaptation (LoRA) adapters.
+    \item \textbf{Qwen3-0.6B-SFT:} A lightweight student model containing 0.6 billion parameters, initialized from the supervised fine-tuning checkpoint (either the full-parameter HoangVuSnape/qwen3-0.6b-sft or the quantized adapter version HoangVuSnape/qwen3-0.6b-qlora-sft) and trained using Quantized Low-Rank Adaptation (QLoRA) adapters.
+    \item \textbf{Qwen3-1.7B-SFT:} A moderately sized student model containing 1.7 billion parameters, initialized from the supervised fine-tuning checkpoint HoangVuSnape/qwen3-1.7b-sft and fine-tuned using standard Low-Rank Adaptation (LoRA) adapters.
 \end{enumerate}
 
 Both student models are initialized from their respective supervised fine-tuning (SFT) checkpoints to ensure they possess baseline legal query-answering capabilities before the logit distillation process begins.
@@ -48,4 +48,4 @@ Due to varying memory requirements across the training phases, execution was div
     \item \textbf{Dedicated Docker Environment (1x NVIDIA RTX 6000 Ada 48GB VRAM):} Utilized for the training of the larger 1.7B student model during Phase 2 On-Policy KD. The 48GB VRAM capacity allows both the teacher and student models to reside on the same device, supporting a larger batch size (batch size of 8) and reducing training time from 10 hours to 5 hours.
 \end{enumerate}
 
-The software frameworks utilized include: (i) \texttt{Unsloth} for accelerating parameter-efficient fine-tuning (PEFT) and reducing memory utilization, (ii) \texttt{TRL} (Transformer Reinforcement Learning) for training via the \texttt{DPOTrainer} class, and (iii) \texttt{bitsandbytes} for quantized model loading and 8-bit optimizer implementations.
+The software frameworks utilized include: (i) Unsloth for accelerating parameter-efficient fine-tuning (PEFT) and reducing memory utilization, (ii) TRL (Transformer Reinforcement Learning) for training via the \texttt{DPOTrainer} class, and (iii) bitsandbytes for quantized model loading and 8-bit optimizer implementations.

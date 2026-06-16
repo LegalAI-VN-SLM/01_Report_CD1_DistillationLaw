@@ -24,7 +24,7 @@ QLoRA (A2) & $0.64 \rightarrow 0.37$ (steady $\downarrow$) & Lower CE (anchored)
 
 \subsection{Rule-Based vs. Large Language Model Judge}
 
-The second ablation evaluates the quality of the error-diagnosis mechanism that determines which student rollouts become rejected responses in the DPO preference set. We compare a rule-based diagnoser, which relies on regular expressions and ROUGE-L thresholding, against an LLM-as-a-Judge diagnoser (\texttt{GPT-4o-mini}) that performs a semantic assessment of both the \texttt{<think>} reasoning trace and the final verdict. The comparison is conducted on the 2,603 training-set rollouts of the 0.6B student (A2), and the resulting diagnosis distribution is reported in Table~\ref{tab:judge_ablation}.
+The second ablation evaluates the quality of the error-diagnosis mechanism that determines which student rollouts become rejected responses in the DPO preference set. We compare a rule-based diagnoser, which relies on regular expressions and ROUGE-L thresholding, against an LLM-as-a-Judge diagnoser (GPT-4o-mini) that performs a semantic assessment of both the \texttt{<think>} reasoning trace and the final verdict. The comparison is conducted on the 2,603 training-set rollouts of the 0.6B student (A2), and the resulting diagnosis distribution is reported in Table~\ref{tab:judge_ablation}.
 
 The rule-based diagnoser exhibits two systematic failure modes. First, owing to its rigid format matching, it recognizes only 290 fully acceptable (\texttt{OK}) samples (11.1\%), misclassifying semantically correct responses that deviate syntactically from the expected template. Second, it admits an inflated 898 \texttt{RISKY} samples (34.5\%) in which the multiple-choice answer is coincidentally correct but the underlying \texttt{<think>} reasoning is entirely flawed, thereby treating spurious ``lucky guesses'' as near-valid. The LLM judge corrects both deficiencies. On the one hand, its semantic evaluation rehabilitates format-deviant but correct answers, raising the genuine \texttt{OK} count to 538 (20.7\%). On the other hand, its deeper inspection of the reasoning chain demotes the spurious lucky guesses to their true category: the \texttt{RISKY} pool shrinks from 898 (34.5\%) to 404 (15.5\%), while the count of correctly identified \texttt{WRONG} samples rises from 1,054 (40.5\%) to 1,652 (63.5\%). This sharper separation between genuinely sound and genuinely flawed responses yields a markedly cleaner preference dataset, which directly improves the quality and stability of the subsequent DPO alignment.
 
@@ -37,7 +37,7 @@ The rule-based diagnoser exhibits two systematic failure modes. First, owing to 
 \hline
 \textbf{Diagnoser} & \textbf{OK (acceptable)} & \textbf{RISKY (lucky guess)} & \textbf{WRONG (detected)} \\ \hline
 Rule-Based (Regex + ROUGE-L) & 290 (11.1\%) & 898 (34.5\%) & 1{,}054 (40.5\%) \\
-LLM Judge (\texttt{GPT-4o-mini}) & \textbf{538 (20.7\%)} & 404 (15.5\%) & \textbf{1{,}652 (63.5\%)} \\ \hline
+LLM Judge (GPT-4o-mini) & \textbf{538 (20.7\%)} & 404 (15.5\%) & \textbf{1{,}652 (63.5\%)} \\ \hline
 \end{tabular}%
 }
 
