@@ -20,7 +20,7 @@ Dưới đây là giải thích từng bức (đã đối chiếu số liệu th
 - LoRA (cam): CE `1.0 → 0.56`.
 - QLoRA (xanh): CE `0.64 → 0.37` — **luôn nằm thấp hơn LoRA suốt quá trình**.
 
-**Ý nghĩa:** Đóng băng base ở 4-bit (QLoRA) hoạt động như **bộ điều chuẩn ẩn** → CE thấp hơn, giữ kiến thức SFT tốt hơn. Đây là điểm nhấn **đúng và chắc**. (⚠️ Con số "0.3→0.7 vs 0.5→0.25" trong report Table 4.5 chưa khớp data này — bạn còn để mình sửa.)
+**Ý nghĩa:** Đóng băng base ở 4-bit (QLoRA) hoạt động như **bộ điều chuẩn ẩn** → CE thấp hơn, giữ kiến thức SFT tốt hơn. Đây là điểm nhấn **đúng và chắc**. 
 
 ---
 

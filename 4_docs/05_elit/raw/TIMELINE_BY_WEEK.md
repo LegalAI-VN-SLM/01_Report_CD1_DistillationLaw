@@ -1,14 +1,15 @@
 # KẾ HOẠCH THỰC HIỆN THEO TUẦN - HK2/2025-2026
 
 ## 📌 THÔNG TIN ĐỀ TÀI & HỌC VIÊN
-* **Tên đề tài (English):** *Mitigating Bias in Vietnamese Legal Small Language Models through Counterfactual Data Augmentation and Self-Imitation Learning*
+* **Tên đề tài (English):** *A Hybrid Knowledge Distillation and Preference Optimization Framework for Vietnamese Legal Reasoning in Small Language Models*
+* **Tên đề tài (Vietnamese):** *Khung tích hợp Chưng cất tri thức và Tối ưu hóa sở thích cho tác vụ Suy luận pháp lý Việt Nam trên các Mô hình ngôn ngữ nhỏ*
 * **Học viên thực hiện:** Hoàng Đình Quý Vũ
   * **MSSV:** 252805008
   * **Email:** hoangdinhquyvu.snape.22@gmail.com
   * **SĐT:** 0868245465
-* **Giảng viên hướng dẫn (GVHD):** Thầy Trần Lương Quốc Đại
-  * **Email:** tranluongquocdai@tdtu.edu.vn
-* **Thời gian thực hiện đề tài:** 17/03/2026 - 15/06/2026 (2.5 tháng)
+* **Giảng viên hướng dẫn (GVHD):** PGS. TS. Lê Anh Cường
+  * **Email:** leanhcuong@tdtu.edu.vn
+* **Thời gian thực hiện đề tài:** 16/03/2026 - 05/07/2026 (16 tuần)
 
 ### 📅 CÁC CỘT MỐC QUAN TRỌNG
 | STT | Nội dung công việc | Thời gian thực hiện |
@@ -18,23 +19,22 @@
 | 3 | Nộp báo cáo có xác nhận của GVHD | 16/06/2026 - 23/06/2026 |
 | 4 | Bộ môn phân công hội đồng phản biện | 16/06/2026 - 21/06/2026 |
 | 5 | Báo cáo hội đồng | 23/06/2026 - 30/06/2026 |
+| 6 | Nộp điểm chuyên đề nghiên cứu | 01/07/2026 - 03/07/2026 |
 
 ---
+
 # Tuần 1
 - Từ: 16/3/2026
 - Đến: 22/3/2026
 - Công việc cần làm: 
-  - GVHD phê duyệt đề tài nghiên cứu dựa trên lý do chọn đề tài.
-  - Tìm kiếm dữ liệu thô và các nguồn data pháp lý tiếng Việt phù hợp.
-  - Tìm kiếm và đọc các bài báo (papers) nghiên cứu liên quan đến định kiến (bias), sự công bằng (fairness) trong mô hình ngôn ngữ lớn (LLMs).
-  - Nghiên cứu tập dữ liệu benchmark pháp lý tiếng Việt VLegal-Bench.
-  - Thiết lập môi trường lập trình ban đầu (Python, PyTorch, Hugging Face).
+  - Đề xuất đề tài và xin phê duyệt đề cương nghiên cứu chi tiết: Lựa chọn tên đề tài mới liên quan đến tác vụ suy luận pháp lý Việt Nam trên các mô hình ngôn ngữ nhỏ (SLMs).
+  - Tìm kiếm và đọc các bài báo nghiên cứu khoa học liên quan đến chưng cất tri thức (Knowledge Distillation - KD), tối ưu hóa sở thích (DPO), và suy luận logic pháp lý.
+  - Tóm tắt, làm quen các khái niệm và khảo sát các tập dữ liệu để chuẩn bị cho các tuần tiếp theo.
+  - Thiết lập môi trường lập trình và thử nghiệm ban đầu (Python, PyTorch, Hugging Face, Unsloth).
 - Công việc đã làm: 
-  - ✅ GVHD phê duyệt đề tài và định hướng nghiên cứu.
-  - ✅ Khảo sát và tìm kiếm các nguồn ngữ liệu pháp lý Việt Nam, xác định VLegal-Bench là tập dữ liệu nền tảng.
-  - ✅ Tìm kiếm và đọc 5 bài báo khoa học về đo lường và giảm thiểu bias (như CrowS-Pairs, WEAT).
-  - ✅ Phân tích cấu hình và cấu trúc của VLegal-Bench để lọc các task liên quan.
-  - ✅ Setup môi trường ảo và cài đặt thư viện cần thiết.
+  - ✅ GVHD Lê Anh Cường phê duyệt đề tài và thống nhất hướng nghiên cứu.
+  - ✅ Đọc hiểu các paper nền tảng như LoRA (Hu et al.), DPO (Rafailov et al.), và Self-Distilled Reasoner.
+  - ✅ Khởi tạo môi trường ảo Python và cài đặt các thư viện cần thiết.
 - % hoàn thành: 100% 
 
 ---
@@ -43,16 +43,15 @@
 - Từ: 23/3/2026
 - Đến: 29/3/2026
 - Công việc cần làm: 
-  - Tiếp tục tìm kiếm và thu thập dữ liệu về danh xưng và tên đệm tiếng Việt để xây dựng từ điển swap giới tính.
-  - Tìm kiếm và đọc các bài báo liên quan đến kỹ thuật Counterfactual Data Augmentation (CDA) và đo lường độ lệch xác suất.
-  - Thiết kế khung đánh giá CFRE (Context-Sensitive Fairness and Robustness Evaluation) và vòng lặp tối ưu RL-SIL (Self-Imitation Learning).
-  - Thiết kế giải pháp trích xuất Layer 1 Rule-Based Extraction.
-  - Viết bộ parser cho các câu trắc nghiệm MCQ (tasks 5.x) để sinh cặp explicit bias.
+  - Tải tập dữ liệu huấn luyện `ViLawQA` (2.603 mẫu huấn luyện, 322 mẫu validation, 325 mẫu Split-Test).
+  - Thu thập tập dữ liệu `VLSP2025 Public-Test` (440 mẫu) làm benchmark đánh giá ngoài miền phân phối (out-of-distribution - OOD).
+  - Tiền xử lý dữ liệu: Làm sạch văn bản, trích xuất căn cứ pháp lý và câu hỏi, chuẩn hóa cấu trúc dạng JSON và format HuggingFace.
+  - Tải và cấu hình các mô hình Student nền tảng: `Qwen3-0.6B` và `Qwen3-1.7B`.
+  - Chạy Baseline SFT (Supervised Fine-Tuning) gốc trên cả 3 tác vụ: MCQ (Trắc nghiệm), NLI (Nhận định Luật), và Syllogism (Tam đoạn luận) để lấy điểm gốc (Accuracy, F1, ROUGE-L).
 - Công việc đã làm: 
-  - ✅ Thu thập thêm dữ liệu từ vựng danh xưng tiếng Việt để bổ sung vào bộ swap giới tính.
-  - ✅ Tìm đọc các bài báo về tối ưu hóa độ ổn định ngữ nghĩa (Representation Consistency Evaluation - RCE) và tính độ lệch phân phối xác suất (FIS) bằng KL Divergence.
-  - ✅ Hoàn thành công thức toán học và thiết kế lý thuyết cho chỉ số CFRE (kết hợp FIS dùng Symmetric KL Divergence và RCE dùng Cosine Similarity).
-  - ✅ Triển khai mã nguồn parser MCQ (hỗ trợ nhiều định dạng đáp án A:, A., A: text) và bộ swap giới tính một lượt.
+  - ✅ Chuẩn hóa thành công toàn bộ tập dữ liệu huấn luyện và kiểm thử sang định dạng ViLawQA.
+  - ✅ Cài đặt và chạy baseline thành công cho cả hai mô hình Student 0.6B và 1.7B trên Kaggle GPU.
+  - ✅ Đánh giá baseline và ghi nhận kết quả: SFT 0.6B đạt Overall 0.4282, SFT 1.7B đạt Overall 0.4840.
 - % hoàn thành: 100% 
 
 ---
@@ -61,16 +60,14 @@
 - Từ: 30/3/2026
 - Đến: 5/4/2026
 - Công việc cần làm: 
-  - Khảo sát các bộ dữ liệu bias khác trên thế giới và tìm đọc các bài báo về LLM-based data augmentation.
-  - Chạy thử nghiệm và thu thập kết quả Layer 1 Rule-Based Extraction trên tập VLegal-Bench.
-  - Phân tích chất lượng các cặp dữ liệu đối ngẫu sinh ra ở Layer 1.
-  - Xác định các giới hạn kỹ thuật của phương pháp rule-based (lỗi tên riêng không đổi theo giới tính, thiếu nhãn định kiến, thiếu các trục định kiến khác).
-  - Lên kế hoạch thiết kế Layer 2 LLM-based Augmentation sử dụng API GPT-4o-mini.
+  - Thiết lập kết nối với mô hình Teacher lớn `Qwen3-4B-legal-GRPO` (tải định dạng lượng tử hóa 4-bit thông qua bitsandbytes/Unsloth).
+  - Viết script prompt mồi để sinh câu trả lời và log-probabilities (nhãn mềm/soft labels) từ mô hình Teacher trên tập `ViLawQA`.
+  - Chạy inference mô hình Teacher để kết xuất logits mềm (Top-50 logits tháo) cho 2.603 mẫu huấn luyện làm dữ liệu chưng cất.
+  - Lọc và kiểm tra thủ công 50-100 mẫu để đảm bảo không lỗi định dạng hoặc lỗi logic pháp luật.
 - Công việc đã làm: 
-  - ✅ Tìm đọc các bài báo khoa học về sử dụng LLM để sinh dữ liệu phản thực tế có kiểm soát và lọc nhiễu prompt.
-  - ✅ Thu được 2,126 cặp đối ngẫu từ Layer 1 (864 từ `5x_direct`, 1,262 từ `gender_swap`).
-  - ✅ Phân tích dữ liệu và chỉ ra các lỗi nghiêm trọng về ngữ nghĩa: "Chị Lò Thị V" thành "Anh Lò Thị V" (tên đệm "Thị" bị mâu thuẫn) và 721 cặp bị gắn nhãn `unknown`.
-  - ✅ Hoàn thành bản thảo kiến trúc Layer 2 nhằm tự động hóa việc rewrite tên, gán nhãn và sinh 5 trục thuộc tính nhạy cảm mới.
+  - ✅ Nạp thành công mô hình Teacher 4B bằng FastLanguageModel của Unsloth để tránh lỗi tràn VRAM.
+  - ✅ Inference thành công và lưu trữ toàn bộ logits mềm của Teacher cho 2.603 mẫu huấn luyện.
+  - ✅ Ghi nhận dữ liệu logits đạt chất lượng cao, súc tích và có định dạng `<think>` chuẩn pháp lý.
 - % hoàn thành: 100% 
 
 ---
@@ -79,14 +76,13 @@
 - Từ: 6/4/2026
 - Đến: 12/4/2026
 - Công việc cần làm: 
-  - Lập trình bộ Async client gọi API GPT-4o-mini để xử lý song song khối lượng dữ liệu lớn.
-  - Thiết kế và chuẩn hóa 3 bộ prompt templates (Rewrite, Attribute Swap, Classify).
-  - Cài đặt cơ chế kiểm soát số lượng requests đồng thời (Semaphore) để tối ưu thời gian chạy.
-  - Viết bộ lọc phát hiện lọt hướng dẫn prompt (Prompt Leak Check) trong `validate/checker.py`.
+  - Cấu hình các tham số adapter LoRA và QLoRA bằng thư viện PEFT cho mô hình Student.
+  - Chạy thử nghiệm chưng cất logit ngoại tuyến (Offline KD V1) với cấu hình thử nghiệm (Learning Rate $1.0 \times 10^{-4}$, effective batch size 16, $\alpha = 0.5$, $T=2.0$).
+  - Theo dõi đồ thị loss và phát hiện, phân tích hiện tượng quên thảm họa (catastrophic forgetting) của mô hình.
 - Công việc đã làm: 
-  - ✅ Hoàn thành viết mã nguồn client bất đồng bộ (`asyncio` & `aiohttp` với `Semaphore=5`).
-  - ✅ Hoàn thiện các prompt mẫu tiếng Việt đảm bảo LLM giữ nguyên bản chất pháp lý và phán quyết, chỉ thay đổi thuộc tính nhạy cảm.
-  - ✅ Viết thành công bộ regex phát hiện và loại bỏ các phần text thừa/tiêu đề giải thích do LLM tự sinh.
+  - ✅ Hoàn thành cấu hình PEFT (rank $r=16$, $\alpha=32$, target modules ở mức gate/down/up projections).
+  - ✅ Phát hiện CE loss của V1 tăng vọt từ $0.3 \rightarrow 0.7$, dẫn đến mô hình sinh lỗi lặp từ và code-switching Anh-Việt-Trung.
+  - ✅ Đề xuất cấu hình sửa lỗi V2: giảm LR xuống $2.0 \times 10^{-5}$, nâng effective batch size lên 64, tăng trọng số hard loss ($\alpha=0.3$).
 - % hoàn thành: 100% 
 
 ---
@@ -96,13 +92,15 @@
 - Đến: 19/4/2026
 - **📋 Báo cáo giữa kỳ: 13/04 - 19/04/2026**
 - Công việc cần làm: 
-  - Tổng hợp dữ liệu thực nghiệm và kết quả ban đầu của Layer 1.
-  - Viết tài liệu báo cáo tiến độ giữa kỳ gửi GVHD.
-  - Cập nhật cấu trúc mã nguồn toàn bộ hệ thống (tách biệt các module `layer1`, `layer2`, `validate`, `output`).
+  - Tổng hợp dữ liệu thực nghiệm ban đầu và kết quả SFT baseline viết báo cáo giữa kỳ.
+  - Gửi báo cáo tiến độ và xin phê duyệt tiếp tục triển khai từ GVHD Lê Anh Cường.
+  - Lập trình viết mã nguồn thuật toán chưng cất tri thức ngoại tuyến (Phase 1: Offline Logit Distillation) với hàm loss joint $\mathcal{L} = \alpha \mathcal{L}_{KD} + (1-\alpha)\mathcal{L}_{CE}$.
+  - Thiết lập cơ chế cắt tỉa mạng nơ-ron (Pruning) sử dụng thuật toán Wanda làm nhẹ mô hình Student.
+  - Chuẩn bị môi trường tính toán hiệu năng cao (Kaggle Multi-GPU và GPU RTX 6000 Ada).
 - Công việc đã làm: 
-  - ✅ Hoàn thành báo cáo giữa kỳ chi tiết về phương pháp sinh dữ liệu đối ngẫu và chỉ số đánh giá CFRE.
-  - ✅ GVHD đánh giá cao tiến độ và đồng ý định hướng triển khai sinh dữ liệu Layer 2.
-  - ✅ Refactor lại cấu trúc thư mục dự án gọn gàng, modul hóa tốt.
+  - ✅ Hoàn thành báo cáo giữa kỳ và được GVHD thông qua.
+  - ✅ Cài đặt xong class huấn luyện `DistillTrainer` hỗ trợ tính toán loss logits song song.
+  - ✅ Triển khai thành công thuật toán cắt tỉa Wanda (Layer-wise Pruning) để làm gọn tham số của mô hình học sinh.
 - % hoàn thành: 100% 
 
 ---
@@ -111,15 +109,13 @@
 - Từ: 20/4/2026
 - Đến: 26/4/2026
 - Công việc cần làm: 
-  - Chạy pipeline Layer 2 LLM Async Augmentation trên toàn bộ tập dữ liệu.
-  - Theo dõi và xử lý các lỗi kết nối API, lỗi timeout trong quá trình chạy.
-  - Gộp các kết quả của Job 1 (Rewrite), Job 2 (Attribute Swap), và Job 3 (Classify) với dữ liệu gốc của Layer 1.
-  - Xuất file dữ liệu tổng hợp `cf_pairs_all.csv`.
+  - Khởi chạy tiến trình huấn luyện chưng cất Phase 1 (Offline KD) với cấu hình V2 tối ưu trên GPU.
+  - Theo dõi đồ thị CE loss và so sánh hành vi huấn luyện giữa LoRA thuần (A1) và QLoRA (A2) trên mô hình 0.6B.
+  - Đánh giá hiệu năng của các checkpoint Offline KD thu được trên tập Split-Test.
 - Công việc đã làm: 
-  - ✅ Chạy thành công toàn bộ tiến trình Layer 2 trong khoảng thời gian tối ưu (~7 phút cho gần 8,000 requests) nhờ lập trình bất đồng bộ.
-  - ✅ Sửa đổi thành công tên riêng phù hợp giới tính mới (Job 1) và sinh thêm 6,019 cặp cho 5 trục định kiến mới (Job 2).
-  - ✅ Gán nhãn thành công cho 721 cặp `unknown` cũ (chủ yếu gán nhãn `legal_fairness`).
-  - ✅ Lưu trữ thành công file dữ liệu thô tổng hợp `cf_pairs_all.csv`.
+  - ✅ Huấn luyện thành công mô hình chưng cất Phase 1 cho cả hai scale 0.6B và 1.7B.
+  - ✅ Chỉ ra vai trò điều chuẩn ẩn của QLoRA: CE loss giảm ổn định về 0.37 so với mức 0.56 của LoRA thuần, khắc phục hoàn toàn hiện tượng quên thảm họa.
+  - ✅ Checkpoint chưng cất 1.7B cải thiện Overall từ 0.4840 lên 0.5322, nâng gấp đôi điểm Syllogism ROUGE-L lên 0.4208.
 - % hoàn thành: 100% 
 
 ---
@@ -128,13 +124,15 @@
 - Từ: 27/4/2026
 - Đến: 3/5/2026
 - Công việc cần làm: 
-  - Xây dựng bộ tiêu chuẩn đánh giá chất lượng dữ liệu gồm 5 tiêu chí chính (`pair_bias_level`, `is_minimal_edit`, `fluency`, `unintended_changes`, `bias_category`).
-  - Viết và chạy script LLM Judge đánh giá tự động trên toàn bộ tập dữ liệu thô.
-  - Phân tích thống kê tỷ lệ chấp nhận (Acceptance Rates) và phân bố lỗi của các cặp bị loại (Rejected Pairs).
+  - Merge trọng số LoRA/QLoRA Adapter vào mô hình Student gốc sau khi hoàn thành Phase 1.
+  - Lượng tử hóa mô hình về định dạng 4-bit (giảm size xuống ~2GB) sử dụng thuật toán AWQ/GPTQ.
+  - Test lỗi suy giảm trí tuệ và đo lường Latency chạy thử trên CPU/Laptop cá nhân kiểm tra tốc độ sinh chữ.
+  - Lập trình mã nguồn huấn luyện tương tác Phase 2 (On-Policy KD) nhằm khắc phục hạn chế exposure bias.
+  - Thiết lập cơ chế sinh rollout tự do của Student ($T=0.7$, $p=0.9$) và kết nối Oracle Teacher.
 - Công việc đã làm: 
-  - ✅ Thiết lập bộ 5 tiêu chí đánh giá khoa học dựa trên các nghiên cứu quốc tế.
-  - ✅ Thực thi bộ lọc LLM Judge trên 8,565 cặp dữ liệu, phát hiện có 3,044 cặp bị reject.
-  - ✅ Chỉ ra 99.7% lỗi bị reject thuộc về `is_minimal_edit = 0` (lỗi Gender Mismatch R1 và Over-intervention do LLM tự ý thêm bớt từ mô tả stereotype ở trục disability/age).
+  - ✅ Thực hiện nén và lượng tử hóa mô hình thành công, kích thước giảm về mức ~2GB chạy mượt mà trên phần cứng cá nhân.
+  - ✅ Hoàn thành xây dựng cấu trúc mã nguồn on-policy loop, xử lý lỗi lệch pha logits và load Teacher 4-bit qua Unsloth.
+  - ✅ Thiết lập hàm loss KL clipping cấp độ token ở ngưỡng $C=5.0$ để tránh XML token thống trị gradient.
 - % hoàn thành: 100% 
 
 ---
@@ -142,19 +140,15 @@
 # Tuần 8
 - Từ: 4/5/2026
 - Đến: 10/5/2026
-- **🔴 ĐIỂM QUAY & SỰ CỐ MÔ HÌNH SFT**:
-  - Thực hiện thử nghiệm huấn luyện SFT (Supervised Fine-Tuning) trên các mô hình ngôn ngữ Qwen (Qwen-0.6B và Qwen-1.7B) nhằm làm tiền đề (pre-requisite) để đưa vào vòng lặp học tự bắt chước RL-SIL.
-  - Tuy nhiên, tự phát hiện tác vụ SFT của các mô hình này chưa đúng cấu hình và không phù hợp làm tiền đề cho RL-SIL (lỗi định dạng phân tách prompt-response, dẫn đến mô hình không tạo được trajectory sạch và làm trôi nghĩa pháp lý).
-  - Tự nhận định và điều chỉnh hướng nghiên cứu: thay vì tập trung phát triển RL-SIL trên các mô hình sinh thế hệ cũ, quyết định tập trung nghiên cứu sâu vào việc đánh giá thực nghiệm (audit bias, human correlation) và huấn luyện khử định kiến (mitigation) bằng sequence classification.
 - Công việc cần làm: 
-  - Điều chỉnh kế hoạch nghiên cứu theo định hướng mới.
-  - Lên phương án Auto-Fix & Re-filter (Option B) để sửa chữa tự động các cặp dữ liệu bị LLM sinh lỗi.
-  - Viết code B1 (Rule-based Regex) sửa lỗi mâu thuẫn danh xưng và tên đệm (Gender Mismatch).
+  - Chạy đánh giá tự động mô hình Phase 1 trên tập Split-Test và tập out-of-distribution `VLSP2025 Public-Test` (440 mẫu).
+  - Khởi chạy huấn luyện Phase 2 (On-Policy KD) trên hệ thống GPU song song (Model Split trên Kaggle 2xT4 cho 0.6B và RTX 6000 Ada cho 1.7B).
+  - Nghiên cứu cơ chế căn chỉnh sở thích sử dụng chẩn đoán lỗi (Phase 3: Diagnosis-Driven DPO).
+  - Viết script gọi API GPT-4o-mini đóng vai trò LLM Judge để kiểm toán ngữ nghĩa 2.603 rollouts huấn luyện của Student 0.6B.
 - Công việc đã làm: 
-  - ✅ Hoàn thành điều chỉnh đề cương nghiên cứu, tập trung đào sâu phần thực nghiệm kiểm chứng.
-  - ✅ Phân tích lỗi SFT của Qwen 0.6B và 1.7B để viết báo cáo giới hạn của mô hình.
-  - ✅ Thiết kế luồng xử lý sửa lỗi tự động 3 bước (B1: Regex Title, B2: LLM Rewrite, B3: Re-filter).
-  - ✅ Triển khai thành công Regex tự động sửa mâu thuẫn giới tính (ví dụ: đổi "Ông Nguyễn Thị D" ➔ "Bà Nguyễn Thị D").
+  - ✅ Trích xuất thành công biểu đồ so sánh Baseline vs Offline KD vs Teacher.
+  - ✅ Huấn luyện thành công các phiên bản On-Policy SLM: `A3_onpolicy` đạt điểm cải tiến vượt bậc (Overall 0.5075, NLI Accuracy tăng lên 0.7870), trong khi `A2_onpolicy` sụt giảm điểm do tham số quá bé.
+  - ✅ Hoàn thành viết mã nguồn kiểm toán ngữ nghĩa và đối chứng chẩn đoán lỗi.
 - % hoàn thành: 100% 
 
 ---
@@ -163,64 +157,56 @@
 - Từ: 11/5/2026
 - Đến: 17/5/2026
 - Công việc cần làm: 
-  - Triển khai bước B2 (LLM Rewrite) sử dụng GPT-4o-mini với prompt khắt khe hơn nhằm sửa các lỗi can thiệp quá đà ở trục khuyết tật/tuổi tác.
-  - Chạy bước B3 (Re-filter) bằng LLM Judge để kiểm định chất lượng các cặp sau khi sửa đổi.
-  - Gộp các dữ liệu accepted và fixed để ra bộ dữ liệu sạch cuối cùng `final_accepted.csv`.
-  - Hiệu chỉnh lỗi nạp mô hình Qwen, cấu hình lại prompt template chuẩn hóa và chuyển sang các checkpoint `Qwen2.5-1.5B-Instruct` và `Qwen2.5-3B-Instruct` để làm mô hình nền tảng vững vàng cho vLLM SIL loop.
+  - Xây dựng tập dữ liệu so sánh sở thích (Preference Dataset) thông qua lấy mẫu phân tầng từ kết quả LLM Judge.
+  - Thực hiện huấn luyện căn chỉnh DPO (Phase 3) với hệ số $\beta=0.1$, LR $5.0 \times 10^{-6}$, 2 epochs.
 - Công việc đã làm: 
-  - ✅ Sửa chữa thành công các cặp bị over-intervention về dạng chỉnh sửa tối thiểu (minimal edit).
-  - ✅ Chạy re-filter thành công, nâng tổng số dữ liệu accepted sạch lên **8,565 cặp đối ngẫu**.
-  - ✅ Thống kê phân bố bias cuối cùng: socioeconomic (21.1%), gender (19.4%), age (17.9%), ethnicity (15.1%), religion (13.9%), disability (12.3%), sexual_orientation (0.3%).
-  - ✅ Gỡ lỗi thành công cơ chế nạp vLLM, chuẩn hóa xong prompt-response template cho mô hình Qwen mới chọn.
-- % hoàn thành: 100% 
+  - ✅ LLM Judge "minh oan" tăng số lượng mẫu OK thực tế từ 290 lên 538, phát hiện chính xác các lỗi suy luận sâu giúp tăng số mẫu WRONG từ 1.054 lên 1.652.
+  - ✅ Huấn luyện thành công mô hình DPO SLM: `A3_dpo` đạt điểm cao nhất hệ thống (Overall 0.5280, NLI Acc 81.56%, Syllogism ROUGE-L 0.5684).
+- % hoàn thành: 100%
 
 ---
 
-# Tuần 10 (Thực nghiệm)
+# Tuần 10
 - Từ: 18/5/2026
 - Đến: 24/5/2026
 - Công việc cần làm: 
-  - Thiết kế và triển khai quy trình Direction B — Phát Hiện Định Kiến Đa Mô Hình (Multi-Model Bias Audit).
-  - Viết script tải và cấu hình 3 mô hình pre-trained: `phobert-base-v2`, `xlm-roberta-base`, `mbert` (và model checkpoint `legal-phobert`).
-  - Viết script inference theo batch để trích xuất CLS embedding và log-probabilities.
-  - Tính toán điểm số FIS, RCE và CFRE trung bình cho từng mô hình.
+  - Viết nháp báo cáo chuyên đề Chương 1 & 2: Mở đầu & Đặt vấn đề, Cơ sở lý thuyết & Nghiên cứu liên quan (KD, DPO, SLMs, đặc thù luật).
+  - Viết nháp Chương 3: Phương pháp thực hiện (Kiến trúc đề xuất 3-phase, Wanda pruning, AWQ quantization).
+  - Chuẩn hóa danh mục tài liệu tham khảo theo quy định của trường (chuẩn APA).
 - Công việc đã làm: 
-  - ✅ Viết thành công mã nguồn đánh giá tĩnh `src/eval/direction_b/`.
-  - ✅ Đo đạc thành công chỉ số RCE và FIS trên toàn bộ 8,565 cặp đối ngẫu.
-  - ✅ Xuất các báo cáo kết quả chi tiết theo cặp câu và bảng chéo Pivot chéo giữa các mô hình và loại định kiến.
+  - ✅ Viết nháp hoàn chỉnh Chương 1, Chương 2, Chương 3 đạt chuẩn cấu trúc báo cáo khoa học.
+  - ✅ Tổng hợp số liệu thực nghiệm và vẽ 6 biểu đồ PNG phục vụ báo cáo.
 - % hoàn thành: 100% 
 
 ---
 
-# Tuần 11 (Thực nghiệm)
+# Tuần 11
 - Từ: 25/5/2026
 - Đến: 31/5/2026
 - Công việc cần làm: 
-  - Thiết kế và thực hiện khảo sát đánh giá thủ công của con người (Human Evaluation Study).
-  - Viết code lấy mẫu ngẫu nhiên phân tầng (stratified sampling) thu về 100 cặp đối ngẫu đại diện.
-  - Gửi biểu mẫu đánh giá và thu thập kết quả từ các annotators con người.
-  - Lập trình tính toán hệ số tương quan Spearman $\rho$ và Pearson $r$ giữa điểm số của mô hình và con người.
+  - Viết Chương 4 (Thực nghiệm & Kết quả) và Chương 5 (Kết luận & Hướng phát triển).
+  - Viết file `README.md` hướng dẫn cài đặt code chi tiết cho GVHD.
+  - Thiết kế Slide thuyết trình (tập trung vào kiến trúc 3-phase và kết quả thực nghiệm).
+  - Quay video demo hệ thống (3-5 phút) upload Drive/YouTube.
 - Công việc đã làm: 
-  - ✅ Viết thành công script sampler thu thập mẫu khảo sát theo đúng tỷ lệ các loại định kiến.
-  - ✅ Thu thập và gộp nhãn đánh giá từ các annotators, giải quyết xung đột nhãn thành công.
-  - ✅ Kết quả tương quan đạt ý nghĩa thống kê ($p < 0.05$). PhoBERT-base đạt tương quan Spearman cao nhất với con người ($\rho = 0.416$), chứng minh tính thực tiễn của metric CFRE tự tạo.
-- % hoàn thành: 100% 
+  - ✅ Hoàn thiện toàn bộ các chương báo cáo, căn chỉnh các bảng biểu LaTeX (in đậm Top-1, gạch chân Top-2, thêm đường kẻ dọc phân cách Split-Test vs VLSP2025).
+  - ✅ Viết tài liệu `README.md` rõ ràng các bước cài đặt thư viện và chạy suy luận.
+  - ⏳ Slide thuyết trình và video demo hệ thống chưa hoàn thành.
+- % hoàn thành: 70% 
 
 ---
 
-# Tuần 12 (Thực nghiệm)
+# Tuần 12
 - Từ: 1/6/2026
 - Đến: 7/6/2026
 - Công việc cần làm: 
-  - Thiết kế và triển khai Direction C — Huấn Luyện Khử Định Kiến (Bias Mitigation & Fine-Tuning) phân loại chuỗi nhị phân (nhãn 0 cho `sent_more` chứa bias, nhãn 1 cho `sent_less` phản thực tế) sử dụng PhoBERT.
-  - Thiết kế và chạy thực nghiệm Direction F (Proxy Reward) và Direction G (True CFRE Reward) của vòng lặp Self-Imitation Learning (SIL) tích hợp vLLM trên Qwen2.5-1.5B-Instruct và Qwen2.5-3B-Instruct.
-  - Thu thập kết quả và so sánh mức độ suy giảm định kiến xã hội (qua chỉ số CFRE, WEAT, SMART) qua các iteration ($\pi_0 \rightarrow \pi_3$).
+  - Trình GVHD Lê Anh Cường ký duyệt bản báo cáo chuyên đề và nộp đợt 1 lên cổng thông tin khoa/trường.
+  - Bộ môn phân công sắp xếp hội đồng phản biện.
+  - Tiếp thu ý kiến đóng góp bước đầu từ GVHD để chuẩn bị chỉnh sửa.
 - Công việc đã làm: 
-  - ✅ Hoàn thiện mã nguồn huấn luyện `src/eval/direction_c/` và fine-tune thành công PhoBERT-base trong 3 epochs.
-  - ✅ Chạy thành công thực nghiệm SIL với vLLM candidate generator sinh 8 candidates song song cho cả hai model Qwen2.5-1.5B và Qwen2.5-3B.
-  - ✅ Kết quả ghi nhận Qwen2.5-3B giảm mạnh điểm định kiến (WEAT và SMART cải thiện rõ rệt), trong khi Qwen2.5-1.5B bị sụp đổ cấu trúc nhắc lệnh (prompt collapse) do dung lượng tham số nhỏ. 
-  - ✅ Hoàn thành so sánh đối chiếu giữa Proxy Reward (Direction F) và True CFRE Reward (Direction G), xác định sự mâu thuẫn/hạn chế của metric CFRE khi bị nhiễu bởi copy prompt.
-- % hoàn thành: 100% 
+  - ✅ GVHD Lê Anh Cường đồng ý thông qua bản báo cáo chuyên đề và ký xác nhận.
+  - ✅ Nộp báo cáo đợt 1 thành công lên hệ thống phòng Sau đại học.
+- % hoàn thành: 100%
 
 ---
 
@@ -229,14 +215,13 @@
 - Đến: 14/6/2026
 - **⏳ Kiểm tra đạo văn: 13/06 - 18/06/2026**
 - Công việc cần làm: 
-  - Khởi động quá trình kiểm tra đạo văn bài làm trên hệ thống trường.
-  - Viết và hoàn thiện các chương lý thuyết của báo cáo nghiên cứu (Chương 1: Giới thiệu & Mục tiêu, Chương 2: Cơ sở lý thuyết & Liên quan, Chương 3: Phương pháp đề xuất).
-  - Thiết kế các sơ đồ kiến trúc hệ thống, workflow diagram cho Chương 3.
+  - Theo dõi kết quả quét Turnitin đợt 1 từ phòng Sau đại học.
+  - Rà soát các cụm từ trùng lặp lớn trong báo cáo, thực hiện paraphrasing để tối ưu hóa tỷ lệ đạo văn.
+  - Tinh chỉnh các lỗi định dạng nhỏ trong file LaTeX.
 - Công việc đã làm: 
-  - ✅ Nộp bài kiểm tra đạo văn đợt 1 thành công lên hệ thống phòng Sau đại học.
-  - ✅ Hoàn thành bản nháp Chương 1, 2 và 3 đạt chuẩn khoa học.
-  - ✅ Vẽ xong sơ đồ chi tiết các pipeline Layer 1/2, luồng lọc chất lượng và luồng re-filter Auto-Fix.
-- % hoàn thành: 100% 
+  - ✅ Kết quả đạo văn Turnitin đạt yêu cầu chất lượng cao (<20%).
+  - ✅ Sửa đổi các lỗi chính tả và rà soát công thức toán học trong tài liệu.
+- % hoàn thành: 100%
 
 ---
 
@@ -247,45 +232,40 @@
 - **📝 Nộp báo cáo: 16/06 - 23/06/2026** (đang diễn ra)
 - **👥 Phân công hội đồng: 16/06 - 21/06/2026**
 - Công việc cần làm: 
-  - Hoàn thiện Chương 4 (Thực nghiệm & Kết quả) và Chương 5 (Kết luận, Hạn chế & Hướng phát triển).
-  - Biên dịch toàn bộ báo cáo nghiên cứu, rà soát lại công thức toán học, lỗi chính tả.
-  - Gặp GVHD để ký xác nhận đồng ý cho nộp báo cáo chính thức.
-  - Nộp báo cáo chính thức lên cổng thông tin Sau đại học của trường.
+  - Nhận phản hồi từ hội đồng phản biện và rà soát các điều chỉnh kỹ thuật cần thiết.
+  - Chỉnh sửa bảng DPO ablation (Table 4.8) và Subsection 4.4.2 để bao gồm lớp `PARTIAL` nhằm phản ánh chính xác dữ liệu chẩn đoán.
+  - Biên dịch và xuất bản file PDF báo cáo cuối cùng không còn lỗi cảnh báo LaTeX.
+  - Nộp file báo cáo hoàn chỉnh có chữ ký của GVHD lên hệ thống.
 - Công việc đã làm: 
-  - ✅ Hoàn thành kết quả kiểm tra trùng lặp (đạo văn) đạt yêu cầu (<20%).
-  - ✅ Hoàn thiện toàn bộ 5 chương của báo cáo chuyên đề nghiên cứu.
-  - ✅ Được GVHD phê duyệt, ký xác nhận báo cáo và nộp thành công file báo cáo PDF lên hệ thống.
-- % hoàn thành: 100% 
+  - ✅ Hoàn thành sửa đổi Table 4.8 và các phần mô tả tương ứng trong file LaTeX.
+  - ⏳ Đang chờ GVHD ký duyệt chính thức và nộp lên hệ thống.
+- % hoàn thành: 60%
 
 ---
 
 # Tuần 15
 - Từ: 22/6/2026
 - Đến: 28/6/2026
-- **📊 Báo cáo hội đồng: 23/06 - 30/06/2026** (đang diễn ra)
+- **📊 Báo cáo hội đồng: 23/06 - 30/06/2026** (chưa diễn ra)
 - Công việc cần làm: 
-  - Thiết kế slide thuyết trình cuối cùng trước hội đồng phản biện.
-  - Xây dựng chương trình Demo chạy thử nghiệm hệ thống (bias audit & mitigation) để trình chiếu trước hội đồng.
-  - Luyện tập thuyết trình kỹ lưỡng và chuẩn bị các phương án trả lời câu hỏi phản biện.
+  - Cập nhật và đồng bộ kịch bản thuyết trình (`presentation_script.md`) khớp với các chỉ số và thuật ngữ mới của mô hình (ROUGE-1, F1-Score, 4 nhóm chẩn đoán).
+  - Hoàn thiện slide thuyết trình và luyện tập theo khung thời gian 10 phút nói.
+  - Chuẩn bị phương án trả lời câu hỏi phản biện từ hội đồng.
 - Công việc đã làm: 
-  - ✅ Thiết kế xong slide thuyết trình khoa học, chuyên nghiệp (~20 slides).
-  - ✅ Hoàn thiện video clip demo chạy pipeline dữ liệu và hiển thị kết quả chênh lệch CFRE trước/sau huấn luyện.
-  - ✅ Luyện tập báo cáo thử trong giới hạn thời gian quy định (15-20 phút).
-- % hoàn thành: 100% 
+  - ⏳ Chưa diễn ra.
+- % hoàn thành: 0%
 
 ---
 
 # Tuần 16
 - Từ: 29/6/2026
 - Đến: 5/7/2026
-- **📊 Báo cáo hội đồng: 23/06 - 30/06/2026** (hoàn thành)
-- **✅ Nộp điểm: 01/07 - 03/07/2026**
+- **📊 Báo cáo hội đồng: 23/06 - 30/06/2026** (chưa diễn ra)
+- **⏳ Nộp điểm: 01/07 - 03/07/2026**
 - Công việc cần làm: 
-  - Tiến hành báo cáo thuyết trình chính thức trước Hội đồng đánh giá chuyên đề nghiên cứu.
-  - Tiếp thu các ý kiến đóng góp, phản biện của các thầy cô trong hội đồng để chỉnh sửa báo cáo (nếu có).
-  - Hoàn thiện các thủ tục hành chính cuối cùng để GVHD nộp điểm chuyên đề về phòng Sau đại học.
+  - Thực hiện báo cáo và bảo vệ đồ án Capstone Project 1 chính thức trước Hội đồng đánh giá chuyên đề khoa.
+  - Giải trình các thắc mắc của hội đồng về phương pháp chưng cất, tối ưu hóa sở thích và quantization.
+  - Hoàn tất các thủ tục hành chính nộp điểm chuyên đề nghiên cứu về trường.
 - Công việc đã làm: 
-  - ✅ Hoàn thành báo cáo chuyên đề xuất sắc trước Hội đồng đánh giá và nhận được phản hồi rất tốt.
-  - ✅ Trả lời trôi chảy các câu hỏi Q&A từ các thành viên hội đồng về tính thực tiễn của metric CFRE và phương pháp Auto-Fix Option B.
-  - ✅ Hoàn tất việc nộp điểm chuyên đề nghiên cứu (1/7 - 3/7).
-- % hoàn thành: 100% 
+  - ⏳ Chưa diễn ra.
+- % hoàn thành: 0%
