@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "654166bdcc78646d",
+        "id": "10972b523b21b09e",
         "type": "tabs",
         "children": [
           {
-            "id": "faf46620664951b6",
+            "id": "bed3466b88c3315c",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "report/report_v2/README.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "README"
+              "title": "New tab"
             }
           }
         ]
@@ -183,9 +179,36 @@
       "bases:Create new base": false
     }
   },
-  "active": "faf46620664951b6",
+  "active": "7d6d0a7d4513eb19",
   "lastOpenFiles": [
-    "report/report_v2/README.md",
-    "report/report_v2"
+    "4_docs/01_cheatsheetFull/extracted_latex.md",
+    "4_docs/01_cheatsheetFull/cheatsheet_explanation.md",
+    "4_docs/audio/qa.mp3",
+    "4_docs/llm_judge_documentation.md",
+    "5_data_visualization/report/phase3_dpo_reward_margins.png",
+    "4_docs/QA_VAN_DAP_THEO_TUNG_PHAN.md",
+    "5_data_visualization/report/phase2_onpolicy_stability.png",
+    "5_data_visualization/report/phase1_ablation_qlora_vs_lora.png",
+    "5_data_visualization/report/phase1_ablation_hyperparameters.png",
+    "4_docs/TOM_TAT_BAO_CAO_3trang.md",
+    "4_docs/02_presentation/slide_notes_bullets.md",
+    "4_docs/02_presentation/presentation_script_v2.md",
+    "4_docs/note.md",
+    "4_docs/01_stucutre.md",
+    "4_docs/02_presentation/presentation_script_v2.md.tmp.17588.c3be8d96281c",
+    "4_docs/audio/tom_tat.mp3",
+    "4_docs/write/C4/glossary_model.md",
+    "4_docs/02_presentation/~$VN_Legal_AI_CD1_v2.pptx",
+    "4_docs/write/C4/glossary.md",
+    "Untitled.md",
+    "4_docs/write/C4/glossary_v2.md",
+    "src/tts_presentation.py.tmp.34952.6a45caa0a377",
+    "src/tts_presentation.py.tmp.34952.dde3fd70ffaf",
+    "4_docs/02_presentation/audio/presentation_full-CD1.mp3",
+    "4_docs/02_presentation/audio/presentation_full.mp3",
+    "4_docs/02_presentation/audio/presentation_full.wav",
+    "src/merge_wav.py",
+    "src/HUONG_DAN_TTS.md",
+    "report/report_v2/README.md"
   ]
 }
